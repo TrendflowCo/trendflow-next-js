@@ -5,24 +5,33 @@ import React, {useEffect,useState} from 'react';
 import SpecificProduct from "../containers/SpecificProduct";
 
 const Home = () => {
-    const [products, setProducts] = useState([]);
     const [response, setResponse] = useState([]);
+    const [visits, setVisits] = useState(0);
+    const [apps, setApps] = useState([]);
     useEffect(() => {
       const fetchData = async () => {
-      try {
-        const url = 'http://10.1.1.68/stamm-analytics/backend/production/data';
-        const rsp = (await axios.get(url)).data
-        setResponse(rsp)
-        const productsTest = [];
-        rsp.forEach(item => {
-          if (!productsTest.includes(item.app)){
-            productsTest.push(item.app)
-          }
-        })
-        setProducts(productsTest)
-      } catch(err) {
-        console.error(err)
-      }
+        try {
+          const url = 'http://10.1.1.68/stamm-analytics/backend/production/data';
+          const rsp = (await axios.get(url)).data
+          setResponse(rsp)
+          console.log(rsp);
+          let visitsForState = 0;
+          rsp.forEach(element => {
+            if(element.event === 'Visit') {
+              visitsForState += 1;
+            }
+          })
+          setVisits(visitsForState);
+          const appsTest = [];
+          rsp.forEach(item => {
+            if (!appsTest.includes(item.app)){
+              appsTest.push(item.app)
+            }
+          })
+          setApps(appsTest)
+        } catch(err) {
+          console.error(err)
+        }
       };
       fetchData();
     },[])
@@ -32,11 +41,11 @@ const Home = () => {
         {response.length > 0 &&
           <>
             <h1 className="text-4xl font-semibold p-0 m-0">Welcome to Stämm Analytics</h1>
-            <h2 className="text-2xl mt-2.5 pl-2.5">{`Total interaction: ${response?.length}`}</h2>
+            <h2 className="text-2xl mt-2.5 pl-2.5">{`Total visits: ${visits}`}</h2>
             <h4 className="text-sm mt-1 pl-2.5">{`From ${(new Date(response[0].timestamp)).toLocaleDateString()} to ${(new Date(response[response.length - 1].timestamp)).toLocaleDateString()}`}</h4>
             <div className="flex flex-row flex-wrap w-full justify-between mt-5">
-              {products.map((item,index) => {return (
-                <SpecificProduct item={item} index={index} key={item} response={response}/>
+              {apps.map((item,index) => {return (
+                <SpecificProduct name={item} index={index} key={item} response={response} visits={visits}/>
               )})}
             </div>
           </>
