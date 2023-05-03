@@ -1,9 +1,12 @@
 import React from 'react';
+import TitleAndImage from '../Home/TitleAndImage';
 
 const Home = () => {
   
     return (
-      <div>Home</div>
+      <>
+        <TitleAndImage/>
+      </>
     )
 };
 

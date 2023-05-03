@@ -13,10 +13,10 @@ module.exports = {
       },
       extend: {
         colors: {
-          'stamm-primary': '#00D89D',
-          'stamm-black': '#272727',
-          'stamm-gray': '#D8D8D8',
-          'stamm-white': '#F9F9F9',
+          'dokuso-green': '#00D89D',
+          'dokuso-black': '#272727',
+          'dokuso-gray': '#D8D8D8',
+          'dokuso-white': '#F9F9F9',
         },
       },
   },
