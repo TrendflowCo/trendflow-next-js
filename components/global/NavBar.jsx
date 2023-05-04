@@ -25,7 +25,7 @@ const NavigationBarHero = () => {
     palette: {
       mode: 'dark',
       primary: {
-        main: '#edf5fd',
+        main: '#F9F9F9',
       },
     },
   });
