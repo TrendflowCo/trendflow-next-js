@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React , {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,14 +11,59 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import { createTheme, ThemeProvider} from '@mui/material/styles';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+const NavigationBarHero = () => {
+  // const {  
+  //   setShowModal,
+  //   user,
+  //   handleResultClick
+  // } = React.useContext(ImageContext);
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#edf5fd',
+      },
+    },
+  });
+  
+  const pages = [
+    'About', 
+    'Brands',
+    // 'SALE (soon)',
+    'Blog',
+    'Api (SOON)',
+  ];
+  
+  const routes = {
+    'Home': '/home',
+    'About': '/manifesto',
+    'Brands': '/Brands',
+    'SALE': '/',
+    'Blog': 'https://medium.com/@dokuso.app/',
+    'Api': '/',
+  }
+  const settings_account = [
+        'Profile', 
+        'Account', 
+        'Dashboard', 
+        'Logout'
+      ];
+  
+
+  const handleSearchSale = (e) => {
+    console.log('sale search')
+    handleResultClick('sale');
+  };
+
+  const handleModal = () => {
+    setShowModal(true)
+  };
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -36,10 +81,11 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+  <ThemeProvider theme={darkTheme}>
+    <AppBar position="static" color="primary" enableColorOnDark>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* Title for desktop display */}
           <Typography
             variant="h6"
             noWrap
@@ -48,16 +94,27 @@ function ResponsiveAppBar() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Dokusō
           </Typography>
-
+          {/* Pages for desktop display */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'inherit', display: 'block' }}
+                href={routes[page]}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
+          {/* Menu bar for mobile display */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -88,49 +145,58 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem 
+                component="a"
+                key={page} 
+                onClick={page === 'SALE' ? handleSearchSale : handleCloseNavMenu}
+                href={routes[page]}
+                target="_blank" 
+                rel="noopener noreferrer"
+                >
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
+             
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* Title for mobile display */}
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/home"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Dokusō
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
+          {/* Menu for a logged user */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              { false ?
+              // { user ?
+              <IconButton 
+                onClick={handleOpenUserMenu} 
+                sx={{ p: 0 }}
+              >
+                <Avatar alt={user.name} src={user.photoURL !== null ? user.photoURL : '/static/images/avatar/2.jpg'} />
               </IconButton>
+              :
+              <Button 
+                onClick={handleModal}
+                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500" variant="contained" 
+                color="primary">
+                Sign Up
+              </Button>
+              }
             </Tooltip>
+            {/* Menu toggle for the logged user */}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -147,7 +213,7 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {settings_account.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
@@ -157,6 +223,7 @@ function ResponsiveAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
+  </ThemeProvider>
   );
 }
-export default ResponsiveAppBar;
+export default NavigationBarHero;
