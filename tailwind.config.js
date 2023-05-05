@@ -23,7 +23,9 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     fontFamily: {
-      'sans': ['Chivo', 'sans-serif'], // overriding 'sans' familiy with 'chivo'(desired) because its called as default in all the text
+      // 'sans': ['Chivo', 'sans-serif'], // overriding 'sans' familiy with 'chivo'(desired) because its called as default in all the text
+      'sans': ['Manrope', 'sans-serif'], // overriding 'sans' familiy with 'chivo'(desired) because its called as default in all the text
+
     },
     extend: {
       colors: {

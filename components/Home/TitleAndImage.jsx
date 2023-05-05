@@ -40,8 +40,7 @@ const TitleAndImage = () => {
                         <span className="ml-1 font-extrabold text-transparent sm:text-2xl text-3xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">precision</span>
                     </div>
                     
-                    <p className="py-4 px-1 sm:px-0 sm:text-lg text-xl"
-                    >
+                    <p className="py-4 px-1 sm:px-0 sm:text-lg text-xl">
                         Our search bar is your gateway to finding the perfect fashion items to fit your style.
                         Don't limit yourself to the same old searches. Try something new, unexpected, and uniquely you.
                     </p>

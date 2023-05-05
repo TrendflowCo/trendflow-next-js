@@ -1,5 +1,4 @@
-// import HomeComp from '../components/general/Home';
-import Main from '../components/global/Index';
+import Main from '../components/Home/Home';
 
 const Home = () => {
   return <Main/>
