@@ -36,16 +36,13 @@ const TitleAndImage = () => {
                         alt='homeImg'
                     />
                     <div className='mt-7 flex flex-row items-start w-full'>
-                        <Typography color="black" variant="h5" style={{ 'fontWeight': 'bold'}}>{`Discover fashion with `}</Typography>
+                        <h4 className="text-2xl font-bold mr-0.5">{`Discover fashion with `}</h4>
                         <span className="ml-1 font-extrabold text-transparent sm:text-2xl text-3xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">precision</span>
                     </div>
-                    
                     <p className="py-4 px-1 sm:px-0 sm:text-lg text-xl">
                         Our search bar is your gateway to finding the perfect fashion items to fit your style.
                         Don't limit yourself to the same old searches. Try something new, unexpected, and uniquely you.
                     </p>
-
-
                 </ThemeProvider>
             </div>
         </div>
