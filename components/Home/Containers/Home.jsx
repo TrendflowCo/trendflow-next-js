@@ -9,7 +9,7 @@ import Footer from '../../global/Footer';
 
 const Home = () => {
     return (
-      <div>
+      <div className='px-4 sm:px-0'>
         <TitleAndImage/>
         <Searcher/>
         <PopularSearches/>

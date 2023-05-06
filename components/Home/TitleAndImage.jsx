@@ -36,7 +36,7 @@ const TitleAndImage = () => {
     };
     return (
         <div className="flex flex-col items-center w-full pt-8 sm:pt-12">
-            <div className="flex flex-col items-center max-w-xl px-3">
+            <div className="flex flex-col items-center max-w-xl ">
                 <ThemeProvider theme={typographyStyle}>
                     <Typography
                         color="black"
