@@ -189,9 +189,10 @@ const NavigationBarHero = () => {
               </IconButton>
               :
               <Button 
-                onClick={handleModal}
-                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500" variant="contained" 
-                color="primary">
+                // onClick={handleModal}
+                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 text-white" variant="contained" 
+                // color="primary"
+                >
                 Sign Up
               </Button>
               }
