@@ -12,7 +12,6 @@ const Layout = ({ children }) => {
       </Head>
       <NavBar/>
       <main className='flex flex-col flex-auto p-0 m-0 overflow-auto'>{children}</main>
-      {/* Footer */}
     </div>
   )
 }
