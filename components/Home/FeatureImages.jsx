@@ -1,14 +1,15 @@
 import React from "react";
 import Image from "next/image";
-import { Typography, createTheme , ThemeProvider } from "@mui/material";
+import { Typography , ThemeProvider } from "@mui/material";
+import { muiColors } from '../Utils/muiTheme';
 
 const FeatureImages = () => {
-    const typographyStyle = createTheme();
-    typographyStyle.typography.h2 = {
+    muiColors.typography.h2 = {
       fontSize: '1.2rem',
       fontWeight: 'bold',
       lineHeight: 1.2,
       letterSpacing: '-0.00833em',
+      color: muiColors.palette.dokusoBlack.main,
       textAlign: 'center',
       fontFamily: [
         'Roboto',
@@ -33,7 +34,7 @@ const FeatureImages = () => {
                 {titles.map((itemTitle, indexTitle) => {return (
                     <div key={indexTitle} className='w-[300px] flex flex-col flex-none items-center m-5'>
                         <Image src={`/ilustration${indexTitle+1}.png`} className="mb-5" width={150} height={150} alt={`illustration${indexTitle+1}`}/>
-                        <ThemeProvider theme={typographyStyle}>
+                        <ThemeProvider theme={muiColors}>
                             <Typography gutterBottom 
                                 variant="h2" 
                                 component="h2" 
@@ -41,7 +42,7 @@ const FeatureImages = () => {
                                 {itemTitle}
                             </Typography>
                         </ThemeProvider>
-                        <p className="text-center">{subTitles[indexTitle]}</p>
+                        <p className="text-center text-dokuso-black">{subTitles[indexTitle]}</p>
                     </div>
                 )})}
             </div>

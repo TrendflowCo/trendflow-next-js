@@ -11,8 +11,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { createTheme, ThemeProvider} from '@mui/material/styles';
-
+import { ThemeProvider} from '@mui/material/styles';
+import { muiColors } from '../Utils/muiTheme';
 
 const NavigationBarHero = () => {
   // const {  
@@ -20,16 +20,7 @@ const NavigationBarHero = () => {
   //   user,
   //   handleResultClick
   // } = React.useContext(ImageContext);
-
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#F9F9F9',
-      },
-    },
-  });
-  
+ 
   const pages = [
     'About', 
     'Brands',
@@ -55,7 +46,6 @@ const NavigationBarHero = () => {
   
 
   const handleSearchSale = (e) => {
-    console.log('sale search')
     handleResultClick('sale');
   };
 
@@ -81,8 +71,8 @@ const NavigationBarHero = () => {
   };
 
   return (
-  <ThemeProvider theme={darkTheme}>
-    <AppBar position="static" color="primary" enableColorOnDark>
+  <ThemeProvider theme={muiColors}>
+    <AppBar position="static" color="dokusoWhite" enableColorOnDark>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Title for desktop display */}
@@ -95,7 +85,7 @@ const NavigationBarHero = () => {
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontWeight: 700,
-              color: 'inherit',
+              color: 'dokusoBlack',
               textDecoration: 'none',
             }}
           >
@@ -107,7 +97,7 @@ const NavigationBarHero = () => {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'inherit', display: 'block' }}
+                sx={{ my: 2 , color:'inherit', display: 'block' }}
                 href={routes[page]}
               >
                 {page}
@@ -122,7 +112,7 @@ const NavigationBarHero = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="dokusoBlack"
             >
               <MenuIcon />
             </IconButton>
@@ -185,12 +175,13 @@ const NavigationBarHero = () => {
                 onClick={handleOpenUserMenu} 
                 sx={{ p: 0 }}
               >
-                <Avatar alt={user.name} src={user.photoURL !== null ? user.photoURL : '/static/images/avatar/2.jpg'} />
+                {/* Here should be the avatar */}
+                {/* <Avatar alt={user.name} src={user.photoURL !== null ? user.photoURL : '/static/images/avatar/2.jpg'} /> */}
               </IconButton>
               :
               <Button 
                 // onClick={handleModal}
-                className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 text-white" variant="contained" 
+                className="text-dokuso-black font-semibold hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
                 // color="primary"
                 >
                 Sign Up

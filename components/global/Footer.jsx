@@ -44,7 +44,7 @@ const Footer = () => {
     });
 
     return (
-        <section className='flex flex-col items-center bg-slate-300 w-full'>
+        <section className='flex flex-col items-center bg-dokuso-black bg-opacity-20 w-full'>
             <div className='flex flex-row justify-center sm:justify-start w-full max-w-xl pt-4'>
                 <ThemeProvider theme={theme}>
                     {socialMedia.map((itemMedia , indexMedia) => {return (
@@ -80,11 +80,11 @@ const Footer = () => {
                 />
                 </Link>
             </div>
-            <div className='text-center text-dark py-4'>
+            <div className='text-center text-dokuso-black py-4'>
                 <Typography variant="body2" color="text.secondary">
                 {'Copyright © '}
                 <Link color="inherit" href="https:/dokuso.app/">
-                Dokuso
+                    Dokuso
                 </Link>{' '}
                 {new Date().getFullYear()}
                 {'.'}

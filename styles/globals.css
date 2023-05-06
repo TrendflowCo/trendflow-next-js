@@ -1,6 +1,24 @@
-/* import fonts */
 @import url("https://fonts.googleapis.com/css?family=Manrope:300,400,500,600,700&display=swap&subset=latin-ext");
-/* @import url("https://fonts.googleapis.com/css?family=Manrope:300,400,500,600,700&display=swap&subset=latin-ext"); */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .scrollbar::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .scrollbar::-webkit-scrollbar-track {
+      border-radius: 0;
+      background: 'transparent';
+    }
+    .scrollbar::-webkit-scrollbar-thumb {
+      background: #262626;
+
+      border-radius: 100vh;
+      border-right: 2px solid #FAFAFA;
+    }
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(0deg, #318AFA 0%, #FA39BE 100%);
+    }
+  }

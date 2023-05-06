@@ -29,10 +29,12 @@ module.exports = {
     },
     extend: {
       colors: {
-        'dokuso-green': '#00D89D',
-        'dokuso-black': '#272727',
-        'dokuso-gray': '#D8D8D8',
-        'dokuso-white': '#F9F9F9',
+        'dokuso-black': '#262626',
+        'dokuso-white': '#FAFAFA',
+        'dokuso-green': '#57FA3E',
+        'dokuso-orange': '#FAB332',
+        'dokuso-blue': '#318AFA',
+        'dokuso-pink': '#FA39BE',
       },
     },
   },

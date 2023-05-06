@@ -31,12 +31,11 @@ const PopularSearches = () => {
                             type="button"  
                             // onClick={handleButtonSearch} 
                             value={prompt} 
-                            className="px-6 py-2 border-2 border-purple-600 mr-1 mb-1 text-purple-600 font-medium text-sm leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                            className="px-6 py-2 border-2 border-dokuso-blue mr-1 mb-1 text-dokuso-blue font-semibold text-sm leading-tight uppercase rounded bg-dokuso-white hover:bg-dokuso-pink hover:bg-opacity-20 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
                         >
                             {prompt}
                         </button>
-                        )
-                        )
+                        ))
                     }
                 </div>
             </div>

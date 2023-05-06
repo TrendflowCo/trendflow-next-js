@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
         <link rel="icon" href="" />
       </Head>
       <NavBar/>
-      <main className='flex flex-col flex-auto p-0 m-0 overflow-auto'>{children}</main>
+      <main className='flex flex-col flex-auto p-0 m-0 overflow-auto scrollbar'>{children}</main>
     </div>
   )
 }
