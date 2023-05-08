@@ -2,32 +2,24 @@ import Head from 'next/head';
 import NavBar from './NavBar';
 import React from 'react';
 import { initFirebase } from "../../services/firebase";
-import { GoogleAuthProvider , getAuth , signInWithPopup  } from "firebase/auth";
+import { GoogleAuthProvider , getAuth , signInWithPopup } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { logOutExternal } from '../Auth/logOut';
+import { signInGoogleExternal } from '../Auth/signInWithGoogleExternal';
 
 const Layout = ({ children }) => {
   initFirebase();
-  const provider = new GoogleAuthProvider();
   const auth = getAuth(); // instance of auth method
   const [user, loading] = useAuthState(auth);
-  const signInGoogle = async () => { // basic sign in function
-    try {
-        const result = await signInWithPopup(auth,provider);
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-    } catch(error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-    }
-  }
-  const logOut = () => {
-    auth.signOut();
+  console.log('user: ', user);
+
+  const signInGoogle = () => {
+    signInGoogleExternal(auth)
   };
 
-
+  const logOut = () => {
+    logOutExternal(auth)
+  };
 
   return (
     <div className='w-screen h-screen flex flex-col bg-dokuso-white'>
