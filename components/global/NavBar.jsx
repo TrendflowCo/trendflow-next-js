@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
 
-const NavigationBarHero = () => {
+const NavigationBarHero = ({signInGoogle , logOut , user}) => {
   // const {  
   //   setShowModal,
   //   user,
@@ -68,6 +68,12 @@ const NavigationBarHero = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+  const handleMenuOption = (option) => {
+    if (option === 'Logout') {
+      logOut()
+    }
+    handleCloseUserMenu()
   };
 
   return (
@@ -168,26 +174,26 @@ const NavigationBarHero = () => {
           </Typography>
           {/* Menu for a logged user */}
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              { false ?
-              // { user ?
-              <IconButton 
-                onClick={handleOpenUserMenu} 
-                sx={{ p: 0 }}
-              >
-                {/* Here should be the avatar */}
-                {/* <Avatar alt={user.name} src={user.photoURL !== null ? user.photoURL : '/static/images/avatar/2.jpg'} /> */}
-              </IconButton>
+              { user ?
+                <Tooltip title="Open settings">
+                  <IconButton 
+                    onClick={handleOpenUserMenu} 
+                    sx={{ p: 0 }}
+                  >
+                    {/* Here should be the avatar */}
+                    <Avatar alt={user.name} src={user.photoURL !== null ? user.photoURL : 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} />
+                  </IconButton>
+                </Tooltip>
               :
-              <Button 
-                // onClick={handleModal}
-                className="text-dokuso-black font-semibold hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
-                // color="primary"
-                >
-                Sign Up
-              </Button>
+                <Button 
+                  // onClick={handleModal}
+                  onClick={signInGoogle}
+                  className="text-dokuso-black font-semibold hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
+                  // color="primary"
+                  >
+                  Log in
+                </Button>
               }
-            </Tooltip>
             {/* Menu toggle for the logged user */}
             <Menu
               sx={{ mt: '45px' }}
@@ -206,7 +212,8 @@ const NavigationBarHero = () => {
               onClose={handleCloseUserMenu}
             >
               {settings_account.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                // <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => handleMenuOption(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
