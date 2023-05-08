@@ -2,22 +2,26 @@ import Head from 'next/head';
 import NavBar from './NavBar';
 import React from 'react';
 import { initFirebase } from "../../services/firebase";
-import { GoogleAuthProvider , getAuth , signInWithPopup } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { logOutExternal } from '../Auth/logOut';
+import { logOutExternal } from '../Auth/logOutExternal';
 import { signInGoogleExternal } from '../Auth/signInWithGoogleExternal';
+import { getFirestore } from "firebase/firestore";
+
 
 const Layout = ({ children }) => {
-  initFirebase();
-  const auth = getAuth(); // instance of auth method
-  const [user, loading] = useAuthState(auth);
-  console.log('user: ', user);
+  const app = initFirebase();  // Initialize Firebase
+  const db = getFirestore(app); // Initialize database
+  // const analytics = getAnalytics(app); // Initialize Analytics and get a reference to the service
 
-  const signInGoogle = () => {
-    signInGoogleExternal(auth)
+  const auth = getAuth(); // instance of auth method
+  const [user, loading] = useAuthState(auth); // user data
+
+  const signInGoogle = () => { // runs the external sign in with google function
+    signInGoogleExternal(auth,db)
   };
 
-  const logOut = () => {
+  const logOut = () => { // runs the external log out function
     logOutExternal(auth)
   };
 
