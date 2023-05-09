@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
 
-const NavigationBarHero = ({signInGoogle , logOut , user}) => {
+const NavigationBarHero = ({signInGoogle , logOut , user , setLogInFlag}) => {
   // const {  
   //   setShowModal,
   //   user,
@@ -187,9 +187,11 @@ const NavigationBarHero = ({signInGoogle , logOut , user}) => {
               :
                 <Button 
                   // onClick={handleModal}
-                  onClick={signInGoogle}
-                  className="text-dokuso-black font-semibold hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
-                  // color="primary"
+                  // onClick={signInGoogle}
+                  onClick={() => setLogInFlag(true)}
+                  className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
+                  color="dokusoBlack"
+                  sx={{fontWeight: 'bold'}}
                   >
                   Log in
                 </Button>

@@ -1,6 +1,8 @@
 import React from "react";
 import { Box, Text, Stack, Icon, createIcon } from '@chakra-ui/react';
 import { Button } from "@mui/material";
+import { ThemeProvider} from '@mui/material/styles';
+import { muiColors } from '../Utils/muiTheme';
 
 const Searcher = () => {
     const Arrow = createIcon({
@@ -35,23 +37,26 @@ const Searcher = () => {
                         <Box>
                             <Icon as={Arrow} w={71} position={'absolute'} right={-71} top={'20px'}/>
                             <Text fontSize={'lg'} fontFamily={'Caveat'} position={'absolute'} right={'-125px'} top={'-6px'} transform={'rotate(10deg)'}>
-                                Try me (it's free)
+                                {`Try me (it's free)`}
                             </Text>
                         </Box>
-                    </Stack> 
-                    <Button 
-                        className="text-dokuso-black hover:text-dokuso-white font-semibold bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" 
-                        variant="contained" 
-                        // value={searchValue}
-                        // onChange={handleInputChange}
-                        // onClick={handleButtonSearch} 
-                        // onKeyDown={handleEnterSearch}
-                        // value={prompt} 
-                        color="primary"
-                        style={{width:'92px'}}
-                    >
-                        Shop Now
-                    </Button>
+                    </Stack>
+                    <ThemeProvider theme={muiColors}>
+                        <Button 
+                            className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" 
+                            variant="contained" 
+                            // value={searchValue}
+                            // onChange={handleInputChange}
+                            // onClick={handleButtonSearch} 
+                            // onKeyDown={handleEnterSearch}
+                            // value={prompt}
+                            sx={{fontWeight: 'bold'}}
+                            color="dokusoBlack"
+                            style={{width:'92px'}}
+                        >
+                            Shop Now
+                        </Button>
+                    </ThemeProvider>
                 </section>
             </div>
         </div>
