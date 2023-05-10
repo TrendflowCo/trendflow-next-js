@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
 
-const NavigationBarHero = ({signInGoogle , logOut , user , setLogInFlag}) => {
+const Navbar = ({signInGoogle , logOut , user , setLogInFlag}) => {
   // const {  
   //   setShowModal,
   //   user,
@@ -227,4 +227,4 @@ const NavigationBarHero = ({signInGoogle , logOut , user , setLogInFlag}) => {
   </ThemeProvider>
   );
 }
-export default NavigationBarHero;
+export default Navbar;

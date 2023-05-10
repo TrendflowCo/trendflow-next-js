@@ -32,8 +32,10 @@ const Layout = ({ children }) => {
         <link rel="icon" href="" />
       </Head>
       <NavBar signInGoogle={signInGoogle} logOut={logOut} user={user} setLogInFlag={setLogInFlag}/>
-      {logInFlag && <LogInModal setLogInFlag={setLogInFlag} logInFlag={logInFlag}/>}
-      <main className='flex flex-col flex-auto p-0 m-0 overflow-auto scrollbar'>{children}</main>
+      <main className='flex flex-col flex-auto p-0 m-0 overflow-auto scrollbar'>
+        {children}
+        {logInFlag && <LogInModal setLogInFlag={setLogInFlag} logInFlag={logInFlag}/>}
+      </main>
     </div>
   )
 }
