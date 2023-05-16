@@ -10,8 +10,10 @@ import { motion } from "framer-motion";
 import { getAuth , signInWithEmailAndPassword } from "firebase/auth";
 import { useAppDispatch } from "../../redux/hooks";
 import { setLogInFlag } from "../../redux/features/actions/auth";
+import Button from '@mui/material/Button';
+import { ThemeProvider} from '@mui/material/styles';
+import { muiColors } from '../Utils/muiTheme';
 
-  
 const LogInForm = () => {
     const dispatch = useAppDispatch();
     const [showPassword, setShowPassword] = useState(false);
@@ -71,6 +73,7 @@ const LogInForm = () => {
     // });
 
     return (
+    <>
         <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Box sx={{paddingX: '18px', marginTop: '12px'}}>
@@ -143,20 +146,24 @@ const LogInForm = () => {
                         Forgot password?
                     </Link>
                 </Stack>
-                <LoadingButton
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    loading={isSubmitting}
-                    onClick={() => logInWithEmailAndPassword(values.email, values.password)}
-                >
-                    {isSubmitting ? "loading..." : "Login"}
-              </LoadingButton>
+                <ThemeProvider theme={muiColors}>
+                    <LoadingButton
+                        fullWidth={true}
+                        className="bg-dokuso-blue" 
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        loading={isSubmitting}
+                        onClick={() => logInWithEmailAndPassword(values.email, values.password)}
+                    >
+                        {isSubmitting ? "loading..." : "Login"}
+                </LoadingButton>
+              </ThemeProvider>
             </Box>
           </Box>
         </Form>
       </FormikProvider>
+      </>
     )
 };
 
