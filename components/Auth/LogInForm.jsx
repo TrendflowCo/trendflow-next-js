@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-import { Box , Checkbox , FormControlLabel , IconButton , InputAdornment , Link , Stack , TextField, createTheme , ThemeProvider } from "@mui/material";
-import Button from '@mui/material/Button';
-import styled from "@emotion/styled";
-
+import { Box , Checkbox , FormControlLabel , IconButton , InputAdornment , Link , Stack , TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 // import { logEvent } from "firebase/analytics";
 // import { analytics } from "../components/FirebaseComp";
 import { getAuth , signInWithEmailAndPassword } from "firebase/auth";
+import { useAppDispatch } from "../../redux/hooks";
+import { setLogInFlag } from "../../redux/features/actions/auth";
 
   
 const LogInForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useAppDispatch();
+    const [showPassword, setShowPassword] = useState(false);
 
     let easing = [0.6, -0.05, 0.01, 0.99];
     const animate = {
@@ -30,16 +30,16 @@ const LogInForm = () => {
         try {
           await signInWithEmailAndPassword(auth, email, password);
           console.log('login_email')
-            logEvent(analytics, 'login', {
-              method: 'email'
-            });
+            // logEvent(analytics, 'login', {
+            //   method: 'email'
+            // });
         } catch (err) {
           console.error(err);
           alert(err.message);
           console.log('login_email_error')
-          logEvent(analytics, 'exception', {
-            description: 'login_email_error',
-          });
+        //   logEvent(analytics, 'exception', {
+        //     description: 'login_email_error',
+        //   });
         }
     };
     const LoginSchema = Yup.object().shape({
@@ -59,9 +59,7 @@ const LogInForm = () => {
           console.log("submitting...");
           setTimeout(() => {
             console.log("submited!!");
-            // setAuth(true);
-            // navigate(from, { replace: true });
-            setShowModal(false);
+            dispatch(setLogInFlag(false))
           }, 2000);
         },
     });
@@ -77,7 +75,7 @@ const LogInForm = () => {
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Box sx={{paddingX: '18px', marginTop: '12px'}}>
             <Box
-              sx={{ display: "flex" , flexDirection: "column" , gap: 4 }}
+              sx={{ display: "flex" , flexDirection: "column" , gap: 3 }}
               initial={{ opacity: 0, y: 40 }}
             >
                 <TextField 
@@ -88,6 +86,7 @@ const LogInForm = () => {
                     {...getFieldProps("email")} 
                     error={Boolean(touched.email && errors.email)} 
                     helperText={touched.email && errors.email}
+                    inputProps={{ style: {height: "36px"} }}
                 />
                 <TextField
                     fullWidth
@@ -97,6 +96,7 @@ const LogInForm = () => {
                     {...getFieldProps("password")}
                     error={Boolean(touched.password && errors.password)}
                     helperText={touched.password && errors.password}
+                    inputProps={{ style: {height: "36px"} }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
