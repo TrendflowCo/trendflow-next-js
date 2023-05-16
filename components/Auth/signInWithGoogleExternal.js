@@ -32,12 +32,10 @@ export const signInGoogleExternal = async () => { // basic sign in function
           // logEvent(analytics, 'sign_up', {
           //   method: 'google'
           // }); 
-          console.log('Logged in with Google - new user created');
         } catch (err) {
           console.error(err);
         }
       } else {
-        console.log('Logged in with Google - Existing user');
         // event login - add later
         // logEvent(analytics, 'login', {
         //   method: 'google'

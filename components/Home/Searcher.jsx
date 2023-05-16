@@ -1,10 +1,13 @@
-import React from "react";
+import React , { useState } from "react";
+import { useRouter } from "next/router";
 import { Box, Text, Stack, Icon, createIcon } from '@chakra-ui/react';
 import { Button } from "@mui/material";
 import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
 
 const Searcher = () => {
+    const router = useRouter();
+    const [forSearch , setForSearch] = useState('');
     const Arrow = createIcon({
         displayName: 'Arrow',
         viewBox: '0 0 72 24',
@@ -17,6 +20,15 @@ const Searcher = () => {
           />
         ),
     });
+    const handleButtonSearch = () => {
+        event.preventDefault();
+        router.push(`/results/${forSearch.split(' ').join('-')}`)
+    };
+    const handleEnterSearch = (e) => {
+        if (e.key === 'Enter') {
+            handleButtonSearch();
+        }
+    };
     return (
         <div className="flex flex-col flex-auto items-center w-full mt-4">
             <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl py-4">
@@ -27,9 +39,8 @@ const Searcher = () => {
                         type="text"
                         placeholder="&#xF002; Find your fashion bliss"
                         style={{'fontFamily':"Arial, FontAwesome"}}
-                        // value={searchValue}
-                        // onChange={handleInputChange}
-                        // onKeyDown={handleEnterSearch}
+                        onChange={(e) => {setForSearch(e.target.value)}}
+                        onKeyDown={handleEnterSearch}
                     />
                 </section>
                 <section className="px-2 lg:mt-0 mt-6">
@@ -47,8 +58,8 @@ const Searcher = () => {
                             variant="contained" 
                             // value={searchValue}
                             // onChange={handleInputChange}
-                            // onClick={handleButtonSearch} 
-                            // onKeyDown={handleEnterSearch}
+                            onClick={() => handleButtonSearch()} 
+                            onKeyDown={(e) => {handleEnterSearch(e)}}
                             // value={prompt}
                             sx={{fontWeight: 'bold'}}
                             color="dokusoBlack"

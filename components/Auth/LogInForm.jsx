@@ -58,15 +58,12 @@ const LogInForm = () => {
         },
         validationSchema: LoginSchema,
         onSubmit: () => {
-          console.log("submitting...");
           setTimeout(() => {
-            console.log("submited!!");
             dispatch(setLogInFlag(false))
           }, 2000);
         },
     });
     const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-    console.log('view_login', values.email)
     // logEvent(analytics, 'page_view', {
     //   page_title: 'login',
     //   client_id: values.email
