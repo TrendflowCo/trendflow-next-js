@@ -17,6 +17,7 @@ const Home = () => {
           <FashionForward/>
           <FeatureImages/>
           <SecondaryLogin/>
+          {/* <input type="text" className="border-none focus:ring-0"/> */}
         </div>
         <Footer/>
       </section>

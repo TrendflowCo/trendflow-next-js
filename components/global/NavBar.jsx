@@ -13,8 +13,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
+import { useAppSelector , useAppDispatch } from '../../redux/hooks';
+import { setLogInFlag } from '../../redux/features/actions/auth';
 
-const Navbar = ({signInGoogle , logOut , user , setLogInFlag}) => {
+const Navbar = ({ logOut , user }) => {
+  const dispatch = useAppDispatch();
   // const {  
   //   setShowModal,
   //   user,
@@ -187,8 +190,7 @@ const Navbar = ({signInGoogle , logOut , user , setLogInFlag}) => {
               :
                 <Button 
                   // onClick={handleModal}
-                  // onClick={signInGoogle}
-                  onClick={() => setLogInFlag(true)}
+                  onClick={() => dispatch(setLogInFlag(true))}
                   className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
                   color="dokusoBlack"
                   sx={{fontWeight: 'bold'}}

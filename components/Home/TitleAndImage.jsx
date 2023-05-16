@@ -35,6 +35,8 @@ const TitleAndImage = () => {
                     <Image
                         src={homeImage}
                         alt='homeImg'
+                        width={"100%"}
+                        height={"100%"}
                     />
                     <div className='mt-7 flex flex-row items-start w-full'>
                         <h4 className="text-3xl sm:text-2xl font-bold mr-0.5">{`Discover fashion with `}

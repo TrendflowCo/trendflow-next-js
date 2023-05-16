@@ -1,11 +1,20 @@
-import { GoogleAuthProvider , signInWithPopup } from "firebase/auth";
-import { query , getDocs, collection , where , addDoc } from "firebase/firestore";
+import { GoogleAuthProvider , signInWithPopup , getAuth } from "firebase/auth";
+import { query , getDocs, collection , where , addDoc , getFirestore } from "firebase/firestore";
 import Swal from "sweetalert2";
+// import { getAnalytics, logEvent } from "firebase/analytics";
+import { app } from "../../services/firebase";
 
-const provider = new GoogleAuthProvider();
-export const signInGoogleExternal = async (auth,db) => { // basic sign in function
+// Initialize analytics component
+// const analytics = getAnalytics(app);
+
+// Initialize auth and db
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const googleProvider = new GoogleAuthProvider();
+export const signInGoogleExternal = async () => { // basic sign in function
   try {
-      const result = await signInWithPopup(auth,provider);
+      const result = await signInWithPopup(auth,googleProvider);
       // const credential = GoogleAuthProvider.credentialFromResult(result);
       // const token = credential.accessToken;
       const user = result.user;
@@ -23,7 +32,7 @@ export const signInGoogleExternal = async (auth,db) => { // basic sign in functi
           // logEvent(analytics, 'sign_up', {
           //   method: 'google'
           // }); 
-          console.log('Logged in with Google - new user created'); 
+          console.log('Logged in with Google - new user created');
         } catch (err) {
           console.error(err);
         }
