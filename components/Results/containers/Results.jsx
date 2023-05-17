@@ -24,7 +24,7 @@ const Results = ({ product }) => {
             }
         };
         fetchData()
-    },[router.query])
+    },[router.query , product])
     return (
         <> 
             { loadingFlag ? 

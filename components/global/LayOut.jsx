@@ -33,7 +33,7 @@ const Layout = ({ children }) => {
         dispatch(setLogInFlag(true))
       }
     }
-  },[ready]);
+  },[ready]);  // eslint-disable-line
 
   useEffect(() => {
     if (logged === null) {
@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
     } else {
       setLogged(false)
     }
-  },[user])
+  },[user]) // eslint-disable-line
 
   return (
     <div className='w-screen h-screen flex flex-col bg-dokuso-white'>

@@ -27,47 +27,24 @@ const Navbar = ({ logOut , user }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
- 
-  // const pages = [
-  //   'About', 
-  //   'Brands',
-  //   // 'SALE (soon)',
-  //   'Blog',
-  //   'Api (SOON)',
-  // ];
-  
-  // const routes = {
-  //   // 'Home': '/home',
-  //   'About': '/manifesto',
-  //   'Brands': '/Brands',
-  //   'SALE': '/',
-  //   'Blog': 'https://medium.com/@dokuso.app/',
-  //   'Api': '/',
-  // }
   const settings_account = [
     'Account', 
-    'Dashboard', 
-    'Logout',
     'Profile',
+    'Dashboard', 
     'Wish list', 
+    'Logout',
   ];
   
-  const handleSearchSale = (e) => {
-    handleResultClick('sale');
-  };
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu = (event) => { // open nav menu on mobile
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = () => { // close nav menu on mobile
     setAnchorElNav(null);
   };
-
-
-
-  const handleCloseUserMenu = () => { // funtion for closing user menu
+  const handleOpenUserMenu = (event) => { // open user menu
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => { // close user menu
     setAnchorElUser(null);
   };
   const handleMenuOption = (option) => { // options from user menu
@@ -209,12 +186,6 @@ const Navbar = ({ logOut , user }) => {
                   onClick={handleOpenUserMenu} 
                   sx={{ p: 0 , width: {sm: 48 , xs: 40} , height: '100%' }}
                 >
-                  {/* Here should be the avatar */}
-                  {/* <Avatar
-                    referrerPolicy="no-referrer" 
-                    alt={user.name} 
-                    src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
-                  /> */}
                   <div className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'>
                     <Image
                       referrerPolicy='no-referrer'
@@ -229,7 +200,6 @@ const Navbar = ({ logOut , user }) => {
               </Tooltip>
             :
               <Button 
-                // onClick={handleModal}
                 onClick={() => dispatch(setLogInFlag(true))}
                 className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
                 color="dokusoBlack"
