@@ -1,13 +1,16 @@
-import React , { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { Box, Text, Stack, Icon, createIcon } from '@chakra-ui/react';
 import { Button } from "@mui/material";
 import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
+import { useAppDispatch , useAppSelector } from "../../redux/hooks";
+import { setCurrentSearch } from "../../redux/features/actions/search";
 
 const Searcher = () => {
+    const dispatch = useAppDispatch();
+    const { currentSearch } = useAppSelector(state => state.search);
     const router = useRouter();
-    const [forSearch , setForSearch] = useState('');
     const Arrow = createIcon({
         displayName: 'Arrow',
         viewBox: '0 0 72 24',
@@ -20,11 +23,14 @@ const Searcher = () => {
           />
         ),
     });
-    const handleButtonSearch = () => {
-        event.preventDefault();
-        router.push(`/results/${forSearch.split(' ').join('-')}`)
+    const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
+        dispatch(setCurrentSearch(e.target.value));
     };
-    const handleEnterSearch = (e) => {
+    const handleButtonSearch = () => { // click into SHOP NOW button
+        event.preventDefault();
+        router.push(`/results/${currentSearch.split(' ').join('-')}`)
+    };
+    const handleEnterSearch = (e) => { // click ENTER into form -> redirects to SHOP NOW
         if (e.key === 'Enter') {
             handleButtonSearch();
         }
@@ -39,7 +45,7 @@ const Searcher = () => {
                         type="text"
                         placeholder="&#xF002; Find your fashion bliss"
                         style={{'fontFamily':"Arial, FontAwesome"}}
-                        onChange={(e) => {setForSearch(e.target.value)}}
+                        onChange={(e) => {handleSearchPhrase(e)}}
                         onKeyDown={handleEnterSearch}
                     />
                 </section>
@@ -56,11 +62,8 @@ const Searcher = () => {
                         <Button 
                             className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" 
                             variant="contained" 
-                            // value={searchValue}
-                            // onChange={handleInputChange}
                             onClick={() => handleButtonSearch()} 
                             onKeyDown={(e) => {handleEnterSearch(e)}}
-                            // value={prompt}
                             sx={{fontWeight: 'bold'}}
                             color="dokusoBlack"
                             style={{width:'92px'}}

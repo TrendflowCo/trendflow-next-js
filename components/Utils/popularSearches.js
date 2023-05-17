@@ -1,0 +1,15 @@
+export const popularSearches = [
+    "Merlina",
+    "Barbie Y2K",
+    "Preppy Girl",
+    "Boho chic",
+    "Parisian chic",
+    "Floral Dresses",
+    "Men's Shirts in pastel colors",
+    "Denim",
+    "Wes Anderson",
+    "Safari Glam",
+    "Capsule",
+    "Bold prints",
+    "Office attire",
+]

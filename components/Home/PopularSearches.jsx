@@ -1,22 +1,16 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { popularSearches } from "../Utils/popularSearches";
+import { useAppDispatch } from "../../redux/hooks";
+import { setCurrentSearch } from "../../redux/features/actions/search";
 
 const PopularSearches = () => {
-    // Basic searches - This should be a get from most frequented searches
-    const prompts = [
-        "Merlina",
-        "Barbie Y2K",
-        "Preppy Girl",
-        "Boho chic",
-        "Parisian chic",
-        "Floral Dresses",
-        "Men's Shirts in pastel colors",
-        "Denim",
-        "Wes Anderson",
-        "Safari Glam",
-        "Capsule",
-        "Bold prints",
-        "Office attire",
-    ]
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const handleQuickSearch = (val) => {
+        dispatch(setCurrentSearch(val))
+        router.push(`/results/${val.split(' ').join('-')}`)
+    };
     
     return (
         <div className="flex flex-col items-center w-full pt-8">
@@ -25,11 +19,11 @@ const PopularSearches = () => {
                     Popular searches
                 </h1>
                 <div className="flex-wrap">
-                    {prompts.map((prompt) => (
+                    {popularSearches.map((prompt) => (
                         <button 
                             key={prompt}
                             type="button"  
-                            // onClick={handleButtonSearch} 
+                            onClick={() => {handleQuickSearch(prompt)}} 
                             value={prompt} 
                             className="px-6 py-2 border-2 border-dokuso-blue mr-1 mb-1 text-dokuso-blue font-semibold text-sm leading-tight uppercase rounded bg-dokuso-white hover:bg-dokuso-pink hover:bg-opacity-20 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
                         >
