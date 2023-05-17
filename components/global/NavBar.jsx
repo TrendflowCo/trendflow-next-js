@@ -15,6 +15,7 @@ import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
 import { useAppSelector , useAppDispatch } from '../../redux/hooks';
 import { setLogInFlag } from '../../redux/features/actions/auth';
+import Image from 'next/image';
 
 const Navbar = ({ logOut , user }) => {
   const dispatch = useAppDispatch();
@@ -184,7 +185,21 @@ const Navbar = ({ logOut , user }) => {
                     sx={{ p: 0 }}
                   >
                     {/* Here should be the avatar */}
-                    <Avatar alt={user.name} src={user.photoURL !== null ? user.photoURL : 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} />
+                    {/* <Avatar
+                      referrerPolicy="no-referrer" 
+                      alt={user.name} 
+                      src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
+                    /> */}
+                    <div className='w-11 h-11 rounded-[22px]'>
+                      <Image
+                        referrerPolicy='no-referrer'
+                        alt="avatar"
+                        src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
+                        width={44} 
+                        height={44} 
+                        className='rounded-[22px]'
+                      />
+                    </div>
                   </IconButton>
                 </Tooltip>
               :

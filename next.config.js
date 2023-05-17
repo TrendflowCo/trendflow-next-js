@@ -40,6 +40,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'fashionunited.com'
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com'
+      },
     ]
   }
 }
