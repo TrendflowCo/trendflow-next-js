@@ -18,60 +18,59 @@ import { setLogInFlag } from '../../redux/features/actions/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { setCurrentSearch } from '../../redux/features/actions/search';
+import { pages } from '../Utils/pages';
 
 const Navbar = ({ logOut , user }) => {
   const { currentSearch } = useAppSelector(state => state.search);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
  
-  const pages = [
-    'About', 
-    'Brands',
-    // 'SALE (soon)',
-    'Blog',
-    'Api (SOON)',
-  ];
+  // const pages = [
+  //   'About', 
+  //   'Brands',
+  //   // 'SALE (soon)',
+  //   'Blog',
+  //   'Api (SOON)',
+  // ];
   
-  const routes = {
-    'Home': '/home',
-    'About': '/manifesto',
-    'Brands': '/Brands',
-    'SALE': '/',
-    'Blog': 'https://medium.com/@dokuso.app/',
-    'Api': '/',
-  }
+  // const routes = {
+  //   // 'Home': '/home',
+  //   'About': '/manifesto',
+  //   'Brands': '/Brands',
+  //   'SALE': '/',
+  //   'Blog': 'https://medium.com/@dokuso.app/',
+  //   'Api': '/',
+  // }
   const settings_account = [
-    'Profile', 
     'Account', 
     'Dashboard', 
-    'Logout'
+    'Logout',
+    'Profile',
+    'Wish list', 
   ];
   
   const handleSearchSale = (e) => {
     handleResultClick('sale');
   };
-
-  const handleModal = () => {
-    setShowModal(true)
-  };
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+
+
+  const handleCloseUserMenu = () => { // funtion for closing user menu
     setAnchorElUser(null);
   };
-  const handleMenuOption = (option) => {
+  const handleMenuOption = (option) => { // options from user menu
     if (option === 'Logout') {
       logOut()
     }
@@ -92,7 +91,6 @@ const Navbar = ({ logOut , user }) => {
       }
     }
   };
-
 
   return (
   <ThemeProvider theme={muiColors}>
@@ -119,12 +117,12 @@ const Navbar = ({ logOut , user }) => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2 , color:'inherit', display: 'block' }}
-                href={routes[page]}
+                sx={{ my: 2 , color:'inherit' }}
+                href={page.src}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -160,14 +158,14 @@ const Navbar = ({ logOut , user }) => {
             >
               {pages.map((page) => (
                 <MenuItem 
-                component="a"
-                key={page} 
-                onClick={page === 'SALE' ? handleSearchSale : handleCloseNavMenu}
-                href={routes[page]}
-                target="_blank" 
-                rel="noopener noreferrer"
+                  component="a"
+                  key={page.name} 
+                  onClick={handleCloseNavMenu}
+                  href={page.src}
+                  target="_blank" 
+                  rel="noopener noreferrer"
                 >
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
              
               ))}
@@ -178,7 +176,7 @@ const Navbar = ({ logOut , user }) => {
             variant="h5"
             noWrap
             component="a"
-            href="/home"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -196,7 +194,7 @@ const Navbar = ({ logOut , user }) => {
               <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl h-full">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
                 <input 
-                    className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 mr-4 pr-10 pl-5 relative flex-auto w-full items-center text-dokuso-black"
+                    className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 mr-4 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
                     type="text"
                     placeholder={currentSearch}
                     style={{'fontFamily':"Arial, FontAwesome"}}
@@ -209,7 +207,7 @@ const Navbar = ({ logOut , user }) => {
               <Tooltip title="Open settings">
                 <IconButton 
                   onClick={handleOpenUserMenu} 
-                  sx={{ p: 0 , width: 44 , height: '100%' }}
+                  sx={{ p: 0 , width: {sm: 48 , xs: 40} , height: '100%' }}
                 >
                   {/* Here should be the avatar */}
                   {/* <Avatar
@@ -217,14 +215,14 @@ const Navbar = ({ logOut , user }) => {
                     alt={user.name} 
                     src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
                   /> */}
-                  <div className='w-11 h-11 rounded-[22px]'>
+                  <div className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'>
                     <Image
                       referrerPolicy='no-referrer'
                       alt="avatar"
                       src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
-                      width={44} 
-                      height={44} 
-                      className='rounded-[22px]'
+                      width={48} 
+                      height={48} 
+                      className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'
                     />
                   </div>
                 </IconButton>
