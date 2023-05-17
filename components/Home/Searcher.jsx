@@ -6,6 +6,8 @@ import { ThemeProvider} from '@mui/material/styles';
 import { muiColors } from '../Utils/muiTheme';
 import { useAppDispatch , useAppSelector } from "../../redux/hooks";
 import { setCurrentSearch } from "../../redux/features/actions/search";
+import Swal from "sweetalert2";
+import { swalNoInputs } from "../Utils/swalConfig";
 
 const Searcher = () => {
     const dispatch = useAppDispatch();
@@ -28,7 +30,13 @@ const Searcher = () => {
     };
     const handleButtonSearch = () => { // click into SHOP NOW button
         event.preventDefault();
-        router.push(`/results/${currentSearch.split(' ').join('-')}`)
+        if (currentSearch !== '') {
+            router.push(`/results/${currentSearch.split(' ').join('-')}`)
+        } else {
+            Swal.fire({
+                ...swalNoInputs
+            })
+        }
     };
     const handleEnterSearch = (e) => { // click ENTER into form -> redirects to SHOP NOW
         if (e.key === 'Enter') {
