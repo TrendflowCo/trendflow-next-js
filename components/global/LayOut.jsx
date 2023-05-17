@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import NavBar from './NavBar';
-import React, { useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { logOutExternal } from '../Auth/logOutExternal';
@@ -11,19 +11,39 @@ import { setLogInFlag } from '../../redux/features/actions/auth';
 const Layout = ({ children }) => {
   const dispatch = useAppDispatch()
   const { logInFlag } = useAppSelector(state => state.auth)
-  // const analytics = getAnalytics(app); // Initialize Analytics and get a reference to the service
   const auth = getAuth(); // instance of auth method
   const [user, loading] = useAuthState(auth); // user data
+  const [ logged , setLogged ] = useState(null);
+  const [ ready , setReady ] = useState(false);
   const logOut = () => { // runs the external log out function
     logOutExternal(auth)
   };
+
   useEffect(() => {
-    setTimeout(() => {
-      if (!logInFlag) {
-        dispatch(setLogInFlag(true));
+    if(logged !== null) {
+      setTimeout(() =>{
+        setReady(true)
+      },90000)
+    }
+  },[logged]);
+
+  useEffect(() => {
+    if (ready === true) {
+      if (logged === false) {
+        dispatch(setLogInFlag(true))
       }
-    },90000)
-  },[])
+    }
+  },[ready]);
+
+  useEffect(() => {
+    if (logged === null) {
+      setLogged(false)
+    } else if (logged === false) {
+      setLogged(true) 
+    } else {
+      setLogged(false)
+    }
+  },[user])
 
   return (
     <div className='w-screen h-screen flex flex-col bg-dokuso-white'>
