@@ -1,23 +1,31 @@
 import { GoogleAuthProvider , signInWithPopup , getAuth } from "firebase/auth";
 import { query , getDocs, collection , where , addDoc , getFirestore } from "firebase/firestore";
 import Swal from "sweetalert2";
-// import { getAnalytics, logEvent } from "firebase/analytics";
+import { getAnalytics , logEvent } from "firebase/analytics";
 import { app } from "../../services/firebase";
-
-// Initialize analytics component
-// const analytics = getAnalytics(app);
 
 // Initialize auth and db
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+// Initialize analytics component
+const analyticsFunction = () => {
+  if (typeof window !== "undefined") {
+    return getAnalytics(app)
+  } else {
+    return null
+  }
+}
+const analytics = analyticsFunction();
+// initialize google auth provider
 const googleProvider = new GoogleAuthProvider();
+
 export const signInGoogleExternal = async () => { // basic sign in function
   try {
       const result = await signInWithPopup(auth,googleProvider);
       // const credential = GoogleAuthProvider.credentialFromResult(result);
       // const token = credential.accessToken;
       const user = result.user;
+      console.log('user: ', user);
       const q = query(collection(db, "users"), where("uid", "==", user.uid)); // bring all users with their UID
       const docs = await getDocs(q);
       if (docs.docs.length === 0) { // If theres no user with the current UID
@@ -28,18 +36,22 @@ export const signInGoogleExternal = async () => { // basic sign in function
             authProvider: "google",
             email: user.email,
           });
-          // event login - add later
-          // logEvent(analytics, 'sign_up', {
-          //   method: 'google'
-          // }); 
+          // event login
+          logEvent(analytics, 'sign_up', {
+            method: 'google'
+          }); 
         } catch (err) {
-          console.error(err);
+          console.error('Login failed: ' , err);
         }
       } else {
-        // event login - add later
-        // logEvent(analytics, 'login', {
-        //   method: 'google'
-        // });  
+        try {
+          // event login
+          logEvent(analytics, 'login', {
+            method: 'google'
+          });  
+        } catch (error) {
+          console.error('failed log event: ', error);
+        }
       }
   } catch(error) {
     console.error('error at google auth: ', error);
@@ -47,9 +59,13 @@ export const signInGoogleExternal = async () => { // basic sign in function
       icon: 'error',
       text: 'Error with Google log in'
     });
-    // event login - add later
-    // logEvent(analytics, 'exception', {
-    //   description: 'login_signup_google_error'
-    // });
+    try {
+      // event login
+      logEvent(analytics, 'exception', {
+        description: 'login_signup_google_error'
+      });
+    } catch(error) {
+      console.error('failed log event: ', error);
+    }
   }
 }
