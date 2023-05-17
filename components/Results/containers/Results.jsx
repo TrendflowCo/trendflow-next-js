@@ -4,8 +4,10 @@ import { endpoints } from "../../../config/endpoints";
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Grid } from "@mui/material";
 import ResultCard from "../ResultCard";
+import { useRouter } from "next/router";
 
 const Results = ({ product }) => {
+    const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
     useEffect(() => {
@@ -22,7 +24,7 @@ const Results = ({ product }) => {
             }
         };
         fetchData()
-    },[])
+    },[router.query])
     return (
         <> 
             { loadingFlag ? 

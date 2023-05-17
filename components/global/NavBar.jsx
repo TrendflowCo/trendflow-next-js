@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,14 +16,13 @@ import { muiColors } from '../Utils/muiTheme';
 import { useAppSelector , useAppDispatch } from '../../redux/hooks';
 import { setLogInFlag } from '../../redux/features/actions/auth';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { setCurrentSearch } from '../../redux/features/actions/search';
 
 const Navbar = ({ logOut , user }) => {
+  const { currentSearch } = useAppSelector(state => state.search);
   const dispatch = useAppDispatch();
-  // const {  
-  //   setShowModal,
-  //   user,
-  //   handleResultClick
-  // } = React.useContext(ImageContext);
+  const router = useRouter();
  
   const pages = [
     'About', 
@@ -42,13 +41,12 @@ const Navbar = ({ logOut , user }) => {
     'Api': '/',
   }
   const settings_account = [
-        'Profile', 
-        'Account', 
-        'Dashboard', 
-        'Logout'
-      ];
+    'Profile', 
+    'Account', 
+    'Dashboard', 
+    'Logout'
+  ];
   
-
   const handleSearchSale = (e) => {
     handleResultClick('sale');
   };
@@ -79,6 +77,22 @@ const Navbar = ({ logOut , user }) => {
     }
     handleCloseUserMenu()
   };
+  const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
+    dispatch(setCurrentSearch(e.target.value));
+  };
+  const handleEnterSearch = (e) => { // click ENTER into form -> redirects to SHOP NOW
+    if (e.key === 'Enter') {
+      event.preventDefault();
+      if (currentSearch !== '') {
+          router.push(`/results/${currentSearch.split(' ').join('-')}`)
+      } else {
+          Swal.fire({
+              ...swalNoInputs
+        })
+      }
+    }
+  };
+
 
   return (
   <ThemeProvider theme={muiColors}>
@@ -177,42 +191,55 @@ const Navbar = ({ logOut , user }) => {
             Dokusō
           </Typography>
           {/* Menu for a logged user */}
-          <Box sx={{ flexGrow: 0 }}>
-              { user ?
-                <Tooltip title="Open settings">
-                  <IconButton 
-                    onClick={handleOpenUserMenu} 
-                    sx={{ p: 0 }}
-                  >
-                    {/* Here should be the avatar */}
-                    {/* <Avatar
-                      referrerPolicy="no-referrer" 
-                      alt={user.name} 
+          <Box sx={{ flexGrow: 0 , display: 'flex', flexDirection: 'row' , alignItems: 'center' }}>
+            { router.pathname !== '/' &&
+              <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl h-full">
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+                <input 
+                    className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 mr-4 pr-10 pl-5 relative flex-auto w-full items-center text-dokuso-black"
+                    type="text"
+                    placeholder={currentSearch}
+                    style={{'fontFamily':"Arial, FontAwesome"}}
+                    onChange={(e) => {handleSearchPhrase(e)}}
+                    onKeyDown={handleEnterSearch}
+                />
+              </div>
+            }
+            { user ?
+              <Tooltip title="Open settings">
+                <IconButton 
+                  onClick={handleOpenUserMenu} 
+                  sx={{ p: 0 , width: 44 , height: '100%' }}
+                >
+                  {/* Here should be the avatar */}
+                  {/* <Avatar
+                    referrerPolicy="no-referrer" 
+                    alt={user.name} 
+                    src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
+                  /> */}
+                  <div className='w-11 h-11 rounded-[22px]'>
+                    <Image
+                      referrerPolicy='no-referrer'
+                      alt="avatar"
                       src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
-                    /> */}
-                    <div className='w-11 h-11 rounded-[22px]'>
-                      <Image
-                        referrerPolicy='no-referrer'
-                        alt="avatar"
-                        src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
-                        width={44} 
-                        height={44} 
-                        className='rounded-[22px]'
-                      />
-                    </div>
-                  </IconButton>
-                </Tooltip>
-              :
-                <Button 
-                  // onClick={handleModal}
-                  onClick={() => dispatch(setLogInFlag(true))}
-                  className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
-                  color="dokusoBlack"
-                  sx={{fontWeight: 'bold'}}
-                  >
-                  Log in
-                </Button>
-              }
+                      width={44} 
+                      height={44} 
+                      className='rounded-[22px]'
+                    />
+                  </div>
+                </IconButton>
+              </Tooltip>
+            :
+              <Button 
+                // onClick={handleModal}
+                onClick={() => dispatch(setLogInFlag(true))}
+                className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
+                color="dokusoBlack"
+                sx={{fontWeight: 'bold'}}
+                >
+                Log in
+              </Button>
+            }
             {/* Menu toggle for the logged user */}
             <Menu
               sx={{ mt: '45px' }}

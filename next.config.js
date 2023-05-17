@@ -18,7 +18,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'pacificplace.com.hk'
+        hostname: 'www.pacificplace.com.hk'
       },
       {
         protocol: 'https',
