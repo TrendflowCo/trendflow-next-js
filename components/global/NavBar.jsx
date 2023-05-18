@@ -31,7 +31,7 @@ const Navbar = ({ logOut , user }) => {
     'Account', 
     'Profile',
     'Dashboard', 
-    'Wish list', 
+    'Wishlist', 
     'Logout',
   ];
   
@@ -50,6 +50,8 @@ const Navbar = ({ logOut , user }) => {
   const handleMenuOption = (option) => { // options from user menu
     if (option === 'Logout') {
       logOut()
+    } else if (option === 'Wishlist') {
+      router.push('/user/wishlist')
     }
     handleCloseUserMenu()
   };
