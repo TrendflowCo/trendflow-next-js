@@ -22,6 +22,10 @@ const Wishlist = () => {
                     const items = newData.map(item => item["img_id"])
                     console.log('fetched items: ', items);
 
+                    // con eso busco los items completos
+                    // fetchData(`/search?ids='${wishlist}'`)
+
+
                 } catch (err) {
                     console.error(err);
                 }

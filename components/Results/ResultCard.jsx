@@ -34,7 +34,7 @@ const ResultCard = ({productItem}) => {
         />
         <section className='flex flex-row p-4 w-full'>
           <div className='flex flex-col w-full'>
-            <p>{enhanceText(productItem.name)}</p>
+            <p className='pr-2'>{enhanceText(productItem.name)}</p>
             {
               productItem.old_price_float !== productItem.price_float ? 
               <div className='flex flex-row w-full'>

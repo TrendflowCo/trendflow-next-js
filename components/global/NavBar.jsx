@@ -175,7 +175,7 @@ const Navbar = ({ logOut , user }) => {
                 <input 
                     className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 mr-4 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
                     type="text"
-                    placeholder={currentSearch}
+                    placeholder={currentSearch || "Tell me what you like"}
                     style={{'fontFamily':"Arial, FontAwesome"}}
                     onChange={(e) => {handleSearchPhrase(e)}}
                     onKeyDown={handleEnterSearch}

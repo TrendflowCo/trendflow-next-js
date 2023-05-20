@@ -31,7 +31,11 @@ const Searcher = () => {
     const handleButtonSearch = () => { // click into SHOP NOW button
         event.preventDefault();
         if (currentSearch !== '') {
-            router.push(`/results/${currentSearch.split(' ').join('-')}`)
+            // debo incluir el idioma de la pagina para la busqueda
+            // fetchData(`search?language=${api_language}&query=${searchValue}`)
+
+            // agrego el idioma hard coded
+            router.push(`/${'en'}/results/${currentSearch.split(' ').join('-')}`)
         } else {
             Swal.fire({
                 ...swalNoInputs
