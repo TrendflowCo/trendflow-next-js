@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-// import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,13 +18,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { setCurrentSearch } from '../../redux/features/actions/search';
 import { pages } from '../Utils/pages';
+import { setLanguage } from '../../redux/features/actions/language';
 
 const Navbar = ({ logOut , user }) => {
   const { currentSearch } = useAppSelector(state => state.search);
+  const { language } = useAppSelector(state => state.language);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElLanguage , setAnchorElLanguage] = useState(null);
 
   const settings_account = [
     'Account', 
@@ -34,6 +36,22 @@ const Navbar = ({ logOut , user }) => {
     'Wishlist', 
     'Logout',
   ];
+  const languages = [
+    { name: 'EN', flag: '🇬🇧' },
+    { name: 'ES', flag: '🇪🇸' },
+    { name: 'IT', flag: '🇮🇹' },
+    { name: 'DU', flag: '🇳🇱' },
+    { name: 'FR', flag: '🇫🇷' },
+    { name: 'PT', flag: '🇵🇹' },
+    { name: 'DE', flag: '🇩🇪' },
+    { name: 'DA', flag: '🇩🇰' },
+    { name: 'RU', flag: '🇷🇺' },
+    { name: 'KO', flag: '🇰🇷' },
+    { name: 'CH', flag: '🇨🇳' },
+    { name: 'JP', flag: '🇯🇵' },
+    { name: 'AR', flag: '🇸🇦' },
+    { name: 'HI', flag: '🇮🇳' },
+  ];  
   
   const handleOpenNavMenu = (event) => { // open nav menu on mobile
     setAnchorElNav(event.currentTarget);
@@ -70,7 +88,17 @@ const Navbar = ({ logOut , user }) => {
       }
     }
   };
-
+  const handleLanguageMenuOpen = (event) => {
+    setAnchorElLanguage(event.currentTarget);
+  };
+  const handleLanguageMenuClose = () => {
+    setAnchorElLanguage(null);
+  };
+  const handleClickLanguage = (selectedLanguage) => {
+    dispatch(setLanguage(selectedLanguage.toLowerCase()))
+    handleLanguageMenuClose();
+  };
+  
   return (
   <ThemeProvider theme={muiColors}>
     <AppBar position="static" color="dokusoWhite" enableColorOnDark>
@@ -210,6 +238,29 @@ const Navbar = ({ logOut , user }) => {
                 Log in
               </Button>
             }
+            {/* Language selector */}
+            { language !== '' && 
+              <Tooltip title="Select language" className='cursor-pointer'>
+                <Button color="inherit" onClick={handleLanguageMenuOpen}>
+                {`${language}`}
+                </Button>
+              </Tooltip>
+            }
+            <Menu
+              anchorEl={anchorElLanguage}
+              open={Boolean(anchorElLanguage)}
+              onClose={handleLanguageMenuClose}
+            >
+              {languages.map((language, index) => (
+                <MenuItem 
+                key={index} 
+                onClick={() => handleClickLanguage(language.name)}
+                >
+                  {language.flag} {language.name}
+                </MenuItem>
+              ))}
+            </Menu>
+
             {/* Menu toggle for the logged user */}
             <Menu
               sx={{ mt: '45px' }}

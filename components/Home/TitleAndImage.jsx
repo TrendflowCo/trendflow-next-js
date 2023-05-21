@@ -4,8 +4,10 @@ import homeImage from '../../public/homeImage.png';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from "@mui/material";
 import { muiColors } from '../Utils/muiTheme';
+import { useAppSelector } from "../../redux/hooks";
 
 const TitleAndImage = () => {
+    const { translations } = useAppSelector(state => state.language);
     muiColors.typography.h1 = {
       fontSize: '3rem',
       fontWeight: 'bold',
@@ -30,7 +32,7 @@ const TitleAndImage = () => {
                         variant="h1" 
                         component="h1" 
                     >
-                        Stay Ahead of the Fashion Game
+                        {translations?.header?.title}
                     </Typography>
                     <Image
                         src={homeImage}
@@ -39,8 +41,12 @@ const TitleAndImage = () => {
                         height={"100%"}
                     />
                     <div className='mt-7 flex flex-row items-start w-full'>
-                        <h4 className="text-3xl sm:text-2xl font-bold mr-0.5">{`Discover fashion with `}
-                            <span className="ml-1 font-extrabold text-transparent sm:text-2xl text-3xl bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-blue">precision</span>
+                        <h4 className="text-3xl sm:text-2xl font-bold mr-0.5">
+                            {`${translations?.search?.title} `}
+                            <span 
+                            className="ml-1 font-extrabold text-transparent sm:text-2xl text-3xl bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-blue">
+                                {translations?.search?.precision}
+                            </span>
                         </h4>
                     </div>
                     <p className="py-4 px-1 sm:px-0 sm:text-lg text-xl">

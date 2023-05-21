@@ -1,0 +1,76 @@
+{
+    "header": {
+    "title": "Stay Ahead of the Fashion Game"
+    },
+    "search": {
+    "title": "Discover fashion with ",
+    "precision": "precision",
+    "text": " Our search bar is your gateway to finding the perfect fashion items to fit your style. Don't limit yourself to the same old searches. Try something new, unexpected, and uniquely you.",
+    "placeholder": "Unleash your creativity..."
+    },
+    "features": {
+    "title": "Fashion Forward, AI Driven",
+    "feature1": {
+    "title": "Stay up-to-date",
+    "text": "Stay ahead of the curve with Dokuso's trend analysis."
+    },
+    "feature2": {
+    "title": "Find Your Perfect Fit",
+    "text": "Get recommendations based on your body type and style preferences."
+    },
+    "feature3": {
+    "title": "Shop by Color and Material",
+    "text": "Find exactly what you're looking for with Dokuso's advanced filtering options."
+    },
+    "text": "Advanced features and benefits for designers, brands, and buyers"
+    },
+    "tour": {
+    "button1": "Click here to search for products",
+    "button2": "Click here to view your favorites list",
+    "button3": "Click here to open filtering options",
+    "next": "Next",
+    "cancel": "Cancel",
+    "done": "Done"
+    },
+    "action": "Join the revolution today and experience the power of Dokuso.",
+    "signup": "Sign up",
+    "login": "Log in",
+    "About": "About",
+    "Brands": "Brands",
+    "Manifesto": "Manifesto",
+    "searchLabel": "Search",
+    "favorites": "Favorites",
+    "filter": "Filter",
+    "price": "Price",
+    "try_me": "Try me (it's free)",
+    "shop_now": "Shop Now",
+    "popular_searches": "Popular Searches",
+    "home": "Home",
+    "dont_have_acc": "Don’t have an account?",
+    "log_in_and_stay_ahead": "Log In and Stay Ahead in Fashion",
+    "email": "Email Address",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgot_pass": "Forgot password?",
+    "elevate_shop": "Elevate Your Shopping: Sign Up Now",
+    "enter_details": "Enter your details below.",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "agreement": "By registering, I agree to Terms of Service & Privacy Policy.",
+    "have_account": "Have an account?",
+    "our_partners": "Our Partners",
+    "join_us": "WANT TO JOIN US?",
+    "request_join_desc": "Join our network of top fashion brands and showcase your products to a wide range of customers. Our platform provides an efficient and user-friendly way to connect with potential customers and increase your brand visibility.",
+    "request_join": "REQUEST TO ADD YOUR BRAND",
+    "price_range": "Price range",
+    "on_sale": "On sale",
+    "categories": "Categories",
+    "see_results": "SEE RESULTS",
+    "manifest_desc": {
+        "line_1": "At Dokusō, we believe in the power of technology to enhance the shopping experience, but we also believe in the joy of using one's own creativity to shop for clothes.",
+        "line_2": "With our AI, finding the perfect piece of clothing is as easy as entering a few keywords and letting your creativity guide you. Our platform matches the text descriptions to the visual features of the images to retrieve the most relevant product pages, so you can find what you're looking for with ease.",
+        "line_3": "But we don't just want to make it easy for you to find what you're looking for - we also want to offer a wide selection of stylish and unique clothing items from top brands. We are committed to providing our customers with the best shopping experience possible, and we believe that this means offering high-quality products as well as an innovative and user-friendly platform that allows you to shop creatively.",
+        "line_4": "We also believe in the importance of sustainability and ethical practices in the fashion industry. That's why we are committed to partnering with brands that prioritize sustainability and ethical production methods.",
+        "line_5": "Thank you for choosing to shop with us. We look forward to helping you find the perfect outfit!"
+    }
+    }

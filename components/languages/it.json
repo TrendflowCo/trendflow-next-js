@@ -1,0 +1,78 @@
+{
+    "header": {
+    "title": "Resta al Passo con il Fioco della Moda"
+    },
+    "search": {
+    "title": "Scopri la moda con ",
+    "precision": "precisione",
+    "text": "La nostra barra di ricerca è la tua porta d'accesso per trovare i capi di moda perfetti per il tuo stile. Non limitarti alle solite ricerche. Prova qualcosa di nuovo, inaspettato e veramente tuo.",
+    "placeholder": "Libera la tua creatività..."
+    },
+    "features": {
+    "title": "Moda Avanzata Alimentata dall'IA",
+    "feature1": {
+    "title": "Resta Aggiornato",
+    "text": "Resta al passo con l'analisi delle tendenze di Dokuso."
+    },
+    "feature2": {
+    "title": "Trova il tuo Taglio Perfetto",
+    "text": "Ottieni raccomandazioni basate sul tuo tipo di corpo e sulle tue preferenze di stile."
+    },
+    "feature3": {
+    "title": "Acquista per Colore e Materiale",
+    "text": "Trova esattamente quello che cerchi con le opzioni avanzate di filtraggio di Dokuso."
+    },
+    "text": "Funzioni e vantaggi avanzati per designer, marchi e acquirenti"
+    },
+    "tour": {
+    "button1": "Clicca qui per cercare i prodotti",
+    "button2": "Clicca qui per vedere la tua lista dei preferiti",
+    "button3": "Clicca qui per aprire le opzioni di filtro",
+    "next": "Avanti",
+    "cancel": "Annulla",
+    "done": "Fatto",
+    "back": "Indietro"
+    },
+    "action": "Unisciti alla rivoluzione oggi e sperimenta il potere di Dokuso.",
+    "signup": "Registrati",
+    "login": "Accedi",
+    "About": "Informazioni su",
+    "Brands": "Marchi",
+    "Manifesto": "Manifesto",
+    "searchLabel": "Cerca",
+    "favorites": "Preferiti",
+    "filter": "Filtra",
+    "price": "Prezzo",
+    "brands": "Marchi",
+    "try_me": "Provalo (è gratuito)",
+    "shop_now": "Acquista Ora",
+    "popular_searches": "Ricerche Popolari",
+    "home": "Home",
+    "dont_have_acc": "Non hai un account?",
+    "log_in_and_stay_ahead": "Accedi e mantieniti avanti nella moda",
+    "email": "Indirizzo email",
+    "password": "Password",
+    "remember": "Ricordami",
+    "forgot_pass": "Password dimenticata?",
+    "elevate_shop": "Migliora il tuo shopping: Iscriviti ora",
+    "enter_details": "Inserisci i tuoi dettagli qui sotto.",
+    "first_name": "Nome",
+    "last_name": "Cognome",
+    "agreement": "Registrandoti, accetti i Termini di servizio e l'Informativa sulla privacy.",
+    "have_account": "Hai già un account?",
+    "our_partners": "I nostri partner",
+    "join_us": "VUOI UNIRTI A NOI?",
+    "request_join_desc": "Unisciti alla nostra rete di importanti marchi di moda e metti in mostra i tuoi prodotti a un'ampia gamma di clienti. La nostra piattaforma offre un modo efficiente e facile da usare per connettersi con potenziali clienti e aumentare la visibilità del tuo brand.",
+    "request_join": "RICHIEDI DI AGGIUNGERE IL TUO BRAND",
+    "price_range": "Fascia di prezzo",
+    "on_sale": "In saldo",
+    "categories": "Categorie",
+    "see_results": "VEDI RISULTATI",
+    "manifest_desc": {
+        "line_1": "Presso Dokusō, crediamo nel potere della tecnologia per migliorare l'esperienza di shopping, ma crediamo anche nella gioia di utilizzare la propria creatività per acquistare abiti.",
+        "line_2": "Grazie alla nostra intelligenza artificiale, trovare il capo di abbigliamento perfetto è facile come inserire alcune parole chiave e lasciare che la tua creatività ti guidi. La nostra piattaforma confronta le descrizioni testuali con le caratteristiche visive delle immagini per recuperare le pagine di prodotti più pertinenti, così puoi trovare ciò che stai cercando con facilità.",
+        "line_3": "Ma non vogliamo solo facilitarti la ricerca di ciò che stai cercando, vogliamo anche offrirti una vasta selezione di abbigliamento elegante e unico delle migliori marche. Siamo impegnati a fornire ai nostri clienti la migliore esperienza di shopping possibile, e crediamo che ciò significhi offrire prodotti di alta qualità e una piattaforma innovativa e facile da usare che ti permetta di fare acquisti in modo creativo.",
+        "line_4": "Crediamo anche nell'importanza della sostenibilità e delle pratiche etiche nell'industria della moda. Per questo motivo, ci impegniamo a collaborare con marchi che danno priorità alla sostenibilità e ai metodi di produzione etici.",
+        "line_5": "Grazie per aver scelto di fare acquisti con noi. Non vediamo l'ora di aiutarti a trovare l'outfit perfetto!"
+        }
+    }

@@ -1,0 +1,78 @@
+{
+    "header": {
+    "title": "Restez à la Pointe du Jeu de la Mode"
+    },
+    "search": {
+    "title": "Découvrez la mode avec ",
+    "precision": "précision",
+    "text": "Notre barre de recherche est votre porte d'entrée pour trouver les articles de mode parfaits pour votre style. Ne vous limitez pas aux mêmes recherches habituelles. Essayez quelque chose de nouveau, d'inattendu et vraiment à vous.",
+    "placeholder": "Libérez votre créativité..."
+    },
+    "features": {
+    "title": "Mode Avancée Alimentée par l'IA",
+    "feature1": {
+    "title": "Restez à Jour",
+    "text": "Restez à la pointe des tendances avec l'analyse des tendances de Dokuso."
+    },
+    "feature2": {
+    "title": "Trouvez votre Coupe Parfaite",
+    "text": "Obtenez des recommandations basées sur votre type de corps et vos préférences de style."
+    },
+    "feature3": {
+    "title": "Achetez par Culeur et Matière",
+    "text": "Trouvez exactement ce que vous cherchez avec les options avancées de filtrage de Dokuso."
+    },
+    "text": "Fonctionnalités et avantages avancés pour les designers, les marques et les acheteurs"
+    },
+    "tour": {
+    "button1": "Cliquez ici pour rechercher des produits",
+    "button2": "Cliquez ici pour voir votre liste de favoris",
+    "button3": "Cliquez ici pour ouvrir les options de filtrage",
+    "next": "Suivant",
+    "cancel": "Annuler",
+    "done": "Terminé",
+    "back": "Retour"
+    },
+    "action": "Rejoignez la révolution aujourd'hui et découvrez la puissance de Dokuso.",
+    "signup": "S'inscrire",
+    "login": "Se connecter",
+    "About": "À propos de",
+    "Brands": "Marques",
+    "Manifesto": "Manifeste",
+    "searchLabel": "Rechercher",
+    "favorites": "Favoris",
+    "filter": "Filtrer",
+    "price": "Prix",
+    "brands": "Marques",
+    "try_me": "Essayez-moi (c'est gratuit)",
+    "shop_now": "Acheter Maintenant",
+    "popular_searches": "Recherches Populaires",
+    "Home": "Accueil",
+    "dont_have_acc": "Vous n'avez pas de compte ?",
+    "log_in_and_stay_ahead": "Connectez-vous et restez en avance dans la mode",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "remember": "Se souvenir de moi",
+    "forgot_pass": "Mot de passe oublié ?",
+    "elevate_shop": "Élevez votre shopping : Inscrivez-vous maintenant",
+    "enter_details": "Entrez vos coordonnées ci-dessous.",
+    "first_name": "Prénom",
+    "last_name": "Nom",
+    "agreement": "En m'inscrivant, j'accepte les Conditions d'utilisation et la Politique de confidentialité.",
+    "have_account": "Vous avez déjà un compte ?",
+    "our_partners": "Nos partenaires",
+    "join_us": "VOULEZ-VOUS NOUS REJOINDRE ?",
+    "request_join_desc": "Rejoignez notre réseau de grandes marques de mode et mettez en valeur vos produits auprès d'une large gamme de clients. Notre plateforme offre un moyen efficace et convivial de vous connecter avec des clients potentiels et d'augmenter la visibilité de votre marque.",
+    "request_join": "DEMANDE D'AJOUT DE VOTRE MARQUE",
+    "price_range": "Gamme de prix",
+    "on_sale": "En solde",
+    "categories": "Catégories",
+    "see_results": "VOIR LES RÉSULTATS",
+    "manifest_desc": {
+        "line_1": "Chez Dokusō, nous croyons au pouvoir de la technologie pour améliorer l'expérience d'achat, mais nous croyons aussi dans la joie d'utiliser sa propre créativité pour acheter des vêtements.",
+        "line_2": "Avec notre IA, trouver la pièce de vêtement parfaite est aussi simple que d'entrer quelques mots-clés et de laisser votre créativité vous guider. Notre plateforme associe les descriptions textuelles aux caractéristiques visuelles des images pour récupérer les pages de produits les plus pertinentes, afin que vous puissiez trouver ce que vous recherchez facilement.",
+        "line_3": "Mais nous ne voulons pas seulement faciliter votre recherche - nous voulons également vous offrir une large sélection de vêtements élégants et uniques provenant des meilleures marques. Nous nous engageons à offrir à nos clients la meilleure expérience d'achat possible, et nous pensons que cela signifie proposer des produits de haute qualité ainsi qu'une plateforme innovante et conviviale qui vous permet de faire du shopping de manière créative.",
+        "line_4": "Nous croyons également en l'importance de la durabilité et des pratiques éthiques dans l'industrie de la mode. C'est pourquoi nous nous engageons à nouer des partenariats avec des marques qui donnent la priorité à la durabilité et aux méthodes de production éthiques.",
+        "line_5": "Merci d'avoir choisi de faire vos achats avec nous. Nous sommes impatients de vous aider à trouver la tenue parfaite !"
+        }
+    }

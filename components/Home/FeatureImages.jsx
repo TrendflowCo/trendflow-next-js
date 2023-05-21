@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { Typography , ThemeProvider } from "@mui/material";
 import { muiColors } from '../Utils/muiTheme';
+import { useAppSelector } from "../../redux/hooks";
 
 const FeatureImages = () => {
+    const { translations } = useAppSelector(state => state.language);
     muiColors.typography.h2 = {
       fontSize: '1.2rem',
       fontWeight: 'bold',
@@ -21,12 +23,8 @@ const FeatureImages = () => {
         fontSize: '1.6rem',
       }
     };
-    const titles = ["Stay Up-to-Date","Find Your Perfect Fit","Shop by Color and Material"];
-    const subTitles = [
-        "Stay ahead of the curve with Dokuso's trend analysis.",
-        "Get recommendations based on your body type and style preferences.",
-        "Find exactly what you're looking for with Dokuso's advanced filtering options."
-    ];
+    const titles = [translations?.features?.feature1?.title,translations?.features?.feature2?.title,translations?.features?.feature3?.title];
+    const subTitles = [translations?.features?.feature1?.text,translations?.features?.feature2?.text,translations?.features?.feature3?.text];
 
     return (
         <div className="flex flex-col items-center w-full pt-16">

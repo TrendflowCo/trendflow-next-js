@@ -1,8 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setLanguage } from '../actions/language';
+import { setLanguage , setTranslations } from '../actions/language';
 
 const initialState = {
     language: 'en',
+    translations: {},
 }; 
 
 export const languageReducer = createReducer(initialState, builder => {
@@ -10,4 +11,8 @@ export const languageReducer = createReducer(initialState, builder => {
     .addCase(setLanguage, (state, action) => {
       state.language = action.payload
     })
+    .addCase(setTranslations, (state, action) => {
+      state.translations = action.payload
+    })
+
 });

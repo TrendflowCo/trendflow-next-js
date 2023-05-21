@@ -1,0 +1,77 @@
+{
+    "header": {
+    "title": "Hold dig foran mode-spillet"
+    },
+    "search": {
+    "title": "Opdag mode med ",
+    "precision": "præcision",
+    "text": "Vores søgefelt er din indgang til at finde de perfekte modegenstande, der passer til din stil. Begræns dig ikke til de samme gamle søgninger. Prøv noget nyt, uventet og unikt for dig.",
+    "placeholder": "Udfold din kreativitet..."
+    },
+    "features": {
+    "title": "Fremtidens mode med AI",
+    "feature1": {
+    "title": "Hold dig opdateret",
+    "text": "Hold dig foran kurven med Dokusos trendanalyse."
+    },
+    "feature2": {
+    "title": "Find din perfekte pasform",
+    "text": "Få anbefalinger baseret på din kropstype og stilpræferencer."
+    },
+    "feature3": {
+    "title": "Shop efter farve og materiale",
+    "text": "Find præcis det, du leder efter, med Dokusos avancerede filtreringsmuligheder."
+    },
+    "text": "Avancerede funktioner og fordele for designere, mærker og købere"
+    },
+    "tour": {
+    "button1": "Klik her for at søge efter produkter",
+    "button2": "Klik her for at se din favoritliste",
+    "button3": "Klik her for at åbne filtreringsmuligheder",
+    "next": "Næste",
+    "cancel": "Annuller",
+    "done": "Færdig"
+    },
+    "action": "Bliv en del af revolutionen i dag og oplev kraften i Dokuso.",
+    "signup": "Tilmeld dig",
+    "login": "Log ind",
+    "About": "Om",
+    "Brands": "Mærker",
+    "Manifesto": "Manifest",
+    "searchLabel": "Søg",
+    "favorites": "Favoritter",
+    "filter": "Filtrer",
+    "price": "Pris",
+    "try_me": "Prøv mig (det er gratis)",
+    "shop_now": "Shop nu",
+    "popular_searches": "Populære søgninger",
+    "home": "Hjem",
+    "dont_have_acc": "Har du ikke en konto?",
+    "log_in_and_stay_ahead": "Log ind og hold dig foran i modeverdenen",
+    "email": "Email-adresse",
+    "password": "Adgangskode",
+    "remember": "Husk mig",
+    "forgot_pass": "Glemt adgangskode?",
+    "elevate_shop": "Gør din shoppingoplevelse bedre: Tilmeld dig nu",
+    "enter_details": "Indtast dine oplysninger nedenfor.",
+    "first_name": "Fornavn",
+    "last_name": "Efternavn",
+    "agreement": "Ved at registrere accepterer jeg Vilkår for service og privatlivspolitik.",
+    "have_account": "Har du en konto?",
+    "our_partners": "Vores partnere",
+    "join_us": "VIL DU VÆRE MED?",
+    "request_join_desc": "Bliv en del af vores netværk af topmodemærker og fremvis dine produkter til et bredt spektrum af kunder. Vores platform giver en effektiv og brugervenlig måde at forbinde med potentielle kunder og øge synligheden af dit brand.",
+    "request_join": "ANSØG OM AT TILFØJE DIT MÆRKE",
+    "price_range": "Prisklasse",
+    "on_sale": "Til salg",
+    "categories": "Kategorier",
+    "see_results": "SE RESULTATER",
+    "manifest_desc": {
+    "line_1": "Hos Dokusō tror vi på teknologiens kraft til at forbedre shoppingoplevelsen, men vi tror også på glæden ved at bruge sin egen kreativitet til at shoppe tøj.",
+    "line_2": "Med vores AI er det lige så nemt som at indtaste nogle få søgeord og lade din kreativitet guide dig til at finde det perfekte tøj. Vores platform matcher tekstbeskrivelserne med billedernes visuelle egenskaber for at finde de mest relevante produktsider, så du nemt kan finde det, du leder efter.",
+    "line_3": "Men vi vil ikke kun gøre det nemt for dig at finde det, du leder efter - vi vil også tilbyde et bredt udvalg af stilfulde og unikke tøjgenstande fra topmærker. Vi er dedikerede til at give vores kunder den bedst mulige shoppingoplevelse, og vi mener, at det indebærer at tilbyde produkter af høj kvalitet samt en innovativ og brugervenlig platform, der giver dig mulighed for at shoppe kreativt.",
+    "line_4": "Vi tror også på vigtigheden af bæredygtighed og etiske praksisser i modebranchen. Derfor er vi dedikerede til at samarbejde med mærker, der prioriterer bæredygtighed og etiske produktionsmetoder.",
+    "line_5": "Tak fordi du har valgt at handle hos os. Vi ser frem til at hjælpe dig med at finde det perfekte outfit!"
+    }
+}
+    
