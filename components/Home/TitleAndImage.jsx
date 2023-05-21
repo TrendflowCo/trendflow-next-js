@@ -50,8 +50,7 @@ const TitleAndImage = () => {
                         </h4>
                     </div>
                     <p className="py-4 px-1 sm:px-0 sm:text-lg text-xl">
-                        {`Our search bar is your gateway to finding the perfect fashion items to fit your style.
-                        Don't limit yourself to the same old searches. Try something new, unexpected, and uniquely you.`}
+                        {translations?.search?.text}
                     </p>
                 </ThemeProvider>
             </div>

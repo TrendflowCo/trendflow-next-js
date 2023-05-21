@@ -1,11 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { popularSearches } from "../Utils/popularSearches";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch , useAppSelector } from "../../redux/hooks";
 import { setCurrentSearch } from "../../redux/features/actions/search";
 
 const PopularSearches = () => {
     const router = useRouter();
+    const { translations } = useAppSelector(state => state.language);
     const dispatch = useAppDispatch();
     const handleQuickSearch = (val) => {
         dispatch(setCurrentSearch(val))
@@ -16,7 +17,7 @@ const PopularSearches = () => {
         <div className="flex flex-col items-center w-full pt-8">
             <div className="flex flex-col max-w-xl w-full items-start">
                 <h1 className="text-dokuso-black text-2xl sm:text-3xl font-bold mb-3">
-                    Popular searches
+                    {translations?.popular_searches}
                 </h1>
                 <div className="flex-wrap">
                     {popularSearches.map((prompt) => (

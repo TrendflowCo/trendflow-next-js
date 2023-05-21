@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import { Typography , ThemeProvider } from "@mui/material";
 import { muiColors } from '../Utils/muiTheme';

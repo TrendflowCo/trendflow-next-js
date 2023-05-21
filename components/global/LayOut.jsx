@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { logOutExternal } from '../Auth/logOutExternal';
 import LogInModal from '../Auth/LogInModal';
 import { useAppSelector , useAppDispatch } from '../../redux/hooks';
-import { setLogInFlag } from '../../redux/features/actions/auth';
+import { setLogInFlag , setUser } from '../../redux/features/actions/auth';
 import { setTranslations } from '../../redux/features/actions/language';
 import enTranslation from '../languages/en.json';
 import esTranslation from '../languages/es.json';
@@ -43,7 +43,6 @@ const Layout = ({ children }) => {
       },90000)
     }
   },[logged]);
-
   useEffect(() => {
     if (ready === true) {
       if (logged === false) {
@@ -51,7 +50,6 @@ const Layout = ({ children }) => {
       }
     }
   },[ready]);  // eslint-disable-line
-
   useEffect(() => {
     if (logged === null) {
       setLogged(false)
@@ -60,6 +58,7 @@ const Layout = ({ children }) => {
     } else {
       setLogged(false)
     }
+    dispatch(setUser(user)); // set the user for every change
   },[user]) // eslint-disable-line
   useEffect(() => {
     switch(language) {
@@ -106,7 +105,7 @@ const Layout = ({ children }) => {
         dispatch(setTranslations(hiTranslation))
         break;
     }
-  },[language])
+  },[language]);
 
   return (
     <div className='w-screen h-screen flex flex-col bg-dokuso-white'>

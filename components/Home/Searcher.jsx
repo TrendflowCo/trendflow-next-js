@@ -12,6 +12,7 @@ import { swalNoInputs } from "../Utils/swalConfig";
 const Searcher = () => {
     const dispatch = useAppDispatch();
     const { currentSearch } = useAppSelector(state => state.search);
+    const { translations } = useAppSelector(state => state.language);
     const router = useRouter();
     const Arrow = createIcon({
         displayName: 'Arrow',
@@ -55,7 +56,7 @@ const Searcher = () => {
                     <input 
                         className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-4 pr-10 pl-5 relative flex-auto w-full items-center text-dokuso-black"
                         type="text"
-                        placeholder="&#xF002; Find your fashion bliss"
+                        placeholder={translations?.search?.placeholder}
                         style={{'fontFamily':"Arial, FontAwesome"}}
                         onChange={(e) => {handleSearchPhrase(e)}}
                         onKeyDown={handleEnterSearch}
@@ -65,8 +66,8 @@ const Searcher = () => {
                     <Stack direction={'column'} spacing={3} align={'center'} alignSelf={'center'} position={'relative'}>
                         <Box>
                             <Icon as={Arrow} w={71} position={'absolute'} right={-71} top={'20px'}/>
-                            <Text fontSize={'lg'} fontFamily={'Caveat'} position={'absolute'} right={'-125px'} top={'-6px'} transform={'rotate(10deg)'}>
-                                {`Try me (it's free)`}
+                            <Text fontSize={'lg'} fontFamily={'Caveat'} position={'absolute'} right={'-125px'} top={'-24px'} transform={'rotate(10deg)'}>
+                                {translations?.try_me}
                             </Text>
                         </Box>
                     </Stack>
@@ -80,7 +81,7 @@ const Searcher = () => {
                             color="dokusoBlack"
                             style={{width:'92px'}}
                         >
-                            Shop Now
+                            {translations?.shop_now}
                         </Button>
                     </ThemeProvider>
                 </section>
