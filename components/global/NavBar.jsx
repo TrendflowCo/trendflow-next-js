@@ -75,6 +75,7 @@ const Navbar = ({ logOut , user }) => {
     setAnchorElLanguage(null);
   };
   const handleClickLanguage = (selectedLanguage) => {
+    localStorage.setItem("language",selectedLanguage.toLowerCase())
     dispatch(setLanguage(selectedLanguage.toLowerCase()))
     handleLanguageMenuClose();
   };
