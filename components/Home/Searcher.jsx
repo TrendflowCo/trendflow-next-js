@@ -12,7 +12,7 @@ import { swalNoInputs } from "../Utils/swalConfig";
 const Searcher = () => {
     const dispatch = useAppDispatch();
     const { currentSearch } = useAppSelector(state => state.search);
-    const { translations } = useAppSelector(state => state.language);
+    const { translations , language } = useAppSelector(state => state.language);
     const router = useRouter();
     const Arrow = createIcon({
         displayName: 'Arrow',
@@ -32,11 +32,7 @@ const Searcher = () => {
     const handleButtonSearch = () => { // click into SHOP NOW button
         event.preventDefault();
         if (currentSearch !== '') {
-            // debo incluir el idioma de la pagina para la busqueda
-            // fetchData(`search?language=${api_language}&query=${searchValue}`)
-
-            // agrego el idioma hard coded
-            router.push(`/${'en'}/results/${currentSearch.split(' ').join('-')}`)
+            router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`)
         } else {
             Swal.fire({
                 ...swalNoInputs

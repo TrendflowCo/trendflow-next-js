@@ -5,17 +5,22 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Grid } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
+import { useAppSelector } from "../../../redux/hooks";
 
 const Results = ({ product }) => {
+    const { language } = useAppSelector(state => state.language);
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
+    const [searchLimit , setSearchLimit] = useState(20);
+    const [currentPage , setCurrentPage] = useState(1);
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoadingFlag(true);
-                const rsp = (await axios.get(`${endpoints('results')}${product}`)).data;
-                console.log(rsp);
+                const rsp = (await axios.get(`${endpoints('results')}${product}&language=${language}&limit=${searchLimit}&page=${currentPage}`)).data;
+                console.log(`Request sent: ${endpoints('results')}${product}&language=${language}&limit=${searchLimit}&page=${currentPage}` )
+                console.log("Response: ", rsp);
                 setProducts(rsp);
                 setLoadingFlag(false);
             } catch (err) {

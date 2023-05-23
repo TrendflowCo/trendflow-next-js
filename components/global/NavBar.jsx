@@ -60,7 +60,7 @@ const Navbar = ({ logOut , user }) => {
     if (e.key === 'Enter') {
       event.preventDefault();
       if (currentSearch !== '') {
-          router.push(`/results/${currentSearch.split(' ').join('-')}`)
+          router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`)
       } else {
           Swal.fire({
               ...swalNoInputs
