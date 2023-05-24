@@ -5,9 +5,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Grid } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
+import { setCurrentSearch } from "../../../redux/features/actions/search";
+import { setLanguage } from "../../../redux/features/actions/language"
 
-const Results = ({ product }) => {
+const Results = () => {
+    const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.language);
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
@@ -18,18 +21,23 @@ const Results = ({ product }) => {
         const fetchData = async () => {
             try {
                 setLoadingFlag(true);
-                const rsp = (await axios.get(`${endpoints('results')}${product}&language=${language}&limit=${searchLimit}&page=${currentPage}`)).data;
-                console.log(`Request sent: ${endpoints('results')}${product}&language=${language}&limit=${searchLimit}&page=${currentPage}` )
+                const querySearch = router.query.id;
+                const queryLanguage = router.query.lan;
+                dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
+                dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
+                const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`)).data;
                 console.log("Response: ", rsp);
-                setProducts(rsp);
+                setProducts(rsp.results);
                 setLoadingFlag(false);
             } catch (err) {
                 console.error (err);
                 setLoadingFlag(false);
             }
         };
-        fetchData()
-    },[router.query , product])
+        if (router.query.id && router.query.lan) {
+            fetchData()
+        }
+    },[router.query.id , router.query.lan])
     return (
         <> 
             { loadingFlag ? 

@@ -12,7 +12,7 @@ import { enhanceText } from '../Utils/enhanceText';
 const ResultCard = ({productItem}) => {
 
   return (
-    <Card sx={{ height: 650 , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , justifyContent: 'space-between' }} className='shadow-lg overflow-auto'>
+    <Card sx={{ height: 650 , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , justifyContent: 'space-between' }} className='shadow-lg flex-none'>
       <section className='flex flex-col w-full h-full'>
         <div className='flex flex-row items-center justify-start w-full h-20 py-2 px-4'>
           <div className='w-full h-full flex flex-col justify-center items-start'>
