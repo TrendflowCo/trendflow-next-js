@@ -118,6 +118,7 @@ const Layout = ({ children }) => {
       <main className='flex flex-col flex-auto p-0 m-0 overflow-auto scrollbar'>
         {children}
         {logInFlag && <LogInModal/>}
+        {/* Include log in from MUI snack bar as dynamic message */}
       </main>
     </div>
   )

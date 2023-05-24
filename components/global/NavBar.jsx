@@ -82,7 +82,7 @@ const Navbar = ({ logOut , user }) => {
   
   return (
   <ThemeProvider theme={muiColors}>
-    <AppBar position="static" color="dokusoWhite" enableColorOnDark>
+    <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[D8D8D8]'>
       <Container maxWidth="xl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
         {/* Title for desktop display */}
         <Box sx={{ mr: 2 , display: { xs: 'none', md: 'flex'}}}>
@@ -177,7 +177,7 @@ const Navbar = ({ logOut , user }) => {
         </Typography>
         {/* Nav bar right section */}
         <Box sx={{ flexGrow: 0 , display: 'flex', flexDirection: 'row' , alignItems: 'center' }}>
-          { router.pathname !== '/[lan]' &&
+          { router.pathname.includes('results') &&
             // Searching section
             <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl h-full">
               <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -216,7 +216,7 @@ const Navbar = ({ logOut , user }) => {
               onClick={() => dispatch(setLogInFlag(true))}
               className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
               color="dokusoBlack"
-              sx={{fontWeight: 'bold'}}
+              sx={{fontWeight: 'bold' , flex: 'none'}}
               >
               Log in
             </Button>

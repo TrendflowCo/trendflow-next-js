@@ -27,6 +27,7 @@ const Results = () => {
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`)).data;
                 console.log("Response: ", rsp);
+                console.log(`requested: ${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`)
                 setProducts(rsp.results);
                 setLoadingFlag(false);
             } catch (err) {
@@ -37,7 +38,12 @@ const Results = () => {
         if (router.query.id && router.query.lan) {
             fetchData()
         }
-    },[router.query.id , router.query.lan])
+    },[router.query.id , router.query.lan]);
+    useEffect(() => { // for a language change into results section
+        const querySearch = router.query.id;
+        localStorage.setItem('language', language);
+        router.push(`/${language}/results/${querySearch}`)
+    },[language]);
     return (
         <> 
             { loadingFlag ? 
@@ -45,13 +51,16 @@ const Results = () => {
                     <CircularProgress size={72} thickness={4} />
                 </Box>
             : 
-                <Grid container spacing={2} sx={{padding: 2}}>
-                    {products.length > 0 && products.map((productItem,productIndex) => {return (
-                        <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                            <ResultCard productItem={productItem}/>
-                        </Grid>
-                    )})}
-                </Grid>
+                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' }}>
+                    <h1 className="p-8 text-3xl font-semibold text-dokuso-black">{`Results for ${router.query.id}`}</h1>
+                    <Grid container spacing={2} sx={{padding: 2}}>
+                        {products.length > 0 && products.map((productItem,productIndex) => {return (
+                            <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
+                                <ResultCard productItem={productItem}/>
+                            </Grid>
+                        )})}
+                    </Grid>
+                </Box>
             }
         </>
     )
