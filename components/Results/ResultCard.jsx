@@ -8,10 +8,13 @@ import ShareIcon from '@mui/icons-material/Share';
 import { logos } from '../Utils/logos';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
-import { Tooltip } from '@mui/material';
+import { Menu, MenuItem, Tooltip } from '@mui/material';
 
 const ResultCard = ({productItem}) => {
   const [showFocused , setShowFocused] = useState(false);
+  const [shareAnchor, setShareAnchor] = useState(null);
+  const open = Boolean(shareAnchor);
+  
   const handleShowSingleCard = () => {
     console.log('showing card: ' , productItem);
     // use dialog from MUI
@@ -23,14 +26,19 @@ const ResultCard = ({productItem}) => {
   };
   const handleShareItem = (event) => {
     event.stopPropagation();
+    setShareAnchor(event.currentTarget);
     console.log('share this item: ' , productItem.id)
+  };
+
+  const handleClose = () => {
+    event.stopPropagation();
+    setShareAnchor(null);
   };
 
   return (
     <Card 
       sx={{ height: 650 , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , justifyContent: 'space-between' }} 
       className='shadow-lg flex-none'
-      onClick={() => {handleShowSingleCard()}}
     >
       <section className='flex flex-col w-full h-full'>
         <div className='flex flex-row items-center justify-start w-full h-20 py-2 px-4'>
@@ -50,6 +58,7 @@ const ResultCard = ({productItem}) => {
           image={productItem.img_url}
           alt={productItem.name}
           sx={{ height: 400 , objectFit: 'cover' }}
+          onClick={() => {handleShowSingleCard()}}
         />
         <section className='flex flex-row p-4 w-full'>
           <div className='flex flex-col w-full'>
@@ -78,11 +87,32 @@ const ResultCard = ({productItem}) => {
               <FavoriteIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Share item" placement="bottom" arrow={true}  onClick={(event) => {handleShareItem(event)}}>
+          <Tooltip 
+            title="Share item" 
+            placement="bottom" 
+            arrow={true}  
+            // onClick={(event) => {handleShareItem(event)}}
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleShareItem}
+            >
             <IconButton aria-label="share">
               <ShareIcon />
             </IconButton>
           </Tooltip>
+          <Menu
+            id="basic-menu"
+            anchorEl={shareAnchor}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={handleClose}>Copy site link</MenuItem>
+            <MenuItem onClick={handleClose}>Visit site</MenuItem>
+          </Menu>
         </CardActions>
       </section>
     </Card>
