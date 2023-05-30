@@ -11,7 +11,9 @@ import { setLanguage } from "../../../redux/features/actions/language";
 import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
+import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
+import filterAndSorting from "../functions/filterAndSorting";
  
 const Results = () => {
     const dispatch = useAppDispatch();
@@ -20,6 +22,8 @@ const Results = () => {
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
+    const [rawResults , setRawResults] = useState([]);
+    const [toViewResults , setToViewResults] = useState([]); // filtered list
     const [searchLimit , setSearchLimit] = useState(20);
     const [currentPage , setCurrentPage] = useState(1);
     const [lastPage , setLastPage] = useState(0);
@@ -35,7 +39,7 @@ const Results = () => {
     const [relatedAssay , setRelatedAssay] = useState([]);
     //
     const [filterOptions , setFilterOptions] = useState({});
-    const [filtersApplied, setFiltersApplied] = useState(0)
+    const [filtersApplied, setFiltersApplied] = useState(0);
     const [filterModal , setFilterModal] = useState(false);
     const [resetFlag , setResetFlag] = useState(false);
     // -- sorting components --
@@ -57,6 +61,7 @@ const Results = () => {
                 console.log("Response: ", rsp);
                 console.log(`requested: ${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`)
                 setProducts(rsp.results);
+                setRawResults(rsp.results);
                 setLastPage(rsp.total_pages);
                 setLastSearch(querySearch);
                 setLoadingFlag(false);
@@ -75,6 +80,16 @@ const Results = () => {
         localStorage.setItem('language', language);
         router.push(`/${language}/results/${querySearch}`)
     },[language]);
+
+    useEffect(() => { // use effect for every filtering or sorting opperation
+        const fetchData = async() => {
+            const filterOptions = {};
+            const { finalResults } = await filterAndSorting(rawResults, filterOptions , sortsApplied , sorts); // filtered and sorted list
+            setToViewResults(finalResults);    
+        }
+        fetchData();
+    },[filterOptions, sorts, sortsApplied]);
+
 
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
@@ -103,7 +118,7 @@ const Results = () => {
                         filterModal={filterModal}
                     />
                     {/* Sorting component */}
-                    {/* <Sorting 
+                    <Sort 
                         sortingModal={sortingModal}
                         setSortingModal={setSortingModal}
                         setSortsApplied={setSortsApplied}
@@ -111,7 +126,7 @@ const Results = () => {
                         setSorts={setSorts}
                         availableSorts={availableSorts}
                         setAvailableSorts={setAvailableSorts}
-                    /> */}
+                    />
 
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                         <div className='mx-5'>
@@ -127,7 +142,7 @@ const Results = () => {
                     </div>
                     <section>
                         <Grid container spacing={2} sx={{padding: 2}}>
-                            {products.length > 0 && products.map((productItem,productIndex) => {return (
+                            {toViewResults.length > 0 && toViewResults.map((productItem,productIndex) => {return (
                                 <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
                                     <ResultCard productItem={productItem}/>
                                 </Grid>

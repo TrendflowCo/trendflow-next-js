@@ -22,7 +22,7 @@ const SortAndFilter = (props) => {
         <section id='filtersContainer' className={`mt-5 mb-2 lg:mt-0 lg:mr-4 lg:w-max flex flex-row justify-evenly lg:justify-between lg:border-none px-4 lg:px-0`}>
             <ThemeProvider theme={muiColors}>
                 <Button variant="outlined" sx={{
-                    width: {lg: '228px' , sx: '50%'} , 
+                    width: {lg: '228px' , xs: '50%'} , 
                     height: '46px' , 
                     mr: {lg: '8px' , sx: 0}, 
                     display: 'flex' , 
@@ -34,17 +34,16 @@ const SortAndFilter = (props) => {
                     color="dokusoBlack"
                     onClick={() => handleOpenFilterModal()}
                     startIcon={<FilterAltIcon/>}
-                    fullWidth={{sx: true , lg: false}}
                 >
                     <span>Filters</span>
                     {filtersApplied > 0 && 
-                        <div className='ml-2 flex flex-col items-center justify-center bg-stamm-primary w-6 h-6 rounded-15'>
-                            <span className='font-bold text-stamm-white'>{filtersApplied}</span>
+                        <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
+                            <span className='font-bold text-dokuso-white'>{filtersApplied}</span>
                         </div>
                     }
                 </Button>
                 <Button variant="outlined" sx={{
-                    width: {lg: '228px' , sx: '50%'} , 
+                    width: {lg: '228px' , xs: '50%'} , 
                     height: '46px' , 
                     ml: {lg: '8px' , sx: 0}, 
                     display: 'flex' , 
@@ -55,12 +54,11 @@ const SortAndFilter = (props) => {
                     color="dokusoBlack"
                     onClick={() => handleOpenSortingModal()}
                     startIcon={<SortIcon/>}
-                    fullWidth={{sx: true , lg: false}}
                 >
                     <span>Sorts</span>
                     {sortsApplied > 0 && 
-                        <div className='ml-2 flex flex-col items-center justify-center bg-stamm-primary w-6 h-6 rounded-15'>
-                            <span className='font-bold text-stamm-white'>{sortsApplied}</span>
+                        <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
+                            <span className='font-bold text-dokuso-white'>{sortsApplied}</span>
                         </div>
                     }
                 </Button>
