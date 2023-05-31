@@ -28,15 +28,6 @@ const Results = () => {
     const [currentPage , setCurrentPage] = useState(1);
     const [lastPage , setLastPage] = useState(0);
     const [lastSearch , setLastSearch] = useState('');
-
-    // variables generated for filtering functionality
-    const [creators,setCreators] = useState([]);
-    const [deviceTypes , setDeviceTypes] = useState([]);
-    const [deviceStatus , setDeviceStatus] = useState([]);
-    const [deviceCreationYear, setDeviceCreationYear] = useState([]);
-    const [deviceCreationMonth , setDeviceCreationMonth] = useState([]);
-    const [deviceId, setDeviceId] = useState('');
-    const [relatedAssay , setRelatedAssay] = useState([]);
     //
     const [filterOptions , setFilterOptions] = useState({});
     const [filtersApplied, setFiltersApplied] = useState(0);
@@ -47,7 +38,6 @@ const Results = () => {
     const [sortsApplied, setSortsApplied] = useState(0);
     const [sorts , setSorts] = useState([]);
     const [availableSorts , setAvailableSorts] = useState(0); // la cantidad de sorts disponibles para mapear los select
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -81,15 +71,12 @@ const Results = () => {
         router.push(`/${language}/results/${querySearch}`)
     },[language]);
 
-    useEffect(() => { // use effect for every filtering or sorting opperation
-        const fetchData = async() => {
-            const filterOptions = {};
-            const { finalResults } = await filterAndSorting(rawResults, filterOptions , sortsApplied , sorts); // filtered and sorted list
-            setToViewResults(finalResults);    
-        }
-        fetchData();
-    },[filterOptions, sorts, sortsApplied]);
-
+    // useEffect(() => { // use effect for every filtering or sorting opperation
+    //     const filterOptions = {};
+    //     const { finalResults } = filterAndSorting(rawResults, filterOptions , sortsApplied , sorts); // filtered and sorted list
+    //     setToViewResults(finalResults);
+    //     console.log('setted to view results: ' , toViewResults);
+    // },[filterOptions, sorts, rawResults, sortsApplied]);
 
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
@@ -142,7 +129,7 @@ const Results = () => {
                     </div>
                     <section>
                         <Grid container spacing={2} sx={{padding: 2}}>
-                            {toViewResults.length > 0 && toViewResults.map((productItem,productIndex) => {return (
+                            {products.length > 0 && products.map((productItem,productIndex) => {return (
                                 <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
                                     <ResultCard productItem={productItem}/>
                                 </Grid>

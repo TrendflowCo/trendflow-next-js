@@ -9,6 +9,7 @@ import { logos } from '../Utils/logos';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
 import { Menu, MenuItem, Tooltip } from '@mui/material';
+import { Toaster, toast } from 'sonner';
 
 const ResultCard = ({productItem}) => {
   const [showFocused , setShowFocused] = useState(false);
@@ -34,11 +35,20 @@ const ResultCard = ({productItem}) => {
     event.stopPropagation();
     setShareAnchor(null);
   };
+  const handleVisitSite = () => {
+    window.open(productItem.shop_link, '_blank');
+    handleClose();
+  };
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(productItem.shop_link);
+    toast.success('Copied to clipboard')    
+    handleClose();
+  };
 
   return (
     <Card 
       sx={{ height: 650 , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , justifyContent: 'space-between' }} 
-      className='shadow-lg flex-none'
+      className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
     >
       <section className='flex flex-col w-full h-full'>
         <div className='flex flex-row items-center justify-start w-full h-20 py-2 px-4'>
@@ -81,6 +91,10 @@ const ResultCard = ({productItem}) => {
         </section>
       </section>
       <section className='flex flex-col h-fit w-full flex-none'>
+              <Toaster>
+                <button onClick={() => toast('My first toast')}>toast ya</button>
+              </Toaster>
+
         <CardActions disableSpacing>
           <Tooltip title="Add to wishlist" placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
             <IconButton aria-label="add to favorites">
@@ -110,8 +124,12 @@ const ResultCard = ({productItem}) => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Copy site link</MenuItem>
-            <MenuItem onClick={handleClose}>Visit site</MenuItem>
+            <MenuItem>
+              <Toaster richColors/>
+                <span onClick={() => handleCopyToClipboard()}>Copy to clipboard</span>
+            </MenuItem>
+
+            <MenuItem onClick={handleVisitSite}>Visit site</MenuItem>
           </Menu>
         </CardActions>
       </section>

@@ -1,4 +1,4 @@
-const filterAndSorting = async ( rawResults, filterOptions , sortsApplied , sorts ) => {
+const filterAndSorting = ( rawResults, filterOptions , sortsApplied , sorts ) => {
     // brings all devices and generates the displayed list
     // const newAllResults = rawResults.filter(item => filterOptions.status.includes(item.status));
     // const newAllResults1 = newAllResults.filter(item => filterOptions.types.includes(item.type));

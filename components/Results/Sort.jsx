@@ -1,7 +1,5 @@
 import React , {useEffect, useState , useRef} from "react";
-import Image from "next/image";
 import AddIcon from '@mui/icons-material/Add';
-// import iconAdd from '../../../public/icon-agregar.svg';
 import { Button, IconButton , ThemeProvider } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SingleSort from './SingleSort';
@@ -105,9 +103,9 @@ const Sort = ( props ) => {
                         <div className="flex flex-col lg:flex-row w-full lg:mt-24 mt-12 mb-8">
                             <ThemeProvider theme={muiColors}>
                                 <Button variant="outlined" sx={{
-                                    width: {lg: '50%' , sx: '100%'} , 
+                                    width: {lg: '50%' , xs: '100%'} , 
                                     height: '46px' , 
-                                    ml: {lg: '8px' , sx: 0}, 
+                                    ml: {lg: '8px' , xs: 0}, 
                                     display: 'flex' , 
                                     flexDirection: 'row' ,
                                     alignItems: 'center',
@@ -115,14 +113,14 @@ const Sort = ( props ) => {
                                     borderRadius: 2 }}
                                     color="dokusoBlack"
                                     onClick={() => setSortingModal(false)}
-                                    fullWidth={{sx: true , lg: false}}
+                                    // fullWidth={{sx: true , lg: false}}
                                 >
                                     Apply Sorting
                                 </Button>
                                 <Button variant="outlined" sx={{
-                                    width: {lg: '50%' , sx: '100%'} , 
+                                    width: {lg: '50%' , xs: '100%'} , 
                                     height: '46px' , 
-                                    ml: {lg: '8px' , sx: 0}, 
+                                    ml: {lg: '8px' , xs: 0}, 
                                     display: 'flex' , 
                                     flexDirection: 'row' ,
                                     alignItems: 'center',
@@ -130,7 +128,7 @@ const Sort = ( props ) => {
                                     borderRadius: 2 }}
                                     color="dokusoBlack"
                                     onClick={() => deleteSorting()}
-                                    fullWidth={{sx: true , lg: false}}
+                                    // fullWidth={{sx: true , lg: false}}
                                 >
                                     Delete Sorting
                                 </Button>
