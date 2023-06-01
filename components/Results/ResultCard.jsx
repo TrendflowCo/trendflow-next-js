@@ -11,7 +11,15 @@ import { enhanceText } from '../Utils/enhanceText';
 import { Menu, MenuItem, Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
 
+import { collection , getDocs, query , where , getFirestore } from "firebase/firestore";
+import { app } from "../../services/firebase";
+import { useAppSelector } from "../../redux/hooks";
+
+
 const ResultCard = ({productItem}) => {
+  const { user } = useAppSelector(state => state.auth);
+  const db = getFirestore(app);
+
   const [showFocused , setShowFocused] = useState(false);
   const [shareAnchor, setShareAnchor] = useState(null);
   const open = Boolean(shareAnchor);
@@ -21,9 +29,17 @@ const ResultCard = ({productItem}) => {
     // use dialog from MUI
     setShowFocused(true);
   };
-  const handleAddWishlist = (event) => {
+  const handleAddWishlist = async (event) => {
     event.stopPropagation();
-    console.log('add to wishlist this item: ' , productItem.id)
+    console.log('add to wishlist this item: ' , productItem.id);
+
+    const q = query(collection(db, "wishlist"), where("uid", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+    const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    // const items = newData.map(item => item["img_id"])
+    // setWishlist(prevWishlist => [...prevWishlist, ...items]);
+    console.log('data from wishlist', newData);
+  
   };
   const handleShareItem = (event) => {
     event.stopPropagation();
@@ -128,7 +144,6 @@ const ResultCard = ({productItem}) => {
               <Toaster richColors/>
                 <span onClick={() => handleCopyToClipboard()}>Copy to clipboard</span>
             </MenuItem>
-
             <MenuItem onClick={handleVisitSite}>Visit site</MenuItem>
           </Menu>
         </CardActions>
