@@ -11,13 +11,17 @@ import { enhanceText } from '../Utils/enhanceText';
 import { Menu, MenuItem, Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
 
-import { collection , getDocs, query , where , getFirestore } from "firebase/firestore";
+import { collection , addDoc , getDocs, query , where , getFirestore } from "firebase/firestore";
 import { app } from "../../services/firebase";
 import { useAppSelector } from "../../redux/hooks";
+import Swal from 'sweetalert2';
+import { swalNoInputs } from '../Utils/swalConfig';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
 
-const ResultCard = ({productItem}) => {
+const ResultCard = ({productItem , reloadFlag , setReloadFlag}) => {
   const { user } = useAppSelector(state => state.auth);
+  const { wishlist } = useAppSelector(state => state.search);
   const db = getFirestore(app);
 
   const [showFocused , setShowFocused] = useState(false);
@@ -31,16 +35,40 @@ const ResultCard = ({productItem}) => {
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();
-    console.log('add to wishlist this item: ' , productItem.id);
-
-    const q = query(collection(db, "wishlist"), where("uid", "==", user.uid));
-    const querySnapshot = await getDocs(q);
-    const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-    // const items = newData.map(item => item["img_id"])
-    // setWishlist(prevWishlist => [...prevWishlist, ...items]);
-    console.log('data from wishlist', newData);
-  
+    if (user) {
+      try {
+        if (!wishlist.includes(productItem.id)) { // if the image is not included yet, add it
+          console.log("Right! the product is to go")
+          await addDoc(collection(db, "wishlist"), {
+            uid: user.uid,
+            img_id: productItem.id,
+          })
+          //   logEvent(analytics, 'addToWishlist', {
+          //     img_id: img_id
+          //   });
+          setReloadFlag(!reloadFlag)
+        } else {
+          // implement delete functionality
+          //
+          // const q = query(collection(db, "wishlist"), where("img_id", "==", productItem.id));
+          // const querySnapshot = await getDocs(q);
+          // const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+          // console.log('log: ',newData)
+          // await db.collection("wishlist").doc(newData[0].id).delete();
+          // setReloadFlag(!reloadFlag)
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      Swal.fire({
+        ...swalNoInputs,
+        text: "You're not logged in",
+        confirmButtonText: "Oh right"
+      })
+    }
   };
+
   const handleShareItem = (event) => {
     event.stopPropagation();
     setShareAnchor(event.currentTarget);
@@ -114,7 +142,10 @@ const ResultCard = ({productItem}) => {
         <CardActions disableSpacing>
           <Tooltip title="Add to wishlist" placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
             <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
+              {wishlist.includes(productItem.id) ? 
+                <FavoriteIcon /> : 
+                <FavoriteBorderOutlinedIcon/>
+              }
             </IconButton>
           </Tooltip>
           <Tooltip 

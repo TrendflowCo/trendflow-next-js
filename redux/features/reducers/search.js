@@ -1,8 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setCurrentSearch } from '../actions/search';
+import { setCurrentSearch , setWishlist } from '../actions/search';
 
 const initialState = {
   currentSearch: '',
+  wishlist: [],
 }; 
 
 export const searchReducer = createReducer(initialState, builder => {
@@ -10,4 +11,8 @@ export const searchReducer = createReducer(initialState, builder => {
     .addCase(setCurrentSearch, (state, action) => {
       state.currentSearch = action.payload
     })
+    .addCase(setWishlist, (state, action) => {
+      state.wishlist = action.payload
+    })
+
 });
