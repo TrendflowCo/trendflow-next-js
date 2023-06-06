@@ -10,19 +10,21 @@ import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
 import { Menu, MenuItem, Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
-
-import { collection , addDoc , getDocs, query , where , getFirestore } from "firebase/firestore";
+import { collection , addDoc , getDocs, query , where , getFirestore , deleteDoc , doc } from "firebase/firestore";
 import { app } from "../../services/firebase";
 import { useAppSelector } from "../../redux/hooks";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from '../Utils/swalConfig';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { CircularProgress } from "@mui/material";
 
 
-const ResultCard = ({productItem , reloadFlag , setReloadFlag}) => {
+
+const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
   const db = getFirestore(app);
+  const [loadingFav , setLoadingFav] = useState(false);
 
   const [showFocused , setShowFocused] = useState(false);
   const [shareAnchor, setShareAnchor] = useState(null);
@@ -36,9 +38,9 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag}) => {
   const handleAddWishlist = async (event) => {
     event.stopPropagation();
     if (user) {
+      setLoadingFav(true);
       try {
         if (!wishlist.includes(productItem.id)) { // if the image is not included yet, add it
-          console.log("Right! the product is to go")
           await addDoc(collection(db, "wishlist"), {
             uid: user.uid,
             img_id: productItem.id,
@@ -46,18 +48,32 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag}) => {
           //   logEvent(analytics, 'addToWishlist', {
           //     img_id: img_id
           //   });
-          setReloadFlag(!reloadFlag)
-        } else {
-          // implement delete functionality
-          //
-          // const q = query(collection(db, "wishlist"), where("img_id", "==", productItem.id));
-          // const querySnapshot = await getDocs(q);
-          // const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-          // console.log('log: ',newData)
-          // await db.collection("wishlist").doc(newData[0].id).delete();
-          // setReloadFlag(!reloadFlag)
+        } else { // delete if it exists
+          // log remove from wishlist
+          //   logEvent(analytics, 'addToWishlist', {
+          //     img_id: img_id
+          //   });
+
+          const q = query(collection(db, "wishlist"), where("img_id", "==", productItem.id)); // bring the query with the one with this img_id
+          const querySnapshot = await getDocs(q); // load it
+          let requestedFavourite = {};
+          querySnapshot.forEach((doc) => {
+            requestedFavourite = {...doc.data(), id: doc.id} // include it here
+          })
+          if(requestedFavourite.id) {
+            await deleteDoc(doc(db, "wishlist", requestedFavourite.id));
+          } else {
+            Swal.fire({
+              ...swalNoInputs,
+              text: "Impossible to delete this item",
+              confirmButtonText: "Damn"
+            });
+          }
         }
+        setReloadFlag(!reloadFlag); // reload wishlist
+        setLoadingFav(false);
       } catch (err) {
+        setLoadingFav(false);
         console.error(err);
       }
     } else {
@@ -142,8 +158,11 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag}) => {
         <CardActions disableSpacing>
           <Tooltip title="Add to wishlist" placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
             <IconButton aria-label="add to favorites">
-              {wishlist.includes(productItem.id) ? 
-                <FavoriteIcon /> : 
+              { loadingFav ?
+                <CircularProgress style={{'color': "#FA39BE"}} size={24} thickness={4}/> 
+              :
+                wishlist.includes(productItem.id) ? 
+                <FavoriteIcon style={{'color': "#FA39BE"}} /> : 
                 <FavoriteBorderOutlinedIcon/>
               }
             </IconButton>

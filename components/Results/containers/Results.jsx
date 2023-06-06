@@ -30,7 +30,6 @@ const Results = () => {
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
-    
     //
     const [rawResults , setRawResults] = useState([]);
     const [toViewResults , setToViewResults] = useState([]); // filtered list
@@ -58,15 +57,13 @@ const Results = () => {
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`)).data; // get data
-                console.log("Response: ", rsp); // results
-                console.log(`requested: ${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`); // where i requested
                 setProducts(rsp.results);
                 setRawResults(rsp.results);
                 setLastPage(rsp.total_pages);
                 setLastSearch(querySearch);
                 setLoadingFlag(false);
             } catch (err) {
-                console.error (err);
+                console.error(err);
                 setLoadingFlag(false);
             }
         };
@@ -89,7 +86,6 @@ const Results = () => {
                     const querySnapshot = await getDocs(q);
                     const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
                     const items = newData.map(item => item["img_id"])
-                    console.log('wishlist items: ', items);
                     dispatch(setWishlist(items)); // set to global state
                 } catch (err) {
                     console.error(err);
