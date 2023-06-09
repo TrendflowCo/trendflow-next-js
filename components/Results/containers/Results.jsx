@@ -76,6 +76,7 @@ const Results = () => {
         const querySearch = router.query.id;
         localStorage.setItem('language', language);
         router.push(`/${language}/results/${querySearch}`)
+        // router.push(`/${language}`); // redirect to home into the new language
     },[language]);
     //
     useEffect(() => { // wishlist search
@@ -141,7 +142,7 @@ const Results = () => {
 
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                         <div className='mx-5'>
-                            <h6 className='text-black text-4xl leading-10 font-semibold'>{enhanceText(lastSearch)}</h6>
+                            <h6 className='text-black text-4xl leading-10 font-semibold'>{enhanceText(lastSearch.split('-').join(' '))}</h6>
                         </div>
                         {/* Buttons for filtering and sorting modal enabling */}
                         <SortAndFilter 

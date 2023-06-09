@@ -76,7 +76,41 @@
         "line_3": "Mas não queremos apenas facilitar a sua busca pelo que você deseja - também queremos oferecer uma ampla seleção de roupas elegantes e únicas de marcas de alto nível. Estamos comprometidos em proporcionar aos nossos clientes a melhor experiência de compra possível e acreditamos que isso significa oferecer produtos de alta qualidade, além de uma plataforma inovadora e fácil de usar que permite comprar com criatividade.",
         "line_4": "Também acreditamos na importância da sustentabilidade e de práticas éticas na indústria da moda. Por isso, estamos comprometidos em firmar parcerias com marcas que priorizam a sustentabilidade e os métodos de produção ética.",
         "line_5": "Agradecemos por escolher fazer suas compras conosco. Estamos ansiosos para ajudá-lo a encontrar a roupa perfeita!"
+    },
+    "prompts": {
+        "Merlina Addams": "Merlina Addams",
+        "Barbie Y2K": "Barbie Y2K",
+        "Preppy Girl": "Garota Preppy",
+        "Boho chic": "Estilo Boho",
+        "Parisian chic": "Estilo parisiense",
+        "Floral Dresses": "Vestidos florais",
+        "Men's Shirts in pastel colors": "Camisas masculinas em cores pastel",
+        "Denim": "Denim",
+        "Wes Anderson": "Wes Anderson",
+        "Safari Glam": "Glamour Safari",
+        "Bold prints": "Estampas ousadas",
+        "Office attire": "Traje de escritório",
+        "Vintage-inspired fashion": "Moda inspirada em vintage",
+        "Streetwear style": "Estilo streetwear",
+        "Retro fashion": "Moda retrô",
+        "Edgy and alternative looks": "Looks ousados e alternativos",
+        "Minimalist wardrobe": "Guarda-roupa minimalista",
+        "Festival fashion": "Moda para festivais",
+        "Urban chic": "Estilo urbano chique",
+        "Avant-garde fashion": "Moda avant-garde",
+        "Sustainable clothing options": "Opções de roupas sustentáveis",
+        "Glamorous evening gowns": "Vestidos de noite glamorosos",
+        "Rock and roll fashion": "Moda rock and roll",
+        "Monochrome outfits": "Looks monocromáticos",
+        "Bohemian dresses": "Vestidos boêmios",
+        "Tailored suits for women": "Ternos sob medida para mulheres",
+        "Statement accessories": "Acessórios marcantes",
+        "Ethical and fair-trade fashion": "Moda ética e comércio justo",
+        "Gender-neutral fashion": "Moda de gênero neutro",
+        "High-fashion runway looks": "Looks de alta moda na passarela",
+        "Cosplay and costume ideas": "Ideias de cosplay e fantasias"
     }
+    
 }
 
 

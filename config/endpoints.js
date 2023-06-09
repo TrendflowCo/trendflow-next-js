@@ -4,6 +4,7 @@ export const endpoints = (name) => {
     const endpoints = {
         // -- old endpoints --
         results: `${CLIP_API}search?query=`,
+        byIds:  `${CLIP_API}search?ids=`
     }
     return endpoints[name];
 }

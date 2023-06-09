@@ -72,6 +72,40 @@
     "line_3": "Men vi vil ikke kun gøre det nemt for dig at finde det, du leder efter - vi vil også tilbyde et bredt udvalg af stilfulde og unikke tøjgenstande fra topmærker. Vi er dedikerede til at give vores kunder den bedst mulige shoppingoplevelse, og vi mener, at det indebærer at tilbyde produkter af høj kvalitet samt en innovativ og brugervenlig platform, der giver dig mulighed for at shoppe kreativt.",
     "line_4": "Vi tror også på vigtigheden af bæredygtighed og etiske praksisser i modebranchen. Derfor er vi dedikerede til at samarbejde med mærker, der prioriterer bæredygtighed og etiske produktionsmetoder.",
     "line_5": "Tak fordi du har valgt at handle hos os. Vi ser frem til at hjælpe dig med at finde det perfekte outfit!"
+    },
+    "prompts": {
+        "Merlina Addams": "Merlina Addams",
+        "Barbie Y2K": "Barbie Y2K",
+        "Preppy Girl": "Preppy-pige",
+        "Boho chic": "Boho-chic",
+        "Parisian chic": "Pariser chic",
+        "Floral Dresses": "Blomsterkjoler",
+        "Men's Shirts in pastel colors": "Herreskjorter i pastelfarver",
+        "Denim": "Denim",
+        "Wes Anderson": "Wes Anderson",
+        "Safari Glam": "Safari-glamour",
+        "Bold prints": "Fremtrædende mønstre",
+        "Office attire": "Kontor påklædning",
+        "Vintage-inspired fashion": "Vintage-inspireret mode",
+        "Streetwear style": "Streetwear-stil",
+        "Retro fashion": "Retro-mode",
+        "Edgy and alternative looks": "Edgy og alternative looks",
+        "Minimalist wardrobe": "Minimalistisk garderobe",
+        "Festival fashion": "Festivalmode",
+        "Urban chic": "Urban elegance",
+        "Avant-garde fashion": "Avantgarde-mode",
+        "Sustainable clothing options": "Bæredygtige tøjmuligheder",
+        "Glamorous evening gowns": "Glamourøse aftenskjoler",
+        "Rock and roll fashion": "Rock and roll-mode",
+        "Monochrome outfits": "Monokrome outfits",
+        "Bohemian dresses": "Boheme-kjoler",
+        "Tailored suits for women": "Skræddersyede jakkesæt til kvinder",
+        "Statement accessories": "Markante tilbehør",
+        "Ethical and fair-trade fashion": "Etisk og fair-trade mode",
+        "Gender-neutral fashion": "Kønsneutral mode",
+        "High-fashion runway looks": "Looks fra haute couture-catwalken",
+        "Cosplay and costume ideas": "Cosplay og kostumeideer"
     }
+    
 }
     

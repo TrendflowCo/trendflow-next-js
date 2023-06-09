@@ -72,5 +72,38 @@
         "line_3": "But we don't just want to make it easy for you to find what you're looking for - we also want to offer a wide selection of stylish and unique clothing items from top brands. We are committed to providing our customers with the best shopping experience possible, and we believe that this means offering high-quality products as well as an innovative and user-friendly platform that allows you to shop creatively.",
         "line_4": "We also believe in the importance of sustainability and ethical practices in the fashion industry. That's why we are committed to partnering with brands that prioritize sustainability and ethical production methods.",
         "line_5": "Thank you for choosing to shop with us. We look forward to helping you find the perfect outfit!"
-    }
-    }
+    },
+    "prompts": {
+        "Merlina Addams": "Merlina Addams",
+        "Barbie Y2K": "Barbie Y2K",
+        "Preppy Girl": "Preppy Girl",
+        "Boho chic": "Boho chic",
+        "Parisian chic": "Parisian chic",
+        "Floral Dresses": "Floral Dresses",
+        "Men's Shirts in pastel colors": "Men's Shirts in pastel colors",
+        "Denim": "Denim",
+        "Wes Anderson": "Wes Anderson",
+        "Safari Glam": "Safari Glam",
+        "Bold prints": "Bold prints",
+        "Office attire": "Office attire",
+        "Vintage-inspired fashion": "Vintage-inspired fashion",
+        "Streetwear style": "Streetwear style",
+        "Retro fashion": "Retro fashion",
+        "Edgy and alternative looks": "Edgy and alternative looks",
+        "Minimalist wardrobe": "Minimalist wardrobe",
+        "Festival fashion": "Festival fashion",
+        "Urban chic": "Urban chic",
+        "Avant-garde fashion": "Avant-garde fashion",
+        "Sustainable clothing options": "Sustainable clothing options",
+        "Glamorous evening gowns": "Glamorous evening gowns",
+        "Rock and roll fashion": "Rock and roll fashion",
+        "Monochrome outfits": "Monochrome outfits",
+        "Bohemian dresses": "Bohemian dresses",
+        "Tailored suits for women": "Tailored suits for women",
+        "Statement accessories": "Statement accessories",
+        "Ethical and fair-trade fashion": "Ethical and fair-trade fashion",
+        "Gender-neutral fashion": "Gender-neutral fashion",
+        "High-fashion runway looks": "High-fashion runway looks",
+        "Cosplay and costume ideas": "Cosplay and costume ideas"
+    }    
+}

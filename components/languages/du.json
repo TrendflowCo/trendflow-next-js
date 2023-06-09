@@ -72,7 +72,41 @@
     "line_3": "Maar we willen niet alleen dat je gemakkelijk kunt vinden wat je zoekt - we willen ook een breed assortiment stijlvolle en unieke kledingstukken van topmerken aanbieden. We zijn toegewijd aan het bieden van de best mogelijke winkelervaring aan onze klanten, en we geloven dat dit betekent dat we hoogwaardige producten en een innovatief en gebruiksvriendelijk platform moeten bieden waarmee je op een creatieve manier kunt winkelen.",
     "line_4": "We geloven ook in het belang van duurzaamheid en ethische praktijken in de mode-industrie. Daarom werken we samen met merken die duurzaamheid en ethische productiemethoden prioriteren.",
     "line_5": "Bedankt dat je ervoor hebt gekozen om bij ons te winkelen. We kijken ernaar uit om je te helpen de perfecte outfit te vinden!"
+    },
+    "prompts": {
+        "Merlina Addams": "Merlina Addams",
+        "Barbie Y2K": "Barbie Y2K",
+        "Preppy Girl": "Preppy meisje",
+        "Boho chic": "Boho chic",
+        "Parisian chic": "Parijse chic",
+        "Floral Dresses": "Bloemenjurken",
+        "Men's Shirts in pastel colors": "Herenoverhemden in pastelkleuren",
+        "Denim": "Denim",
+        "Wes Anderson": "Wes Anderson",
+        "Safari Glam": "Safari glam",
+        "Bold prints": "Gedurfde prints",
+        "Office attire": "Kantoorkleding",
+        "Vintage-inspired fashion": "Vintage geïnspireerde mode",
+        "Streetwear style": "Streetwear-stijl",
+        "Retro fashion": "Retro mode",
+        "Edgy and alternative looks": "Gedurfde en alternatieve looks",
+        "Minimalist wardrobe": "Minimalistische garderobe",
+        "Festival fashion": "Festival mode",
+        "Urban chic": "Stedelijke chic",
+        "Avant-garde fashion": "Avant-garde mode",
+        "Sustainable clothing options": "Duurzame kledingopties",
+        "Glamorous evening gowns": "Glamoureuze avondjurken",
+        "Rock and roll fashion": "Rock and roll mode",
+        "Monochrome outfits": "Monochrome outfits",
+        "Bohemian dresses": "Bohemien jurken",
+        "Tailored suits for women": "Op maat gemaakte pakken voor vrouwen",
+        "Statement accessories": "Opvallende accessoires",
+        "Ethical and fair-trade fashion": "Ethische en eerlijke handelsmode",
+        "Gender-neutral fashion": "Genderneutrale mode",
+        "High-fashion runway looks": "Looks van de haute couture catwalk",
+        "Cosplay and costume ideas": "Cosplay en kostuumideeën"
     }
+    
 }
     
     

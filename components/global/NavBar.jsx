@@ -82,7 +82,7 @@ const Navbar = ({ logOut , user }) => {
   
   return (
   <ThemeProvider theme={muiColors}>
-    <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[D8D8D8]'>
+    <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[#D8D8D8]'>
       <Container maxWidth="xl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
         {/* Title for desktop display */}
         <Box sx={{ mr: 2 , display: { xs: 'none', md: 'flex'}}}>
@@ -184,7 +184,7 @@ const Navbar = ({ logOut , user }) => {
               <input 
                   className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 mr-4 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
                   type="text"
-                  placeholder={currentSearch || "Tell me what you like"}
+                  placeholder={currentSearch.split('-').join(' ') || "Tell me what you like"}
                   style={{'fontFamily':"Arial, FontAwesome"}}
                   onChange={(e) => {handleSearchPhrase(e)}}
                   onKeyDown={handleEnterSearch}
