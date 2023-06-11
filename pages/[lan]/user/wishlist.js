@@ -1,4 +1,4 @@
-import Wishlist from "../../components/User/Wishlist/Wishlist";
+import Wishlist from "../../../components/User/Wishlist/Wishlist";
 
 const wishlist = () => {
     return <Wishlist/>

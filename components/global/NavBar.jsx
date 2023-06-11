@@ -49,7 +49,7 @@ const Navbar = ({ logOut , user }) => {
     if (option === 'Logout') {
       logOut()
     } else if (option === 'Wishlist') {
-      router.push('/user/wishlist')
+      router.push(`/${language}/user/wishlist`)
     }
     handleCloseUserMenu()
   };

@@ -5,6 +5,9 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import axios from "axios";
+import { useAppDispatch } from "../../../redux/hooks";
+import { setWishlist } from "../../../redux/features/actions/search";
+import { setLanguage } from "../../../redux/features/actions/language";
 import ResultCard from "../../Results/ResultCard";
 import { useRouter } from "next/router";
 import { Box, CircularProgress, Grid, Pagination, ThemeProvider } from "@mui/material";
@@ -12,6 +15,7 @@ import { muiColors } from "../../Utils/muiTheme";
   
 
 const Wishlist = () => {
+    const dispatch = useAppDispatch();
     const db = getFirestore(app);
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data
@@ -27,15 +31,17 @@ const Wishlist = () => {
             if (user) {
                 try {
                     setLoadingFlag(true);
+                    const queryLanguage = router.query.lan;
+                    dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                     const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
                     const querySnapshot = await getDocs(q);
                     const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-                    const items = newData.map(item => item["img_id"])
+                    const items = newData.map(item => item["img_id"]);
+                    dispatch(setWishlist(items)); // set to global state
                     const completeString = items.join(',');
                     const wishlistProducts = await axios.get(`${endpoints('byIds')}${completeString}`);
-                    console.log(wishlistProducts.data)
-                    setProducts(rsp.results);
-                    setLastPage(rsp.total_pages);
+                    setProducts(wishlistProducts.data.results);
+                    setLastPage(wishlistProducts.data.total_pages);
                     setLoadingFlag(false);
                 } catch (err) {
                     console.error(err);
@@ -43,7 +49,28 @@ const Wishlist = () => {
             }
         };
     fetchData();
-    },[router.query.id , router.query.lan , currentPage , user]);
+    },[router.query.lan , currentPage , user]);
+    useEffect(() => { // funcion solo para remover favoritos de la wishlist - sin loader general
+        const fetchData = async () => {
+            if (user) {
+                try {
+                    const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
+                    const querySnapshot = await getDocs(q);
+                    const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+                    const items = newData.map(item => item["img_id"]);
+                    dispatch(setWishlist(items)); // set to global state
+                    const completeString = items.join(',');
+                    const wishlistProducts = await axios.get(`${endpoints('byIds')}${completeString}`);
+                    setProducts(wishlistProducts.data.results);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        };
+    fetchData();
+    },[reloadFlag]);
+
+
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
     };
@@ -77,11 +104,13 @@ const Wishlist = () => {
                             )})}
                         </Grid>
                     </section>
-                    <div className="flex flex-col w-full items-center py-4">
-                        <ThemeProvider theme={muiColors}>
-                            <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
-                        </ThemeProvider>
-                    </div>
+                    { products.length > 0 && 
+                        <div className="flex flex-col w-full items-center py-4">
+                            <ThemeProvider theme={muiColors}>
+                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
+                            </ThemeProvider>
+                        </div>
+                    }
                 </Box>
             }
         </>
