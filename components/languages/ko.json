@@ -107,5 +107,15 @@
             "Gender-neutral fashion": "성별 중립적인 패션",
             "High-fashion runway looks": "하이패션 런웨이 룩",
             "Cosplay and costume ideas": "코스프레와 의상 아이디어"
-        }        
+        },
+        "wishlist": {
+            "title": "위시리스트"
+          },
+          "userMenu": {
+            "account": "계정",
+            "profile": "프로필",
+            "dashboard": "대시보드",
+            "wishlist": "위시리스트",
+            "logout": "로그아웃"
+        }     
     }

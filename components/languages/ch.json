@@ -105,5 +105,15 @@
         "Gender-neutral fashion": "中性时尚",
         "High-fashion runway looks": "高级时装秀造型",
         "Cosplay and costume ideas": "Cosplay和服装创意"
-    }    
+    },
+    "wishlist": {
+        "title": "愿望清单"
+      },
+      "userMenu": {
+        "account": "帐户",
+        "profile": "个人资料",
+        "dashboard": "仪表盘",
+        "wishlist": "愿望清单",
+        "logout": "登出"
+    }
 }

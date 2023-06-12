@@ -105,6 +105,15 @@
         "Gender-neutral fashion": "أزياء محايدة من النوع الجندري",
         "High-fashion runway looks": "إطلالات عروض الأزياء العالية",
         "Cosplay and costume ideas": "أفكار كوسبلاي والأزياء"
+    },
+    "wishlist": {
+        "title": "قائمة الرغبات"
+      },
+      "userMenu": {
+        "account": "الحساب",
+        "profile": "الملف الشخصي",
+        "dashboard": "لوحة التحكم",
+        "wishlist": "قائمة الرغبات",
+        "logout": "تسجيل الخروج"
     }
-    
 }

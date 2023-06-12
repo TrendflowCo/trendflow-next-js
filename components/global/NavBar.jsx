@@ -20,6 +20,7 @@ import { pages } from '../Utils/pages';
 import { setLanguage } from '../../redux/features/actions/language';
 import { settings_account } from '../Utils/settingsAccount';
 import { languages } from "../Utils/languages";
+import { enhanceText } from "../Utils/enhanceText";
 
 const Navbar = ({ logOut , user }) => {
   const { currentSearch } = useAppSelector(state => state.search);
@@ -46,9 +47,9 @@ const Navbar = ({ logOut , user }) => {
     setAnchorElUser(null);
   };
   const handleMenuOption = (option) => { // options from user menu
-    if (option === 'Logout') {
+    if (option === 'logout') {
       logOut()
-    } else if (option === 'Wishlist') {
+    } else if (option === 'wishlist') {
       router.push(`/${language}/user/wishlist`)
     }
     handleCloseUserMenu()
@@ -241,7 +242,7 @@ const Navbar = ({ logOut , user }) => {
             {settings_account.map((setting) => (
               // <MenuItem key={setting} onClick={handleCloseUserMenu}>
               <MenuItem key={setting} onClick={() => handleMenuOption(setting)}>
-                <Typography textAlign="center">{setting}</Typography>
+                <Typography textAlign="center">{translations?.userMenu?.[setting] && enhanceText(translations?.userMenu?.[setting])}</Typography>
               </MenuItem>
             ))}
           </Menu>

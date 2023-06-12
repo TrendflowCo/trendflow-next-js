@@ -107,5 +107,15 @@
         "Gender-neutral fashion": "ジェンダーニュートラルなファッション",
         "High-fashion runway looks": "ハイファッションのランウェイルック",
         "Cosplay and costume ideas": "コスプレと衣装のアイデア"
+    },
+    "wishlist": {
+        "title": "ほしい物リスト"
+      },
+      "userMenu": {
+        "account": "アカウント",
+        "profile": "プロフィール",
+        "dashboard": "ダッシュボード",
+        "wishlist": "ほしい物リスト",
+        "logout": "ログアウト"
     }
 }

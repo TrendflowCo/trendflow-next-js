@@ -105,5 +105,15 @@
         "Gender-neutral fashion": "Gender-neutral fashion",
         "High-fashion runway looks": "High-fashion runway looks",
         "Cosplay and costume ideas": "Cosplay and costume ideas"
-    }    
+    },
+    "wishlist": {
+        "title": "wishlist"
+    },
+    "userMenu": {
+        "account": "account",
+        "profile": "profile",
+        "dashboard": "dashboard",
+        "wishlist": "wishlist",
+        "logout": "logout"
+    }
 }

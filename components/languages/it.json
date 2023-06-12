@@ -107,6 +107,15 @@
         "Gender-neutral fashion": "Moda gender-neutral",
         "High-fashion runway looks": "Look da passerella di alta moda",
         "Cosplay and costume ideas": "Idee per cosplay e costumi"
-    }
-        
-    }
+    },
+    "wishlist": {
+        "title": "lista dei desideri"
+      },
+      "userMenu": {
+        "account": "account",
+        "profile": "profilo",
+        "dashboard": "dashboard",
+        "wishlist": "lista dei desideri",
+        "logout": "logout"
+    } 
+}

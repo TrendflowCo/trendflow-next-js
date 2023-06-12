@@ -105,5 +105,15 @@
     "Gender-neutral fashion": "लिंग-निषेध फैशन",
     "High-fashion runway looks": "उच्च-फैशन रनवे लुक",
     "Cosplay and costume ideas": "कॉसप्ले और कॉस्ट्यूम विचार"
-    }   
+    },
+    "wishlist": {
+        "title": "इच्छा-सूची"
+      },
+      "userMenu": {
+        "account": "खाता",
+        "profile": "प्रोफ़ाइल",
+        "dashboard": "डैशबोर्ड",
+        "wishlist": "इच्छा-सूची",
+        "logout": "लॉगआउट"
+    }
 }

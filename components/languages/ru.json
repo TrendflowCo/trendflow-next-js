@@ -105,5 +105,15 @@
             "Gender-neutral fashion": "Гендерно-нейтральная мода",
             "High-fashion runway looks": "Образы с модных подиумов",
             "Cosplay and costume ideas": "Идеи косплея и костюмов"
-        }        
+        },
+        "wishlist": {
+            "title": "список желаний"
+          },
+          "userMenu": {
+            "account": "аккаунт",
+            "profile": "профиль",
+            "dashboard": "панель управления",
+            "wishlist": "список желаний",
+            "logout": "выйти"
+        }   
 }

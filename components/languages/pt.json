@@ -32,8 +32,6 @@
     "cancel": "Cancelar",
     "done": "Feito",
     "back": "Voltar"
-    
-    
     },
     "action": "Junte-se à revolução hoje e experimente o poder da Dokuso.",
     "signup": "Inscreva-se",
@@ -109,6 +107,16 @@
         "Gender-neutral fashion": "Moda de gênero neutro",
         "High-fashion runway looks": "Looks de alta moda na passarela",
         "Cosplay and costume ideas": "Ideias de cosplay e fantasias"
+    },
+    "wishlist": {
+        "title": "lista de desejos"
+      },
+      "userMenu": {
+        "account": "conta",
+        "profile": "perfil",
+        "dashboard": "painel de controle",
+        "wishlist": "lista de desejos",
+        "logout": "sair"
     }
     
 }

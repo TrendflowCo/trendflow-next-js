@@ -5,17 +5,19 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import axios from "axios";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch , useAppSelector } from "../../../redux/hooks";
 import { setWishlist } from "../../../redux/features/actions/search";
 import { setLanguage } from "../../../redux/features/actions/language";
 import ResultCard from "../../Results/ResultCard";
 import { useRouter } from "next/router";
 import { Box, CircularProgress, Grid, Pagination, ThemeProvider } from "@mui/material";
 import { muiColors } from "../../Utils/muiTheme";
+import { enhanceText } from "../../Utils/enhanceText";
   
 
 const Wishlist = () => {
     const dispatch = useAppDispatch();
+    const { translations } = useAppSelector(state => state.language);
     const db = getFirestore(app);
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data
@@ -85,7 +87,7 @@ const Wishlist = () => {
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                         <div className='mx-5'>
-                            <h6 className='text-black text-4xl leading-10 font-semibold'>Wishlist</h6>
+                            <h6 className='text-black text-4xl leading-10 font-semibold'>{translations?.wishlist?.title && enhanceText(translations?.wishlist?.title)}</h6>
                         </div>
                         {/* Buttons for filtering and sorting modal enabling
                         <SortAndFilter 

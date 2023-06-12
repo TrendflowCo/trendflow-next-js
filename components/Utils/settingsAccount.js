@@ -1,7 +1,7 @@
 export const settings_account =  [
-    'Account', 
-    'Profile',
-    'Dashboard', 
-    'Wishlist', 
-    'Logout',
+    'account', 
+    'profile',
+    'dashboard', 
+    'wishlist', 
+    'logout',
   ];

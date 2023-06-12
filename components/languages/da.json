@@ -105,6 +105,16 @@
         "Gender-neutral fashion": "Kønsneutral mode",
         "High-fashion runway looks": "Looks fra haute couture-catwalken",
         "Cosplay and costume ideas": "Cosplay og kostumeideer"
+    },
+    "wishlist": {
+        "title": "ønskeliste"
+      },
+      "userMenu": {
+        "account": "konto",
+        "profile": "profil",
+        "dashboard": "oversigt",
+        "wishlist": "ønskeliste",
+        "logout": "log ud"
     }
     
 }
