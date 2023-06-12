@@ -136,11 +136,11 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
             {
               productItem.old_price_float !== productItem.price_float ? 
               <div className='flex flex-row w-full'>
-                <span className='font-semibold text-dokuso-pink mr-1'>{productItem.price}</span> 
-                <span className='font-semibold line-through'>{`${productItem.old_price}`}</span> 
+                <span className='font-semibold text-dokuso-pink mr-1'>{`$${productItem.price_float}`}</span> 
+                <span className='font-semibold line-through'>{`$${productItem.old_price_float}`}</span> 
               </div>
             : 
-              <span className='font-semibold'>{productItem.price}</span> 
+              <span className='font-semibold'>{`$${productItem.price_float}`}</span> 
             }
           </div>
           {productItem.old_price_float !== productItem.price_float && 
