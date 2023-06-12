@@ -18,6 +18,7 @@ import Filter from "../Filter";
 import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
 import filterAndSorting from "../functions/filterAndSorting";
+import { languageAdapter } from "../functions/languageAdapter";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -56,7 +57,8 @@ const Results = () => {
                 const queryLanguage = router.query.lan;
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
-                const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${queryLanguage}&limit=${searchLimit}&page=${currentPage}`)).data; // get data
+                console.log(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}&limit=${searchLimit}&page=${currentPage}`);
+                const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}&limit=${searchLimit}&page=${currentPage}`)).data; // get data
                 setProducts(rsp.results);
                 setRawResults(rsp.results);
                 setLastPage(rsp.total_pages);
