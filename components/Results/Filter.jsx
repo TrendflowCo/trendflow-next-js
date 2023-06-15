@@ -4,62 +4,17 @@ import { IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 
 
-const Filter = ( { setFilterModal , types , creators , statuses , years , months , title , assay , setFilterOptions , filterOptions , setFiltersApplied , filterModal } ) => {
+const Filter = (props) => {
+    const {setFilterModal,
+        filterModal ,
+        onSaleFilter,
+        setOnSaleFilter,
+        resetFlag,
+        setResetFlag} = props;
     const ref = useRef(null);
-    // const [selectType, setSelectType] = useState('Choose');
-    // const [selectCreator, setSelectCreator] = useState('Choose');
-    // const [selectStatus, setSelectStatus] = useState('Choose');
-    // const [selectYear, setSelectYear] = useState('Choose');
-    // const [selectMonth, setSelectMonth] = useState('Choose');
-    // const [selectTitle, setSelectTitle] = useState('');
-    // const [selectAssay , setSelectAssay] = useState('Choose');
     useEffect(() => {
         if (filterModal){
             let amount = 0;
-            // if (filterOptions.types != types) {
-            //     setSelectType(filterOptions.types[0])
-            // }
-            // if (filterOptions.status != statuses) {
-            //     setSelectStatus(filterOptions.status[0])
-            // }
-            // if (filterOptions.creators!= creators) {
-            //     setSelectCreator(filterOptions.creators[0]._id)
-            // }
-            // if (filterOptions.years != years) {
-            //     setSelectYear(filterOptions.years[0])
-            // }
-            // if (filterOptions.months != months) {
-            //     setSelectMonth(filterOptions.months[0])
-            // }
-            // if (filterOptions.title != title) {
-            //     setSelectTitle(filterOptions.title)
-            // }
-            // if (filterOptions.assay != assay) {
-            //     setSelectAssay(filterOptions.assay)
-            // }
-            // if (selectStatus !== 'Choose'){
-            //     amount += 1
-            // }
-            // if(selectTitle !== '') {
-            //     amount += 1
-            // }
-            // if(selectAssay !== 'Choose') {
-            //     amount += 1
-            // }
-            // if(selectType !== 'Choose') {
-            //     amount += 1
-            // }
-            // if(selectCreator !== 'Choose') {
-            //     amount += 1
-            // }
-            // if(selectYear !== 'Choose') {
-            //     amount += 1
-            // }
-            // if(selectMonth !== 'Choose') {
-            //     amount += 1
-            // }
-            // setFiltersApplied(amount);
-
             const checkIfClickedOutside = (e) => {
                 if (filterModal && ref.current && !ref.current.contains(e.target)) {
                 setFilterModal(false)
@@ -70,64 +25,16 @@ const Filter = ( { setFilterModal , types , creators , statuses , years , months
                 document.removeEventListener("mousedown", checkIfClickedOutside)
             }
         }
-  
-    },[filterModal])    
-    // const changeStatus = (e) => {
-    //     const newVector = {...filterOptions,status:[e]};
-    //     setSelectStatus(e);
-    //     setFilterOptions(newVector);
-    // }
-    // const changeCreator = (e) => {
-    //     const newVector = {...filterOptions,creators:[creators[creators.findIndex(item => item._id === e)]]};
-    //     setSelectCreator(e);
-    //     setFilterOptions(newVector);
-    // }
-    // const changeType = (e) => {
-    //     const newVector = {...filterOptions,types:[e]};
-    //     setSelectType(e);
-    //     setFilterOptions(newVector);
-    // }
-    // const changeYear = (e) => {
-    //     const newVector = {...filterOptions,years:[parseInt(e)]};
-    //     setSelectYear(parseInt(e));
-    //     setFilterOptions(newVector);
-    // };
-    // const changeMonth = (e) => {
-    //     const newVector = {...filterOptions,months:[parseInt(e)]};
-    //     setSelectMonth(parseInt(e));
-    //     setFilterOptions(newVector);
-    // };
-    // const changeTitle = (e) => {
-    //     const newVector = {...filterOptions,title: e.toLowerCase()};
-    //     setSelectTitle(e.toLowerCase());
-    //     setFilterOptions(newVector);
-    // };
-    // const changeAssay = (e) => {
-    //     const newVector = {...filterOptions,assay:[e]};
-    //     setSelectAssay(e);
-    //     setFilterOptions(newVector);
-    // }
-
-    // const deleteFilter = () => {
-    //     const newVector = {
-    //         creators: creators,
-    //         types: types,
-    //         status: statuses,
-    //         years: years,
-    //         months: months,
-    //         title: title,
-    //         assay: assay
-    //     };
-    //     setSelectStatus('Choose');
-    //     setSelectCreator('Choose');
-    //     setSelectType('Choose');
-    //     setSelectYear('Choose');
-    //     setSelectMonth('Choose');
-    //     setSelectTitle('');
-    //     setSelectAssay('Choose');
-    //     setFilterOptions(newVector);
-    //     setFiltersApplied(0)
-    // }
+    },[filterModal]);
+    console.log('on sale filter: ', onSaleFilter)
+    const handleSetOnSale = () => {
+        if (onSaleFilter === null || onSaleFilter === false) {
+            setOnSaleFilter(true)
+        } else if (onSaleFilter === true) {
+            setOnSaleFilter(false)
+        }
+        setResetFlag(!resetFlag); // en un futuro voy a aplicarlo con un boton
+    }
     return(
         <>
             {filterModal && <div className="h-full w-full bg-dokuso-black absolute top-0 left-0 z-10 bg-opacity-30"></div>}
@@ -142,17 +49,10 @@ const Filter = ( { setFilterModal , types , creators , statuses , years , months
                     <div className="mt-4">
                         <h4 className="text-2xl font-semibold">Filters</h4>
                     </div>
-                    {/* <div className='flex flex-col mt-5 lg:ml-2.5 lg:pr-2.5'>
-                        <label htmlFor="" className='text-black text-sm font-semibold'>Id</label>
-                        <div>
-                            <input value={selectTitle}
-                                placeholder='Type a title'
-                                onChange={(e) => changeTitle(e.target.value)}
-                                className={`w-full outline-none duration-500 border bg-stamm-white rounded-15 h-11.5 py-3.5 pr-10 pl-3.5 mt-2.5 text-xs ${selectTitle != '' ? 'border-stamm-primary shadow' : 'border-stamm-gray'}`}
-                                >
-                            </input>
-                        </div>
-                    </div> */}
+                    <div className='flex flex-row mt-5'>
+                        <label className='text-black text-sm font-semibold mr-5'>Only on sale</label>
+                        <input type="checkbox" onChange={() => {handleSetOnSale()}}/>
+                    </div>
                     {/* <div className='flex flex-col mt-5 lg:ml-2.5 lg:pr-2.5'>
                         <label htmlFor="" className='text-black text-sm font-semibold'>Type</label>
                         <div>

@@ -32,22 +32,28 @@ const Results = () => {
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
     //
-    const [rawResults , setRawResults] = useState([]);
-    const [toViewResults , setToViewResults] = useState([]); // filtered list
-    const [searchLimit , setSearchLimit] = useState(20);
-    const [currentPage , setCurrentPage] = useState(1);
-    const [lastPage , setLastPage] = useState(0);
-    const [lastSearch , setLastSearch] = useState('');
-    //
-    const [filterOptions , setFilterOptions] = useState({});
-    const [filtersApplied, setFiltersApplied] = useState(0);
-    const [filterModal , setFilterModal] = useState(false);
-    const [resetFlag , setResetFlag] = useState(false);
+    const [searchLimit , setSearchLimit] = useState(20); // search limit value
+    const [currentPage , setCurrentPage] = useState(1); // current page value
+    const [lastPage , setLastPage] = useState(0); // last page value
+    const [lastSearch , setLastSearch] = useState(''); // text display of search
+    // Filter
+    const [filtersApplied, setFiltersApplied] = useState(0); // amount of filters
+    const [filterModal , setFilterModal] = useState(false); // modal controller
+    const [sectionFilter , setSectionFilter] = useState('');
+    const [onSaleFilter,setOnSaleFilter] = useState(false);
+    const [priceFilter , setPriceFilter] = useState({
+        minPrice: 0,
+        maxPrice: 0
+    });
+    const [bransFilter , setBrandsFilter] = useState([]);
+    
     // -- sorting components --
     const [sortingModal , setSortingModal] = useState(false);
     const [sortsApplied, setSortsApplied] = useState(0);
     const [sorts , setSorts] = useState([]);
     const [availableSorts , setAvailableSorts] = useState(0); // la cantidad de sorts disponibles para mapear los select
+    // reload var
+    const [resetFlag , setResetFlag] = useState(false); // reload
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,10 +63,10 @@ const Results = () => {
                 const queryLanguage = router.query.lan;
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
-                console.log(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}&limit=${searchLimit}&page=${currentPage}`);
-                const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}&limit=${searchLimit}&page=${currentPage}`)).data; // get data
+                let onSaleQuery = onSaleFilter ? `&onSale=true` : ''
+                console.log(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}&limit=${searchLimit}&page=${currentPage}${onSaleQuery}`);
+                const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}${onSaleQuery}&limit=${searchLimit}&page=${currentPage}`)).data; // get data
                 setProducts(rsp.results);
-                setRawResults(rsp.results);
                 setLastPage(rsp.total_pages);
                 setLastSearch(querySearch);
                 setLoadingFlag(false);
@@ -72,7 +78,7 @@ const Results = () => {
         if (router.query.id && router.query.lan) {
             fetchData()
         }
-    },[router.query.id , router.query.lan , currentPage]);
+    },[router.query.id , router.query.lan , currentPage , resetFlag]);
 
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
@@ -98,13 +104,6 @@ const Results = () => {
     fetchData();
     }, [user , reloadFlag])
 
-    // useEffect(() => { // use effect for every filtering or sorting opperation
-    //     const filterOptions = {};
-    //     const { finalResults } = filterAndSorting(rawResults, filterOptions , sortsApplied , sorts); // filtered and sorted list
-    //     setToViewResults(finalResults);
-    //     console.log('setted to view results: ' , toViewResults);
-    // },[filterOptions, sorts, rawResults, sortsApplied]);
-
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
     };
@@ -119,17 +118,11 @@ const Results = () => {
                     {/* Filter component */}
                     <Filter 
                         setFilterModal={setFilterModal} 
-                        // types={deviceTypes} 
-                        // creators={creators} 
-                        // statuses={deviceStatus} 
-                        // years={deviceCreationYear}
-                        // months={deviceCreationMonth}
-                        // title={deviceId}
-                        // assay={relatedAssay}
-                        filterOptions={filterOptions} 
-                        setFilterOptions={setFilterOptions} 
-                        setFiltersApplied={setFiltersApplied}
                         filterModal={filterModal}
+                        onSaleFilter={onSaleFilter}
+                        setOnSaleFilter={setOnSaleFilter}
+                        resetFlag={resetFlag}
+                        setResetFlag={setResetFlag}
                     />
                     {/* Sorting component */}
                     <Sort 
