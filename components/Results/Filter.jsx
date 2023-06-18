@@ -1,17 +1,33 @@
 import React , {useEffect, useState , useRef} from "react";
-// import downArrow from '../../../public/icon-flecha-down.svg';
 import { IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import Switch from '@mui/material/Switch';
+import { useRouter } from "next/router";
 
 
 const Filter = (props) => {
-    const {setFilterModal,
-        filterModal ,
-        onSaleFilter,
-        setOnSaleFilter,
-        resetFlag,
-        setResetFlag} = props;
+    const router = useRouter();
+    const { setFilterModal , filterModal } = props;
+        
+    const [onSaleChecked, setOnSaleChecked] = useState(false);
+
+    const handleSetOnSale = (event) => {
+        setOnSaleChecked(event.target.checked);
+        if (event.target.checked === true) {
+            router.push({ href: "./", query: { ...router.query, onSale:'true' } })
+        } else {
+            const { pathname, query } = router;
+            const params = new URLSearchParams(query);
+            params.delete('onSale');
+            router.replace(
+            { pathname, query: params.toString() },
+            undefined, 
+            { shallow: true }
+        );
+    }
+    };
     const ref = useRef(null);
+
     useEffect(() => {
         if (filterModal){
             let amount = 0;
@@ -26,15 +42,7 @@ const Filter = (props) => {
             }
         }
     },[filterModal]);
-    console.log('on sale filter: ', onSaleFilter)
-    const handleSetOnSale = () => {
-        if (onSaleFilter === null || onSaleFilter === false) {
-            setOnSaleFilter(true)
-        } else if (onSaleFilter === true) {
-            setOnSaleFilter(false)
-        }
-        setResetFlag(!resetFlag); // en un futuro voy a aplicarlo con un boton
-    }
+
     return(
         <>
             {filterModal && <div className="h-full w-full bg-dokuso-black absolute top-0 left-0 z-10 bg-opacity-30"></div>}
@@ -49,9 +57,13 @@ const Filter = (props) => {
                     <div className="mt-4">
                         <h4 className="text-2xl font-semibold">Filters</h4>
                     </div>
-                    <div className='flex flex-row mt-5'>
-                        <label className='text-black text-sm font-semibold mr-5'>Only on sale</label>
-                        <input type="checkbox" onChange={() => {handleSetOnSale()}}/>
+                    <div className='flex flex-row mt-5 items-center'>
+                        <label className='text-black text-sm font-semibold mr-5'>On sale products</label>
+                        <Switch
+                            checked={onSaleChecked}
+                            onChange={handleSetOnSale}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                        />                    
                     </div>
                     {/* <div className='flex flex-col mt-5 lg:ml-2.5 lg:pr-2.5'>
                         <label htmlFor="" className='text-black text-sm font-semibold'>Type</label>

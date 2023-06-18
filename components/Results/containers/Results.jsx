@@ -17,7 +17,6 @@ import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
 import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
-import filterAndSorting from "../functions/filterAndSorting";
 import { languageAdapter } from "../functions/languageAdapter";
  
 const Results = () => {
@@ -39,33 +38,27 @@ const Results = () => {
     // Filter
     const [filtersApplied, setFiltersApplied] = useState(0); // amount of filters
     const [filterModal , setFilterModal] = useState(false); // modal controller
-    const [sectionFilter , setSectionFilter] = useState('');
-    const [onSaleFilter,setOnSaleFilter] = useState(false);
-    const [priceFilter , setPriceFilter] = useState({
-        minPrice: 0,
-        maxPrice: 0
-    });
-    const [bransFilter , setBrandsFilter] = useState([]);
-    
     // -- sorting components --
     const [sortingModal , setSortingModal] = useState(false);
     const [sortsApplied, setSortsApplied] = useState(0);
     const [sorts , setSorts] = useState([]);
     const [availableSorts , setAvailableSorts] = useState(0); // la cantidad de sorts disponibles para mapear los select
-    // reload var
-    const [resetFlag , setResetFlag] = useState(false); // reload
-
+    //
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoadingFlag(true);
-                const querySearch = router.query.id;
+                const querySearch = router.query.id.split('-').join(' ');
                 const queryLanguage = router.query.lan;
+                const onSaleQuery = router.query.onSale ? `&onSale=true`  : '';
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
-                let onSaleQuery = onSaleFilter ? `&onSale=true` : ''
-                console.log(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}&limit=${searchLimit}&page=${currentPage}${onSaleQuery}`);
-                const rsp = (await axios.get(`${endpoints('results')}${querySearch}&language=${languageAdapter(queryLanguage)}${onSaleQuery}&limit=${searchLimit}&page=${currentPage}`)).data; // get data
+                const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
+                const limitQuery = `&limit=${searchLimit}`
+                const pageQuery = `&page=${currentPage}`
+                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${limitQuery}${pageQuery}`
+                const rsp = (await axios.get(requestURI)).data; // get data
+                console.log('requested to: ',requestURI)
                 setProducts(rsp.results);
                 setLastPage(rsp.total_pages);
                 setLastSearch(querySearch);
@@ -76,10 +69,10 @@ const Results = () => {
             }
         };
         if (router.query.id && router.query.lan) {
-            fetchData()
+            fetchData();
         }
-    },[router.query.id , router.query.lan , currentPage , resetFlag]);
-
+    },[ router.query.lan , router.query.id , router.query.onSale , currentPage ]);
+    //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
         localStorage.setItem('language', language);
@@ -108,45 +101,41 @@ const Results = () => {
         setCurrentPage(newPage);
     };
     return (
-        <> 
+        <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
+            {/* Filter component */}
+            <Filter 
+                setFilterModal={setFilterModal} 
+                filterModal={filterModal}
+            />
+            {/* Sorting component */}
+            <Sort 
+                sortingModal={sortingModal}
+                setSortingModal={setSortingModal}
+                setSortsApplied={setSortsApplied}
+                sorts={sorts}
+                setSorts={setSorts}
+                availableSorts={availableSorts}
+                setAvailableSorts={setAvailableSorts}
+            />
+
+            <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
+                <div className='mx-5'>
+                    <h6 className='text-black text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                </div>
+                {/* Buttons for filtering and sorting modal enabling */}
+                <SortAndFilter 
+                    filtersApplied={filtersApplied} 
+                    sortsApplied={sortsApplied} 
+                    setFilterModal={setFilterModal} 
+                    setSortingModal={setSortingModal}
+                />
+            </div>
             { loadingFlag ? 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <CircularProgress size={72} thickness={4} />
                 </Box>
-            : 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
-                    {/* Filter component */}
-                    <Filter 
-                        setFilterModal={setFilterModal} 
-                        filterModal={filterModal}
-                        onSaleFilter={onSaleFilter}
-                        setOnSaleFilter={setOnSaleFilter}
-                        resetFlag={resetFlag}
-                        setResetFlag={setResetFlag}
-                    />
-                    {/* Sorting component */}
-                    <Sort 
-                        sortingModal={sortingModal}
-                        setSortingModal={setSortingModal}
-                        setSortsApplied={setSortsApplied}
-                        sorts={sorts}
-                        setSorts={setSorts}
-                        availableSorts={availableSorts}
-                        setAvailableSorts={setAvailableSorts}
-                    />
-
-                    <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
-                        <div className='mx-5'>
-                            <h6 className='text-black text-4xl leading-10 font-semibold'>{enhanceText(lastSearch.split('-').join(' '))}</h6>
-                        </div>
-                        {/* Buttons for filtering and sorting modal enabling */}
-                        <SortAndFilter 
-                            filtersApplied={filtersApplied} 
-                            sortsApplied={sortsApplied} 
-                            setFilterModal={setFilterModal} 
-                            setSortingModal={setSortingModal}
-                        />
-                    </div>
+            :
+                <>
                     <section>
                         <Grid container spacing={2} sx={{padding: 2}}>
                             {products.length > 0 && products.map((productItem,productIndex) => {return (
@@ -161,9 +150,9 @@ const Results = () => {
                             <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
                         </ThemeProvider>
                     </div>
-                </Box>
+                </>
             }
-        </>
+        </Box>
     )
 };
 

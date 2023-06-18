@@ -12,7 +12,6 @@ const SortAndFilter = (props) => {
         setSortingModal
     } = props;
     const handleOpenFilterModal = () => { // function for opening filter modal
-        console.log('open filter')
         setFilterModal(true);
     };
     const handleOpenSortingModal = () => { // function for opening sorting modal

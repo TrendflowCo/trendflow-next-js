@@ -32,7 +32,7 @@ const Searcher = () => {
     const handleButtonSearch = () => { // click into SHOP NOW button
         event.preventDefault();
         if (currentSearch !== '') {
-            router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`)
+            router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`) // url will be with joined spaces
         } else {
             Swal.fire({
                 ...swalNoInputs
