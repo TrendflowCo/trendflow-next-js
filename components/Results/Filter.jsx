@@ -30,7 +30,6 @@ const Filter = (props) => {
 
     useEffect(() => {
         if (filterModal){
-            let amount = 0;
             const checkIfClickedOutside = (e) => {
                 if (filterModal && ref.current && !ref.current.contains(e.target)) {
                 setFilterModal(false)

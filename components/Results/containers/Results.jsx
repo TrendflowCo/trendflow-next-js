@@ -48,9 +48,14 @@ const Results = () => {
         const fetchData = async () => {
             try {
                 setLoadingFlag(true);
+                let filtersTotal = 0
                 const querySearch = router.query.id.split('-').join(' ');
                 const queryLanguage = router.query.lan;
-                const onSaleQuery = router.query.onSale ? `&onSale=true`  : '';
+                let onSaleQuery = '';
+                if (router.query.onSale) {
+                    onSaleQuery = '&onSale=true'
+                    filtersTotal += 1;
+                }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
@@ -62,6 +67,7 @@ const Results = () => {
                 setProducts(rsp.results);
                 setLastPage(rsp.total_pages);
                 setLastSearch(querySearch);
+                setFiltersApplied(filtersTotal)
                 setLoadingFlag(false);
             } catch (err) {
                 console.error(err);
