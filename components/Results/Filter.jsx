@@ -3,13 +3,21 @@ import { IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Switch from '@mui/material/Switch';
 import { useRouter } from "next/router";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Box from '@mui/material/Box';
+import { enhanceText } from "../Utils/enhanceText";
 
 
 const Filter = (props) => {
     const router = useRouter();
     const { setFilterModal , filterModal } = props;
-        
+    const sectionOptions = ['men','women','kids']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
+    const [sectionFilter , setSectionFilter] = useState('');
+    const [age, setAge] = useState('');
 
     const handleSetOnSale = (event) => {
         setOnSaleChecked(event.target.checked);
@@ -20,27 +28,48 @@ const Filter = (props) => {
             const params = new URLSearchParams(query);
             params.delete('onSale');
             router.replace(
+                { pathname, query: params.toString() },
+                undefined, 
+                { shallow: true }
+            );
+        }
+    };
+    
+    const handleChangeFilter = (event) => {
+        setSectionFilter(event.target.value);
+        router.push({ href: "./", query: { ...router.query, section: event.target.value } })
+    };
+    
+    const ref = useRef(null);
+
+
+    // auto close by click outside. Revisit function
+    // useEffect(() => {
+    //     if (filterModal){
+    //         const checkIfClickedOutside = (e) => {
+    //             if (filterModal && ref.current && !ref.current.contains(e.target)) {
+    //             setFilterModal(false)
+    //             }
+    //         }
+    //         document.addEventListener("mousedown", checkIfClickedOutside)
+    //         return () => {
+    //             document.removeEventListener("mousedown", checkIfClickedOutside)
+    //         }
+    //     }
+    // },[filterModal]);
+    const deleteFilter = () => {
+        const { pathname, query } = router;
+        const params = new URLSearchParams(query);
+        params.delete('onSale');
+        params.delete('section');
+        router.replace(
             { pathname, query: params.toString() },
             undefined, 
             { shallow: true }
         );
+        setOnSaleChecked(false);
+        setSectionFilter('');
     }
-    };
-    const ref = useRef(null);
-
-    useEffect(() => {
-        if (filterModal){
-            const checkIfClickedOutside = (e) => {
-                if (filterModal && ref.current && !ref.current.contains(e.target)) {
-                setFilterModal(false)
-                }
-            }
-            document.addEventListener("mousedown", checkIfClickedOutside)
-            return () => {
-                document.removeEventListener("mousedown", checkIfClickedOutside)
-            }
-        }
-    },[filterModal]);
 
     return(
         <>
@@ -56,7 +85,7 @@ const Filter = (props) => {
                     <div className="mt-4">
                         <h4 className="text-2xl font-semibold">Filters</h4>
                     </div>
-                    <div className='flex flex-row mt-5 items-center'>
+                    <div className='flex flex-row mt-5 items-center justify-between'>
                         <label className='text-black text-sm font-semibold mr-5'>On sale products</label>
                         <Switch
                             checked={onSaleChecked}
@@ -64,19 +93,26 @@ const Filter = (props) => {
                             inputProps={{ 'aria-label': 'controlled' }}
                         />                    
                     </div>
-                    {/* <div className='flex flex-col mt-5 lg:ml-2.5 lg:pr-2.5'>
-                        <label htmlFor="" className='text-black text-sm font-semibold'>Type</label>
-                        <div>
-                            <select value={selectType}
-                                onChange={(e) => changeType(e.target.value)}
-                                style={{backgroundImage: `url(${downArrow.src})`}}
-                                className={`selectSpecial outline-none duration-500 cursor-pointer border bg-stamm-white rounded-15 h-11.5 py-3.5 pr-10 pl-3.5 mt-2.5 text-xs ${selectType != 'Choose' ? 'border-stamm-primary shadow' : 'border-stamm-gray'}`}
+                    <div className='flex flex-row mt-5 items-center justify-between'>
+                        <label className='text-black text-sm font-semibold'>Section</label>
+                        <Box sx={{ width: '50%' }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Section</InputLabel>
+                                <Select
+                                    sx={{width: '100%'}}
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={sectionFilter}
+                                    label="Section"
+                                    onChange={handleChangeFilter}
                                 >
-                                <option value="Choose" disabled>Choose</option>
-                                {[...types].sort((a, b) => a.localeCompare(b)).map(item => <option key={item} value={item}>{(item.charAt(0))+ (item.toLowerCase()).slice(1)}</option>)}
-                            </select>
-                        </div>
-                    </div> */}
+                                    {[...sectionOptions].sort((a,b) => a.localeCompare(b)).map(item => 
+                                        <MenuItem key={item} value={item}>{enhanceText(item)}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </div>
                     {/* <div className='flex flex-col mt-5 lg:ml-2.5 lg:pr-2.5'>
                         <label htmlFor="" className='text-black text-sm font-semibold'>Status</label>
                         <div>
@@ -144,10 +180,10 @@ const Filter = (props) => {
                             </div>
                         </div>
                     </div> */}
-                    {/* <div className="flex flex-col lg:flex-row w-full lg:mt-24 mt-12 mb-8">
-                        <button className='bg-stamm-primary place-self-center w-full text-stamm-white border border-stamm-primary p-1.5 h-11.5 rounded-15 hover:opacity-80 lg:w-[352px] mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => setFilterModal(false)}>Apply Filters</button>
-                        <button className='bg-stamm-black place-self-center w-full text-stamm-white border border-stamm-black p-1.5 h-11.5 rounded-15 hover:opacity-80 lg:w-[352px] lg:ml-2.5' onClick={() => deleteFilter()}>Delete Filters</button>
-                    </div> */}
+                    <div className="flex flex-col lg:flex-row w-full lg:mt-24 mt-12 mb-8">
+                        {/* <button className='bg-dokuso-pink place-self-center w-full text-dokuso-white border border-stamm-primary p-1.5 h-11.5 rounded hover:opacity-80 lg:w-[352px] mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => setFilterModal(false)}>Apply Filters</button> */}
+                        <button className='bg-dokuso-black place-self-center w-full text-dokuso-white border border-stamm-black p-1.5 h-11.5 rounded hover:opacity-80 lg:w-full' onClick={() => deleteFilter()}>Delete Filters</button>
+                    </div>
                 </>}
             </div>
         </>

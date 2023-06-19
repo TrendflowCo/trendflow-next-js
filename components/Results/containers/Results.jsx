@@ -53,7 +53,12 @@ const Results = () => {
                 const queryLanguage = router.query.lan;
                 let onSaleQuery = '';
                 if (router.query.onSale) {
-                    onSaleQuery = '&onSale=true'
+                    onSaleQuery = '&onSale=true';
+                    filtersTotal += 1;
+                }
+                let sectionQuery = '';
+                if(router.query.section) {
+                    sectionQuery = `&section=${router.query.section}`;
                     filtersTotal += 1;
                 }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
@@ -61,9 +66,10 @@ const Results = () => {
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
                 const pageQuery = `&page=${currentPage}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${limitQuery}${pageQuery}`
+                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${sectionQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
-                console.log('requested to: ',requestURI)
+                console.log('requested to: ',requestURI);
+                console.log('results: ', rsp)
                 setProducts(rsp.results);
                 setLastPage(rsp.total_pages);
                 setLastSearch(querySearch);
@@ -77,7 +83,7 @@ const Results = () => {
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    },[ router.query.lan , router.query.id , router.query.onSale , currentPage ]);
+    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , currentPage ]);
     //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;

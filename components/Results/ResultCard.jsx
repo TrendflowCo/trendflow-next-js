@@ -18,8 +18,6 @@ import { swalNoInputs } from '../Utils/swalConfig';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { CircularProgress } from "@mui/material";
 
-
-
 const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
@@ -114,8 +112,8 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
         <div className='flex flex-row items-center justify-start w-full h-20 py-2 px-4'>
           <div className='w-full h-full flex flex-col justify-center items-start'>
             <Image 
-              src={logos[productItem.brand.toLowerCase()]} 
-              alt={productItem.brand} 
+              src={logos[productItem?.brand?.toLowerCase()]} 
+              alt={productItem?.brand} 
               height={0} 
               width={0} 
               sizes="100vh" 

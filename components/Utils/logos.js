@@ -22,5 +22,7 @@ export const logos = {
     'champion': 'https://upload.wikimedia.org/wikipedia/commons/3/39/Champion_Usa_logo.png',
     'dior': 'https://upload.wikimedia.org/wikipedia/commons/5/56/Dior_Logo_2022.svg',
     'all saints': 'https://fashionunited.com/img/upload/2022/08/09/allsaints-logo-yyvp0b72-2022-06-17-3sfad3sg-2022-08-09.png',
-    'alexander mcqueen': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Logo_of_Alexander_McQueen.svg/2560px-Logo_of_Alexander_McQueen.svg.png'
+    'alexander mcqueen': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Logo_of_Alexander_McQueen.svg/2560px-Logo_of_Alexander_McQueen.svg.png',
+    'fila': 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Fila_logo.svg',
+    'sandro': 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sandro-logo.jpg'
   };
