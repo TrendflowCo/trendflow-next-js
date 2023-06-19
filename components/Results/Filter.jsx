@@ -3,21 +3,37 @@ import { IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Switch from '@mui/material/Switch';
 import { useRouter } from "next/router";
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import { enhanceText } from "../Utils/enhanceText";
-
+import { useAppDispatch } from "../../redux/hooks";
+import { setTotalFilters } from "../../redux/features/actions/search";
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 const Filter = (props) => {
     const router = useRouter();
-    const { setFilterModal , filterModal } = props;
-    const sectionOptions = ['men','women','kids']
+    const dispatch = useAppDispatch();
+    const { setFilterModal , filterModal , availableBrands } = props;
+    const sectionOptions = ['men','women','kids','home','gift']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
     const [sectionFilter , setSectionFilter] = useState('');
-    const [age, setAge] = useState('');
+    const [selectedBrands, setSelectedBrands] = useState([]);
+
+    useEffect(() => {
+        let finalFilterAmount = 0;
+        if(onSaleChecked) {
+            finalFilterAmount += 1
+        };
+        if (sectionFilter !== '') {
+            finalFilterAmount += 1
+        }
+        if (selectedBrands.length > 0) {
+            finalFilterAmount += 1
+        }
+        dispatch(setTotalFilters(finalFilterAmount));
+    },[onSaleChecked , sectionFilter , selectedBrands])
 
     const handleSetOnSale = (event) => {
         setOnSaleChecked(event.target.checked);
@@ -34,15 +50,35 @@ const Filter = (props) => {
             );
         }
     };
-    
-    const handleChangeFilter = (event) => {
+    const handleChangeSection = (event) => {
         setSectionFilter(event.target.value);
         router.push({ href: "./", query: { ...router.query, section: event.target.value } })
     };
+    const handleChangeBrands = (event) => {
+        const { target: { value } } = event;
+        const queryBrands = typeof value === 'string' ? value.split(',') : value;
+        console.log('query brands: ', queryBrands)
+        setSelectedBrands(queryBrands);
+        if (selectedBrands.length > 0) {
+            router.replace({
+                query: { ...router.query, brands: queryBrands.join(',') },
+            });
+        } else {
+            router.push({ href: "./", query: { ...router.query, brands: queryBrands[0] } })
+        }
+    };
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
     
     const ref = useRef(null);
-
-
     // auto close by click outside. Revisit function
     // useEffect(() => {
     //     if (filterModal){
@@ -62,6 +98,7 @@ const Filter = (props) => {
         const params = new URLSearchParams(query);
         params.delete('onSale');
         params.delete('section');
+        params.delete('brands');
         router.replace(
             { pathname, query: params.toString() },
             undefined, 
@@ -69,6 +106,7 @@ const Filter = (props) => {
         );
         setOnSaleChecked(false);
         setSectionFilter('');
+        setSelectedBrands([]);
     }
 
     return(
@@ -96,21 +134,48 @@ const Filter = (props) => {
                     <div className='flex flex-row mt-5 items-center justify-between'>
                         <label className='text-black text-sm font-semibold'>Section</label>
                         <Box sx={{ width: '50%' }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Section</InputLabel>
-                                <Select
-                                    sx={{width: '100%'}}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={sectionFilter}
-                                    label="Section"
-                                    onChange={handleChangeFilter}
-                                >
-                                    {[...sectionOptions].sort((a,b) => a.localeCompare(b)).map(item => 
-                                        <MenuItem key={item} value={item}>{enhanceText(item)}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
+                            <Select
+                                sx={{width: '100%'}}
+                                displayEmpty
+                                value={sectionFilter}
+                                onChange={handleChangeSection}
+                                renderValue={(selected) => {
+                                    if (selected.length === 0) {
+                                        return <span>Select section</span>;
+                                    }
+                                    return enhanceText(selected);
+                                }}
+                            >
+                                {[...sectionOptions].sort((a,b) => a.localeCompare(b)).map(item => 
+                                    <MenuItem key={item} value={item}>{enhanceText(item)}</MenuItem>
+                                )}
+                            </Select>
+                        </Box>
+                    </div>
+                    <div className='flex flex-row mt-5 items-center justify-between'>
+                        <label className='text-black text-sm font-semibold'>Brands</label>
+                        <Box sx={{ width: '50%' }}>
+                            <Select
+                                sx={{width: '100%'}}
+                                displayEmpty
+                                value={selectedBrands}
+                                onChange={handleChangeBrands}
+                                multiple
+                                renderValue={(selected) => {
+                                    if(selected.length === 0) {
+                                        return <span>Select brands</span>
+                                    }
+                                    return selected.join(', ')
+                                }}
+                                MenuProps={MenuProps}
+                            >
+                                {[...availableBrands].sort((a,b) => a.localeCompare(b)).map((brand) => (
+                                <MenuItem key={brand} value={brand.split(' ').join('-')}>
+                                    <Checkbox checked={selectedBrands.indexOf(brand.split(' ').join('-')) > -1} />
+                                    <ListItemText primary={brand} />
+                                </MenuItem>
+                            ))}                                
+                            </Select>
                         </Box>
                     </div>
                     {/* <div className='flex flex-col mt-5 lg:ml-2.5 lg:pr-2.5'>

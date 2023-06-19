@@ -24,5 +24,7 @@ export const logos = {
     'all saints': 'https://fashionunited.com/img/upload/2022/08/09/allsaints-logo-yyvp0b72-2022-06-17-3sfad3sg-2022-08-09.png',
     'alexander mcqueen': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Logo_of_Alexander_McQueen.svg/2560px-Logo_of_Alexander_McQueen.svg.png',
     'fila': 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Fila_logo.svg',
-    'sandro': 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sandro-logo.jpg'
+    'sandro': 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sandro-logo.jpg',
+    'ysl':'https://upload.wikimedia.org/wikipedia/commons/2/29/Yves_Saint_Laurent_Logo.svg',
+    'parfois': 'https://upload.wikimedia.org/wikipedia/commons/2/2b/ParfoisLogo.jpg'
   };

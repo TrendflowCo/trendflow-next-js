@@ -30,13 +30,15 @@ const Results = () => {
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
+    const [failedSearch , setFailedSearch] = useState(false);
     //
     const [searchLimit , setSearchLimit] = useState(20); // search limit value
     const [currentPage , setCurrentPage] = useState(1); // current page value
     const [lastPage , setLastPage] = useState(0); // last page value
     const [lastSearch , setLastSearch] = useState(''); // text display of search
+    const [totalResults, setTotalResults] = useState(0);
+    const [availableBrands , setAvailableBrands] = useState([]);
     // Filter
-    const [filtersApplied, setFiltersApplied] = useState(0); // amount of filters
     const [filterModal , setFilterModal] = useState(false); // modal controller
     // -- sorting components --
     const [sortingModal , setSortingModal] = useState(false);
@@ -47,43 +49,52 @@ const Results = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setFailedSearch(false);
                 setLoadingFlag(true);
-                let filtersTotal = 0
+                setTotalResults(0)
                 const querySearch = router.query.id.split('-').join(' ');
                 const queryLanguage = router.query.lan;
                 let onSaleQuery = '';
                 if (router.query.onSale) {
                     onSaleQuery = '&onSale=true';
-                    filtersTotal += 1;
                 }
                 let sectionQuery = '';
                 if(router.query.section) {
+                    console.log('pase por aca')
                     sectionQuery = `&section=${router.query.section}`;
-                    filtersTotal += 1;
+                }
+                let brandsQuery ='';
+                if(router.query.brands) {
+                    console.log(router.query.brands)
+                    brandsQuery = `&brands=${router.query.brands.split('-').join(' ')}`;
                 }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
                 const pageQuery = `&page=${currentPage}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${sectionQuery}${limitQuery}${pageQuery}`
+                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${sectionQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
                 console.log('requested to: ',requestURI);
                 console.log('results: ', rsp)
+                if(!router.query.brands && !router.query.section && !router.query.onSale) {
+                    setAvailableBrands(rsp.available_brands)
+                }
                 setProducts(rsp.results);
                 setLastPage(rsp.total_pages);
+                setTotalResults(rsp.total_results);
                 setLastSearch(querySearch);
-                setFiltersApplied(filtersTotal)
                 setLoadingFlag(false);
             } catch (err) {
                 console.error(err);
                 setLoadingFlag(false);
+                setFailedSearch(true);
             }
         };
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , currentPage ]);
+    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , currentPage ]);
     //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
@@ -118,6 +129,7 @@ const Results = () => {
             <Filter 
                 setFilterModal={setFilterModal} 
                 filterModal={filterModal}
+                availableBrands={availableBrands}
             />
             {/* Sorting component */}
             <Sort 
@@ -133,10 +145,10 @@ const Results = () => {
             <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                 <div className='mx-5'>
                     <h6 className='text-black text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                    <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
                 </div>
                 {/* Buttons for filtering and sorting modal enabling */}
                 <SortAndFilter 
-                    filtersApplied={filtersApplied} 
                     sortsApplied={sortsApplied} 
                     setFilterModal={setFilterModal} 
                     setSortingModal={setSortingModal}
@@ -148,20 +160,26 @@ const Results = () => {
                 </Box>
             :
                 <>
-                    <section>
-                        <Grid container spacing={2} sx={{padding: 2}}>
-                            {products.length > 0 && products.map((productItem,productIndex) => {return (
-                                <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                    <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
-                                </Grid>
-                            )})}
-                        </Grid>
-                    </section>
-                    <div className="flex flex-col w-full items-center py-4">
-                        <ThemeProvider theme={muiColors}>
-                            <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
-                        </ThemeProvider>
-                    </div>
+                    {failedSearch ? 
+                        <section>No results for this search</section>
+                    : 
+                    <>
+                        <section>
+                            <Grid container spacing={2} sx={{padding: 2}}>
+                                {products.length > 0 && products.map((productItem,productIndex) => {return (
+                                    <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
+                                        <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
+                                    </Grid>
+                                )})}
+                            </Grid>
+                        </section>
+                        <div className="flex flex-col w-full items-center py-4">
+                            <ThemeProvider theme={muiColors}>
+                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
+                            </ThemeProvider>
+                        </div>
+                    </>
+                    }
                 </>
             }
         </Box>

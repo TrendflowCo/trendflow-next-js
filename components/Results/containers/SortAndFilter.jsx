@@ -3,10 +3,11 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SortIcon from '@mui/icons-material/Sort';
 import { Button, ThemeProvider } from "@mui/material";
 import { muiColors } from "../../Utils/muiTheme";
+import { useAppSelector } from "../../../redux/hooks";
 
 const SortAndFilter = (props) => {
+    const { totalFilters } = useAppSelector ( state => state.search);
     const {
-        filtersApplied,
         sortsApplied,
         setFilterModal,
         setSortingModal
@@ -35,9 +36,9 @@ const SortAndFilter = (props) => {
                     startIcon={<FilterAltIcon/>}
                 >
                     <span>Filters</span>
-                    {filtersApplied > 0 && 
+                    {totalFilters > 0 && 
                         <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
-                            <span className='font-bold text-dokuso-white'>{filtersApplied}</span>
+                            <span className='font-bold text-dokuso-white'>{totalFilters}</span>
                         </div>
                     }
                 </Button>
