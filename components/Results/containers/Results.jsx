@@ -38,6 +38,7 @@ const Results = () => {
     const [lastSearch , setLastSearch] = useState(''); // text display of search
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
+    const [currentPriceRange , setCurrentPriceRange] = useState([]);
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
     // -- sorting components --
@@ -60,7 +61,6 @@ const Results = () => {
                 }
                 let sectionQuery = '';
                 if(router.query.section) {
-                    console.log('pase por aca')
                     sectionQuery = `&section=${router.query.section}`;
                 }
                 let brandsQuery ='';
@@ -77,8 +77,9 @@ const Results = () => {
                 const rsp = (await axios.get(requestURI)).data; // get data
                 console.log('requested to: ',requestURI);
                 console.log('results: ', rsp)
-                if(!router.query.brands && !router.query.section && !router.query.onSale) {
-                    setAvailableBrands(rsp.available_brands)
+                if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) {
+                    setAvailableBrands(rsp.available_brands); // sets available brands if its a base request
+                    setCurrentPriceRange([rsp.min_price,rsp.max_price]); // sets available prices if its a base request
                 }
                 setProducts(rsp.results);
                 setLastPage(rsp.total_pages);
@@ -94,7 +95,7 @@ const Results = () => {
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , currentPage ]);
+    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , currentPage ]);
     //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
@@ -130,6 +131,7 @@ const Results = () => {
                 setFilterModal={setFilterModal} 
                 filterModal={filterModal}
                 availableBrands={availableBrands}
+                currentPriceRange={currentPriceRange}
             />
             {/* Sorting component */}
             <Sort 

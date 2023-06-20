@@ -27,7 +27,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
   const [showFocused , setShowFocused] = useState(false);
   const [shareAnchor, setShareAnchor] = useState(null);
   const open = Boolean(shareAnchor);
-  
+  const parragraphLimit = 52;
   const handleShowSingleCard = () => {
     console.log('showing card: ' , productItem);
     // use dialog from MUI
@@ -130,7 +130,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
         />
         <section className='flex flex-row p-4 w-full'>
           <div className='flex flex-col w-full'>
-            <p className='pr-2'>{enhanceText(productItem.name)}</p>
+            <p className='pr-2'>{productItem.name?.length < parragraphLimit ? enhanceText(productItem.name) : `${enhanceText(productItem.name.slice(0,parragraphLimit))}...`}</p>
             {
               productItem.old_price_float !== productItem.price_float ? 
               <div className='flex flex-row w-full'>
@@ -138,7 +138,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
                 <span className='font-semibold line-through'>{`$${productItem.old_price_float}`}</span> 
               </div>
             : 
-              <span className='font-semibold'>{`$${productItem.price_float}`}</span> 
+              <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : 'No price'}</span> 
             }
           </div>
           {productItem.old_price_float !== productItem.price_float && 
