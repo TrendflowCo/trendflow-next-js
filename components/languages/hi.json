@@ -115,5 +115,11 @@
         "dashboard": "डैशबोर्ड",
         "wishlist": "इच्छा-सूची",
         "logout": "लॉगआउट"
+    },
+    "results": {
+      "on_sale" : "बिक्री में",
+      "no_price": "कोई मूल्य नहीं",
+      "copy_to_clipboard": "क्लिपबोर्ड पर कॉपी करें",
+      "visit_site": "साइट पर जाएँ"
     }
 }

@@ -117,5 +117,11 @@
         "dashboard": "dashboard",
         "wishlist": "lista dei desideri",
         "logout": "logout"
-    } 
+    },
+    "results": {
+        "on_sale" : "in vendita",
+        "no_price": "nessun prezzo",
+        "copy_to_clipboard": "copia negli appunti",
+        "visit_site": "visita il sito"
+    }
 }

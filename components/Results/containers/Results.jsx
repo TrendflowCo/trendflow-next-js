@@ -38,7 +38,7 @@ const Results = () => {
     const [lastSearch , setLastSearch] = useState(''); // text display of search
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
-    const [currentPriceRange , setCurrentPriceRange] = useState([]);
+    const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
     // -- sorting components --
@@ -65,21 +65,27 @@ const Results = () => {
                 }
                 let brandsQuery ='';
                 if(router.query.brands) {
-                    console.log(router.query.brands)
                     brandsQuery = `&brands=${router.query.brands.split('-').join(' ')}`;
+                }
+                let minPriceQuery = '';
+                if(router.query.minPrice) {
+                    minPriceQuery = `&minPrice=${router.query.minPrice}`;
+                }
+                let maxPriceQuery = '';
+                if(router.query.maxPrice) {
+                    maxPriceQuery = `&maxPrice=${router.query.maxPrice}`;
                 }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
                 const pageQuery = `&page=${currentPage}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${sectionQuery}${limitQuery}${pageQuery}`
+                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
-                console.log('requested to: ',requestURI);
                 console.log('results: ', rsp)
                 if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) {
-                    setAvailableBrands(rsp.available_brands); // sets available brands if its a base request
-                    setCurrentPriceRange([rsp.min_price,rsp.max_price]); // sets available prices if its a base request
+                    setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
+                    setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
                 }
                 setProducts(rsp.results);
                 setLastPage(rsp.total_pages);

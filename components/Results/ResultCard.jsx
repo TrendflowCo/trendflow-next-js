@@ -21,9 +21,9 @@ import { CircularProgress } from "@mui/material";
 const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
+  const { translations } = useAppSelector(state => state.language);
   const db = getFirestore(app);
   const [loadingFav , setLoadingFav] = useState(false);
-
   const [showFocused , setShowFocused] = useState(false);
   const [shareAnchor, setShareAnchor] = useState(null);
   const open = Boolean(shareAnchor);
@@ -138,21 +138,18 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
                 <span className='font-semibold line-through'>{`$${productItem.old_price_float}`}</span> 
               </div>
             : 
-              <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : 'No price'}</span> 
+              <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
             }
           </div>
           {productItem.old_price_float !== productItem.price_float && 
-            <div className='flex-none w-fit h-fit p-2.5 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange'>
-              <span className='text-xl font-bold text-dokuso-white'>SALE</span>
+            <div className='flex-none w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange'>
+              <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
             </div>
           }
         </section>
       </section>
       <section className='flex flex-col h-fit w-full flex-none'>
-              <Toaster>
-                <button onClick={() => toast('My first toast')}>toast ya</button>
-              </Toaster>
-
+        <Toaster richColors/>
         <CardActions disableSpacing>
           <Tooltip title="Add to wishlist" placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
             <IconButton aria-label="add to favorites">
@@ -169,7 +166,6 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
             title="Share item" 
             placement="bottom" 
             arrow={true}  
-            // onClick={(event) => {handleShareItem(event)}}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -189,10 +185,9 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
             }}
           >
             <MenuItem>
-              <Toaster richColors/>
-                <span onClick={() => handleCopyToClipboard()}>Copy to clipboard</span>
+              <span onClick={() => handleCopyToClipboard()}>{enhanceText(translations?.results?.copy_to_clipboard)}</span>
             </MenuItem>
-            <MenuItem onClick={handleVisitSite}>Visit site</MenuItem>
+            <MenuItem onClick={handleVisitSite}>{enhanceText(translations?.results?.visit_site)}</MenuItem>
           </Menu>
         </CardActions>
       </section>

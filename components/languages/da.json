@@ -115,7 +115,12 @@
         "dashboard": "oversigt",
         "wishlist": "ønskeliste",
         "logout": "log ud"
+    },
+    "results": {
+        "on_sale" : "til salg",
+        "no_price": "ingen pris",
+        "copy_to_clipboard": "kopier til udklipsholder",
+        "visit_site": "besøg hjemmeside"
     }
-    
 }
     

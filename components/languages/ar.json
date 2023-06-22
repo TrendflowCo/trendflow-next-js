@@ -115,5 +115,11 @@
         "dashboard": "لوحة التحكم",
         "wishlist": "قائمة الرغبات",
         "logout": "تسجيل الخروج"
+    },
+    "results": {
+        "on_sale" : "للبيع",
+        "no_price": "بدون سعر",
+        "copy_to_clipboard": "نسخ إلى الحافظة",
+        "visit_site": "زيارة الموقع"
     }
 }

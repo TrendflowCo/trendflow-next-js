@@ -115,5 +115,11 @@
         "dashboard": "dashboard",
         "wishlist": "wishlist",
         "logout": "logout"
+    },
+    "results": {
+        "on_sale" : "sale",
+        "no_price": "no price",
+        "copy_to_clipboard": "copy to clipboard",
+        "visit_site": "visit site"
     }
 }

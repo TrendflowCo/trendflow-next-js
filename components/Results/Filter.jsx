@@ -21,19 +21,22 @@ const Filter = (props) => {
     const [onSaleChecked, setOnSaleChecked] = useState(false);
     const [sectionFilter , setSectionFilter] = useState('');
     const [selectedBrands, setSelectedBrands] = useState([]);
-    const priceLimits = {
-        min: currentPriceRange.length === 2 ? currentPriceRange[0] : 0,
-        max: currentPriceRange.length === 2 ? currentPriceRange[1] : 2000
+    const priceLimits = { // for query management
+        min: currentPriceRange[0],
+        max: currentPriceRange[1]
     };
-    const [priceRange , setPriceRange] = useState(currentPriceRange?.length === 2 ? currentPriceRange : [0,2000]);
-    const priceMarks = [
+    const [priceRange , setPriceRange] = useState(currentPriceRange); // for edition
+    useEffect(() => { // sets price range for filter if it changes
+        setPriceRange(currentPriceRange)
+    },[currentPriceRange])
+    const priceMarks = [ // for range selector marks
         {
-            value: currentPriceRange.length === 2 ? currentPriceRange[0] : 0,
-            label: currentPriceRange.length === 2 ? `$${currentPriceRange[0]}` : '$0',
+            value: currentPriceRange[0],
+            label: `$${currentPriceRange[0]}`,
         },
         {
-          value: currentPriceRange.length === 2 ? currentPriceRange[1] : 2000,
-          label: currentPriceRange.length === 2 ? `$${currentPriceRange[1]}` : '$2000',
+          value: currentPriceRange[1],
+          label: `$${currentPriceRange[1]}`,
         },
     ];
     useEffect(() => {
@@ -131,7 +134,7 @@ const Filter = (props) => {
         setOnSaleChecked(false);
         setSectionFilter('');
         setSelectedBrands([]);
-        setPriceRange([0 , 2000])
+        setPriceRange(currentPriceRange)
     }
 
     return(
@@ -214,8 +217,8 @@ const Filter = (props) => {
                                 value={priceRange}
                                 onChange={handleChangePriceRange}
                                 valueLabelDisplay="auto"
-                                min={0}
-                                max={2000}
+                                min={currentPriceRange[0]}
+                                max={currentPriceRange[1]}
                                 marks={priceMarks}
                             />
                         </Box>

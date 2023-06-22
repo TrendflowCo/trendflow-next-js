@@ -117,5 +117,11 @@
         "dashboard": "ダッシュボード",
         "wishlist": "ほしい物リスト",
         "logout": "ログアウト"
+    },
+    "results": {
+        "on_sale" : "セール中",
+        "no_price": "価格なし",
+        "copy_to_clipboard": "クリップボードにコピー",
+        "visit_site": "サイトを訪れる"
     }
 }

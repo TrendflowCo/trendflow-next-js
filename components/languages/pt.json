@@ -117,6 +117,12 @@
         "dashboard": "painel de controle",
         "wishlist": "lista de desejos",
         "logout": "sair"
+    },
+    "results": {
+        "on_sale" : "em promoção",
+        "no_price": "sem preço",
+        "copy_to_clipboard": "copiar para área de transferência",
+        "visit_site": "visitar site"
     }
     
 }

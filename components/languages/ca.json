@@ -116,5 +116,11 @@
             "dashboard": "panell de control",
             "wishlist": "llista de desitjos",
             "logout": "tancar sessió"
+        },
+        "results": {
+            "on_sale" : "en oferta",
+            "no_price": "sense preu",
+            "copy_to_clipboard": "copiar al porta-retalls",
+            "visit_site": "visitar el lloc"
         }
     }

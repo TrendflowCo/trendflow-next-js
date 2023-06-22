@@ -115,6 +115,12 @@
         "dashboard": "dashboard",
         "wishlist": "verlanglijst",
         "logout": "uitloggen"
+    },
+    "results": {
+        "on_sale" : "in de aanbieding",
+        "no_price": "geen prijs",
+        "copy_to_clipboard": "kopiëren naar klembord",
+        "visit_site": "website bezoeken"
     }
     
 }

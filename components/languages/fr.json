@@ -117,5 +117,11 @@
         "dashboard": "tableau de bord",
         "wishlist": "liste de souhaits",
         "logout": "déconnexion"
+    },
+    "results": {
+        "on_sale" : "en vente",
+        "no_price": "pas de prix",
+        "copy_to_clipboard": "copier dans le presse-papiers",
+        "visit_site": "visiter le site"
     }
 }

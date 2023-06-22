@@ -117,5 +117,11 @@
             "dashboard": "대시보드",
             "wishlist": "위시리스트",
             "logout": "로그아웃"
-        }     
+        },
+        "results": {
+            "on_sale" : "할인 중",
+            "no_price": "가격 없음",
+            "copy_to_clipboard": "클립보드에 복사",
+            "visit_site": "사이트 방문"
+        }  
     }

@@ -115,5 +115,11 @@
         "dashboard": "仪表盘",
         "wishlist": "愿望清单",
         "logout": "登出"
+    },
+    "results": {
+        "on_sale" : "特价",
+        "no_price": "无价格",
+        "copy_to_clipboard": "复制到剪贴板",
+        "visit_site": "访问网站"
     }
 }

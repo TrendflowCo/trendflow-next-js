@@ -117,5 +117,11 @@
     "dashboard": "tablero",
     "wishlist": "lista de deseos",
     "logout": "cerrar sesión"
+  },
+  "results": {
+    "on_sale" : "en oferta",
+    "no_price": "sin precio",
+    "copy_to_clipboard": "copiar al portapapeles",
+    "visit_site": "visitar sitio"
   }
 }
