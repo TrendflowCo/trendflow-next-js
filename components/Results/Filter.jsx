@@ -50,8 +50,11 @@ const Filter = (props) => {
         if (selectedBrands.length > 0) {
             finalFilterAmount += 1
         }
+        if (priceRange[0] !== currentPriceRange[0] || priceRange[1] !== currentPriceRange[1]) {
+            finalFilterAmount += 1
+        }
         dispatch(setTotalFilters(finalFilterAmount));
-    },[onSaleChecked , sectionFilter , selectedBrands])
+    },[onSaleChecked , sectionFilter , selectedBrands , priceRange])
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
