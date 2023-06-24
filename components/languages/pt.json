@@ -121,10 +121,24 @@
     "results": {
         "on_sale" : "em promoção",
         "no_price": "sem preço",
-        "copy_to_clipboard": "copiar para área de transferência",
-        "visit_site": "visitar site"
-    }
-    
+        "copy_to_clipboard": "copiar para a área de transferência",
+        "visit_site": "visitar site",
+        "filters": "filtros",
+        "sorts": "classificações",
+        "on_sale_products": "produtos em promoção",
+        "section": "seção",
+        "brands": "marcas",
+        "price_range": "intervalo de preços",
+        "sort_by": "ordenar por",
+        "apply_sorting": "aplicar classificação",
+        "delete_sorting": "apagar classificação",
+        "add_to_wishlist": "adicionar à lista de desejos",
+        "share_item": "partilhar item",
+        "apply_filters": "aplicar filtros",
+        "delete_filters": "excluir filtros",
+        "select_section": "selecionar seção",
+        "select_brands": "selecionar marcas"
+    }    
 }
 
 

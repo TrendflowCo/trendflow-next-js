@@ -120,6 +120,21 @@
       "on_sale" : "बिक्री में",
       "no_price": "कोई मूल्य नहीं",
       "copy_to_clipboard": "क्लिपबोर्ड पर कॉपी करें",
-      "visit_site": "साइट पर जाएँ"
+      "visit_site": "साइट पर जाएँ",
+      "filters": "फ़िल्टर",
+      "sorts": "छाँटें",
+      "on_sale_products": "बिक्री में उत्पाद",
+      "section": "खंड",
+      "brands": "ब्रांड",
+      "price_range": "मूल्य सीमा",
+      "sort_by": "छाँटें",
+      "apply_sorting": "छाँटें लागू करें",
+      "delete_sorting": "छाँटें हटाएँ",
+      "add_to_wishlist": "इच्छा-सूची में जोड़ें",
+      "share_item": "आइटम साझा करें",
+      "apply_filters": "फ़िल्टर लागू करें",
+      "delete_filters": "फ़िल्टर हटाएँ",
+      "select_section": "खंड चुनें",
+      "select_brands": "ब्रांड चुनें"
     }
 }

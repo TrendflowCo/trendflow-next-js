@@ -122,6 +122,21 @@
         "on_sale" : "セール中",
         "no_price": "価格なし",
         "copy_to_clipboard": "クリップボードにコピー",
-        "visit_site": "サイトを訪れる"
+        "visit_site": "サイトを訪れる",
+        "filters": "フィルター",
+        "sorts": "ソート",
+        "on_sale_products": "セール商品",
+        "section": "セクション",
+        "brands": "ブランド",
+        "price_range": "価格帯",
+        "sort_by": "並び替え",
+        "apply_sorting": "ソートを適用",
+        "delete_sorting": "ソートを削除",
+        "add_to_wishlist": "ウィッシュリストに追加",
+        "share_item": "アイテムを共有",
+        "apply_filters": "フィルターを適用",
+        "delete_filters": "フィルターを削除",
+        "select_section": "セクションを選択",
+        "select_brands": "ブランドを選択"
     }
 }

@@ -122,6 +122,21 @@
         "on_sale" : "en vente",
         "no_price": "pas de prix",
         "copy_to_clipboard": "copier dans le presse-papiers",
-        "visit_site": "visiter le site"
+        "visit_site": "visiter le site",
+        "filters": "filtres",
+        "sorts": "tri",
+        "on_sale_products": "produits en vente",
+        "section": "section",
+        "brands": "marques",
+        "price_range": "plage de prix",
+        "sort_by": "trier par",
+        "apply_sorting": "appliquer le tri",
+        "delete_sorting": "supprimer le tri",
+        "add_to_wishlist": "ajouter à la liste de souhaits",
+        "share_item": "partager l'article",
+        "apply_filters": "appliquer les filtres",
+        "delete_filters": "supprimer les filtres",
+        "select_section": "sélectionner la section",
+        "select_brands": "sélectionner les marques"
     }
 }

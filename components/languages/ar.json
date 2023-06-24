@@ -120,6 +120,21 @@
         "on_sale" : "للبيع",
         "no_price": "بدون سعر",
         "copy_to_clipboard": "نسخ إلى الحافظة",
-        "visit_site": "زيارة الموقع"
+        "visit_site": "زيارة الموقع",
+        "filters": "فلاتر",
+        "sorts": "ترتيبات",
+        "on_sale_products": "منتجات للبيع",
+        "section": "قسم",
+        "brands": "العلامات التجارية",
+        "price_range": "نطاق الأسعار",
+        "apply_filters": "تطبيق الفلاتر",
+        "delete_filters": "حذف الفلاتر",
+        "sort_by": "ترتيب حسب",
+        "apply_sorting": "تطبيق الترتيب",
+        "delete_sorting": "حذف الترتيب",
+        "add_to_wishlist": "إضافة إلى قائمة الرغبات",
+        "share_item": "مشاركة المنتج",
+        "select_section": "اختيار القسم",
+        "select_brands": "اختيار العلامات التجارية"
     }
 }

@@ -120,6 +120,21 @@
         "on_sale" : "特价",
         "no_price": "无价格",
         "copy_to_clipboard": "复制到剪贴板",
-        "visit_site": "访问网站"
+        "visit_site": "访问网站",
+        "filters":  "过滤器",
+        "sorts": "排序",
+        "on_sale_products": "特价商品",
+        "section": "部分",
+        "brands": "品牌",
+        "price_range": "价格范围",
+        "sort_by": "排序方式",
+        "apply_sorting": "应用排序",
+        "delete_sorting": "删除排序",
+        "add_to_wishlist": "添加到收藏夹",
+        "share_item": "分享商品",
+        "apply_filters": "应用过滤器",
+        "delete_filters": "删除过滤器",
+        "select_section": "选择部分",
+        "select_brands": "选择品牌"
     }
 }

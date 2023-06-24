@@ -120,6 +120,21 @@
         "on_sale" : "sale",
         "no_price": "no price",
         "copy_to_clipboard": "copy to clipboard",
-        "visit_site": "visit site"
+        "visit_site": "visit site",
+        "filters": "filters",
+        "sorts": "sorts",
+        "on_sale_products": "on sale products",
+        "section": "section",
+        "brands": "brands",
+        "price_range": "price range",
+        "sort_by": "sort by",
+        "apply_sorting": "apply sorting",
+        "delete_sorting": "delete sorting",
+        "add_to_wishlist": "add to wishlist",
+        "share_item": "share item",
+        "apply_filters": "apply filters",
+        "delete_filters": "delete filters",
+        "select_section": "select section",
+        "select_brands": "select brands"
     }
 }

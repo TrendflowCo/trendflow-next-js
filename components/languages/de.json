@@ -119,8 +119,22 @@
     "results": {
         "on_sale" : "im Angebot",
         "no_price": "kein Preis",
-        "copy_to_clipboard": "in die Zwischenablage kopieren",
-        "visit_site": "Website besuchen"
-    }
-    
+        "copy_to_clipboard": "kopieren in Zwischenablage",
+        "visit_site": "Website besuchen",
+        "filters": "filter",
+        "sorts": "Sortierungen",
+        "on_sale_products": "Produkte im Angebot",
+        "section": "Abschnitt",
+        "brands": "Marken",
+        "price_range": "Preisspanne",
+        "sort_by": "Sortieren nach",
+        "apply_sorting": "Sortierung anwenden",
+        "delete_sorting": "Sortierung löschen",
+        "add_to_wishlist": "zur Wunschliste hinzufügen",
+        "share_item": "Artikel teilen",
+        "apply_filters": "Filter anwenden",
+        "delete_filters": "Filter löschen",
+        "select_section": "Abschnitt auswählen",
+        "select_brands": "Marken auswählen"
+    }    
 }

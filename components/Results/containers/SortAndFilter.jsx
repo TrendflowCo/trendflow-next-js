@@ -4,9 +4,11 @@ import SortIcon from '@mui/icons-material/Sort';
 import { Button, ThemeProvider } from "@mui/material";
 import { muiColors } from "../../Utils/muiTheme";
 import { useAppSelector } from "../../../redux/hooks";
+import { enhanceText } from "../../Utils/enhanceText";
 
 const SortAndFilter = (props) => {
     const { totalFilters } = useAppSelector ( state => state.search);
+    const { translations } = useAppSelector( state => state.language);
     const {
         sortsApplied,
         setFilterModal,
@@ -35,7 +37,7 @@ const SortAndFilter = (props) => {
                     onClick={() => handleOpenFilterModal()}
                     startIcon={<FilterAltIcon/>}
                 >
-                    <span>Filters</span>
+                    <span>{enhanceText(translations?.results?.filters)}</span>
                     {totalFilters > 0 && 
                         <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
                             <span className='font-bold text-dokuso-white'>{totalFilters}</span>
@@ -55,7 +57,7 @@ const SortAndFilter = (props) => {
                     onClick={() => handleOpenSortingModal()}
                     startIcon={<SortIcon/>}
                 >
-                    <span>Sorts</span>
+                    <span>{enhanceText(translations?.results?.sorts)}</span>
                     {sortsApplied > 0 && 
                         <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
                             <span className='font-bold text-dokuso-white'>{sortsApplied}</span>

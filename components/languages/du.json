@@ -120,9 +120,23 @@
         "on_sale" : "in de aanbieding",
         "no_price": "geen prijs",
         "copy_to_clipboard": "kopiëren naar klembord",
-        "visit_site": "website bezoeken"
-    }
-    
+        "visit_site": "website bezoeken",
+        "filters":  "filters",
+        "sorts": "sorteren",
+        "on_sale_products": "producten in de aanbieding",
+        "section": "sectie",
+        "brands": "merken",
+        "price_range": "prijsbereik",
+        "sort_by": "sorteren op",
+        "apply_sorting": "sortering toepassen",
+        "delete_sorting": "sortering verwijderen",
+        "add_to_wishlist": "toevoegen aan verlanglijst",
+        "share_item": "item delen",
+        "apply_filters": "filters toepassen",
+        "delete_filters": "filters verwijderen",
+        "select_section": "sectie selecteren",
+        "select_brands": "merken selecteren"
+    }    
 }
     
     

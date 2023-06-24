@@ -118,9 +118,24 @@
             "logout": "tancar sessió"
         },
         "results": {
-            "on_sale" : "en oferta",
+            "on_sale" : "en venda",
             "no_price": "sense preu",
-            "copy_to_clipboard": "copiar al porta-retalls",
-            "visit_site": "visitar el lloc"
+            "copy_to_clipboard": "copiar al portapapers",
+            "visit_site": "visitar lloc",
+            "filters": "filtres",
+            "sorts": "classificacions",
+            "on_sale_products": "productes en venda",
+            "section": "secció",
+            "brands": "marques",
+            "price_range": "rang de preus",
+            "sort_by": "ordenar per",
+            "apply_sorting": "aplicar classificació",
+            "delete_sorting": "eliminar classificació",
+            "add_to_wishlist": "afegir a la llista de desitjos",
+            "share_item": "compartir article",
+            "apply_filters": "aplicar filtres",
+            "delete_filters": "eliminar filtres",
+            "select_section": "seleccionar secció",
+            "select_brands": "seleccionar marques"
         }
-    }
+}

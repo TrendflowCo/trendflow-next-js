@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import { enhanceText } from "../Utils/enhanceText";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch , useAppSelector } from "../../redux/hooks";
 import { setTotalFilters } from "../../redux/features/actions/search";
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
@@ -16,6 +16,7 @@ import Slider from '@mui/material/Slider';
 const Filter = (props) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const { translations } = useAppSelector(state => state.language);
     const { setFilterModal , filterModal , availableBrands , currentPriceRange } = props;
     const sectionOptions = ['men','women','kids','home','gift']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
@@ -155,10 +156,10 @@ const Filter = (props) => {
                         </IconButton>
                     </div>
                     <div className="mt-4">
-                        <h4 className="text-2xl font-semibold">Filters</h4>
+                        <h4 className="text-2xl font-semibold">{enhanceText(translations?.results?.filters)}</h4>
                     </div>
                     <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold mr-5'>On sale products</label>
+                        <label className='text-black text-sm font-semibold mr-5'>{enhanceText(translations?.results?.on_sale_products)}</label>
                         <Switch
                             checked={onSaleChecked}
                             onChange={handleSetOnSale}
@@ -166,7 +167,7 @@ const Filter = (props) => {
                         />                    
                     </div>
                     <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold'>Section</label>
+                        <label className='text-black text-sm font-semibold'>{enhanceText(translations?.results?.section)}</label>
                         <Box sx={{ width: '50%' }}>
                             <Select
                                 sx={{width: '100%'}}
@@ -175,7 +176,7 @@ const Filter = (props) => {
                                 onChange={handleChangeSection}
                                 renderValue={(selected) => {
                                     if (selected.length === 0) {
-                                        return <span>Select section</span>;
+                                        return <span>{enhanceText(translations?.results?.select_section)}</span>;
                                     }
                                     return enhanceText(selected);
                                 }}
@@ -187,7 +188,7 @@ const Filter = (props) => {
                         </Box>
                     </div>
                     <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold'>Brands</label>
+                        <label className='text-black text-sm font-semibold'>{enhanceText(translations?.results?.brands)}</label>
                         <Box sx={{ width: '50%' }}>
                             <Select
                                 sx={{width: '100%'}}
@@ -197,7 +198,7 @@ const Filter = (props) => {
                                 multiple
                                 renderValue={(selected) => {
                                     if(selected.length === 0) {
-                                        return <span>Select brands</span>
+                                        return <span>{enhanceText(translations?.results?.select_brands)}</span>
                                     }
                                     
                                     return selected.join(', ').split('-').join(' ')
@@ -214,7 +215,7 @@ const Filter = (props) => {
                         </Box>
                     </div>
                     <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold'>Price range</label>
+                        <label className='text-black text-sm font-semibold'>{enhanceText(translations?.results?.price_range)}</label>
                         <Box sx={{ width: '50%' , display: 'flex' , flexDirection: 'row' , alignItems: 'center' , justifyContent: 'center' , px: 1.5 }}>
                             <Slider
                                 value={priceRange}
@@ -227,8 +228,8 @@ const Filter = (props) => {
                         </Box>
                     </div>
                     <div className="flex flex-col lg:flex-row w-full lg:mt-24 mt-12 mb-8">
-                        <button className='bg-gradient-to-r from-dokuso-pink to-dokuso-orange place-self-center w-full text-dokuso-white border border-stamm-primary p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => handleApplyFilter()}>Apply Filters</button>
-                        <button className='bg-dokuso-black place-self-center w-full text-dokuso-white border border-stamm-black p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:ml-2.5' onClick={() => deleteFilter()}>Delete Filters</button>
+                        <button className='bg-gradient-to-r from-dokuso-pink to-dokuso-orange place-self-center w-full text-dokuso-white border border-stamm-primary p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => handleApplyFilter()}>{enhanceText(translations?.results?.apply_filters)}</button>
+                        <button className='bg-dokuso-black place-self-center w-full text-dokuso-white border border-stamm-black p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:ml-2.5' onClick={() => deleteFilter()}>{enhanceText(translations?.results?.delete_filters)}</button>
                     </div>
                 </>}
             </div>

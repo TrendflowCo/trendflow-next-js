@@ -151,8 +151,8 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
       <section className='flex flex-col h-fit w-full flex-none'>
         <Toaster richColors/>
         <CardActions disableSpacing>
-          <Tooltip title="Add to wishlist" placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
-            <IconButton aria-label="add to favorites">
+          <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)} placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
+            <IconButton>
               { loadingFav ?
                 <CircularProgress style={{'color': "#FA39BE"}} size={24} thickness={4}/> 
               :
@@ -163,7 +163,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
             </IconButton>
           </Tooltip>
           <Tooltip 
-            title="Share item" 
+            title={enhanceText(translations?.results?.share_item)} 
             placement="bottom" 
             arrow={true}  
             aria-controls={open ? 'basic-menu' : undefined}

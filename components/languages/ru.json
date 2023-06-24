@@ -118,8 +118,23 @@
         },
         "results": {
             "on_sale" : "распродажа",
-            "no_price": "без цены",
+            "no_price": "нет цены",
             "copy_to_clipboard": "копировать в буфер обмена",
-            "visit_site": "посетить сайт"
-        }   
+            "visit_site": "посетить сайт",
+            "filters": "фильтры",
+            "sorts": "сортировки",
+            "on_sale_products": "товары со скидкой",
+            "section": "раздел",
+            "brands": "бренды",
+            "price_range": "диапазон цен",
+            "sort_by": "сортировать по",
+            "apply_sorting": "применить сортировку",
+            "delete_sorting": "удалить сортировку",
+            "add_to_wishlist": "добавить в список желаний",
+            "share_item": "поделиться товаром",
+            "apply_filters": "применить фильтры",
+            "delete_filters": "удалить фильтры",
+            "select_section": "выбрать раздел",
+            "select_brands": "выбрать бренды"
+        }
 }
