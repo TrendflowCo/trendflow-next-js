@@ -4,7 +4,7 @@ import { setCurrentSearch , setWishlist , setTotalFilters } from '../actions/sea
 const initialState = {
   currentSearch: '',
   wishlist: [],
-  totalFilters: 0
+  totalFilters: 0,
 }; 
 
 export const searchReducer = createReducer(initialState, builder => {

@@ -10,7 +10,6 @@ const SortAndFilter = (props) => {
     const { totalFilters } = useAppSelector ( state => state.search);
     const { translations } = useAppSelector( state => state.language);
     const {
-        sortsApplied,
         setFilterModal,
         setSortingModal
     } = props;
@@ -58,11 +57,11 @@ const SortAndFilter = (props) => {
                     startIcon={<SortIcon/>}
                 >
                     <span>{enhanceText(translations?.results?.sorts)}</span>
-                    {sortsApplied > 0 && 
+                    {/* {sortsApplied > 0 && 
                         <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
                             <span className='font-bold text-dokuso-white'>{sortsApplied}</span>
                         </div>
-                    }
+                    } */}
                 </Button>
             </ThemeProvider>
         </section>

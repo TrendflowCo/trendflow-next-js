@@ -21,10 +21,8 @@ import { languageAdapter } from "../functions/languageAdapter";
  
 const Results = () => {
     const db = getFirestore(app);
-    const auth = getAuth(app); // instance of auth method
     const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.language);
-    const { currentSearch , wishlist } = useAppSelector(state => state.search);
     const { user } = useAppSelector(state => state.auth);
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
@@ -41,11 +39,8 @@ const Results = () => {
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
-    // -- sorting components --
-    const [sortingModal , setSortingModal] = useState(false);
-    const [sortsApplied, setSortsApplied] = useState(0);
-    const [sorts , setSorts] = useState([]);
-    const [availableSorts , setAvailableSorts] = useState(0); // la cantidad de sorts disponibles para mapear los select
+    // Sorting
+    const [sortingModal , setSortingModal] = useState(false); // modal controller
     //
     useEffect(() => {
         const fetchData = async () => {
@@ -75,12 +70,20 @@ const Results = () => {
                 if(router.query.maxPrice) {
                     maxPriceQuery = `&maxPrice=${router.query.maxPrice}`;
                 }
+                let sortByQuery = '';
+                if(router.query.sortBy) {
+                    sortByQuery = `&sortBy=${router.query.sortBy}`;
+                }
+                let ascendingQuery = '';
+                if(router.query.ascending) {
+                    ascendingQuery = `&ascending=${router.query.ascending}`;
+                }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
                 const pageQuery = `&page=${currentPage}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${limitQuery}${pageQuery}`
+                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
                 console.log('results: ', rsp)
                 if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) {
@@ -101,7 +104,8 @@ const Results = () => {
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , currentPage ]);
+        // re-renders if some query or page changes
+    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , currentPage ]);
     //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
@@ -143,11 +147,6 @@ const Results = () => {
             <Sort 
                 sortingModal={sortingModal}
                 setSortingModal={setSortingModal}
-                setSortsApplied={setSortsApplied}
-                sorts={sorts}
-                setSorts={setSorts}
-                availableSorts={availableSorts}
-                setAvailableSorts={setAvailableSorts}
             />
 
             <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
@@ -157,7 +156,6 @@ const Results = () => {
                 </div>
                 {/* Buttons for filtering and sorting modal enabling */}
                 <SortAndFilter 
-                    sortsApplied={sortsApplied} 
                     setFilterModal={setFilterModal} 
                     setSortingModal={setSortingModal}
                 />
