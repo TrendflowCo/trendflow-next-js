@@ -129,8 +129,9 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
           onClick={() => {handleShowSingleCard()}}
         />
         <section className='flex flex-row p-4 w-full'>
-          <div className='flex flex-col w-full'>
-            <p className='pr-2'>{productItem.name?.length < parragraphLimit ? enhanceText(productItem.name) : `${enhanceText(productItem.name.slice(0,parragraphLimit))}...`}</p>
+          <div className={`flex flex-col ${productItem.old_price_float !== productItem.price_float ? 'w-[70%]' : 'w-full'}`}>
+            <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
+            {/* <p className='pr-2'>{productItem.name?.length < parragraphLimit ? enhanceText(productItem.name) : `${enhanceText(productItem.name.slice(0,parragraphLimit))}...`}</p> */}
             {
               productItem.old_price_float !== productItem.price_float ? 
               <div className='flex flex-row w-full'>
@@ -141,8 +142,9 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
               <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
             }
           </div>
+          {/* On sale checking */}
           {productItem.old_price_float !== productItem.price_float && 
-            <div className='flex-none w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange'>
+            <div className='flex-none w-[30%] h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
               <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
             </div>
           }
