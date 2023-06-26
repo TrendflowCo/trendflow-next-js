@@ -135,6 +135,9 @@
         "apply_filters": "Filter anwenden",
         "delete_filters": "Filter löschen",
         "select_section": "Abschnitt auswählen",
-        "select_brands": "Marken auswählen"
+        "select_brands": "Marken auswählen",
+        "brand": "Marke",
+        "price": "Preis",
+        "select_filter": "Filter auswählen"
     }    
 }

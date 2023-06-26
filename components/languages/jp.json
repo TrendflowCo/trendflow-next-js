@@ -137,6 +137,9 @@
         "apply_filters": "フィルターを適用",
         "delete_filters": "フィルターを削除",
         "select_section": "セクションを選択",
-        "select_brands": "ブランドを選択"
+        "select_brands": "ブランドを選択",
+        "brand": "ブランド",
+        "price": "価格",
+        "select_filter": "フィルターを選択"
     }
 }

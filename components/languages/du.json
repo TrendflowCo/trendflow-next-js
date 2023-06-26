@@ -135,7 +135,10 @@
         "apply_filters": "filters toepassen",
         "delete_filters": "filters verwijderen",
         "select_section": "sectie selecteren",
-        "select_brands": "merken selecteren"
+        "select_brands": "merken selecteren",
+        "brand": "merk",
+        "price": "prijs",
+        "select_filter": "filter selecteren"
     }    
 }
     

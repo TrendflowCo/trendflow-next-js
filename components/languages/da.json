@@ -135,7 +135,10 @@
         "apply_filters": "anvend filtre",
         "delete_filters": "slet filtre",
         "select_section": "vælg sektion",
-        "select_brands": "vælg mærker"
+        "select_brands": "vælg mærker",
+        "brand": "mærke",
+        "price": "pris",
+        "select_filter": "vælg filter"
     }
 }
     

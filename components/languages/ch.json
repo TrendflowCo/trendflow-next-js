@@ -135,6 +135,9 @@
         "apply_filters": "应用过滤器",
         "delete_filters": "删除过滤器",
         "select_section": "选择部分",
-        "select_brands": "选择品牌"
+        "select_brands": "选择品牌",
+        "brand": "品牌",
+        "price": "价格",
+        "select_filter": "选择过滤器"
     }
 }

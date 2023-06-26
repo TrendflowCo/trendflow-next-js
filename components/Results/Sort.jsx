@@ -11,7 +11,20 @@ const Sort = ( props ) => {
     const router = useRouter();
     const { translations } = useAppSelector(state =>state.language);
     const { sortingModal , setSortingModal } = props;
-    const optionsList = ['section' , 'brand' , 'price'];
+    const optionsList = [{
+        text: translations?.results.price,
+        value: 'price'
+    },
+    {
+        text: translations?.results.section,
+        value: 'section'
+
+    },
+    {
+        text: translations?.results.brand,
+        value: 'brand'
+
+    }];
     const [selectedSort , setSelectedSort] = useState('');
     const [ascending , setAscending] = useState(true);
     const ref = useRef(null);
@@ -35,14 +48,16 @@ const Sort = ( props ) => {
         setAscending(!ascending);
     };
     const handleApplySorting = () => {
-        let newQuery = {...router.query};
-        if (selectedSort !== '') { // sorting param
-            newQuery = {...newQuery, sortBy: selectedSort};
-            if (ascending) {
-                newQuery = {...newQuery, ascending: 'true'}
+        if(selectedSort !== '') {
+            let newQuery = {...router.query};
+            if(ascending) { // on sale filtering
+                newQuery = {...newQuery , ascending:'true' }
+            } else {
+                delete newQuery.ascending;
             }
+            newQuery = {...newQuery, sortBy: selectedSort}
+            router.push({ href: "./", query: newQuery })    
         }
-        router.push({ href: "./", query: newQuery })
     };
 
     return(
@@ -68,13 +83,13 @@ const Sort = ( props ) => {
                                     onChange={handleChangeSort}
                                     renderValue={(selected) => {
                                         if (selected.length === 0) {
-                                            return <span>Select filter</span>;
+                                            return <span>{enhanceText(translations?.results?.select_filter)}</span>;
                                         }
-                                        return enhanceText(selected);
+                                        return enhanceText(translations?.results?.[selected]);
                                     }}
                                 >
-                                    {[...optionsList].sort((a,b) => a.localeCompare(b)).map(item => 
-                                        <MenuItem key={item} value={item}>{enhanceText(item)}</MenuItem>
+                                    {[...optionsList].sort((a,b) => a.text.localeCompare(b.text)).map(item => 
+                                        <MenuItem key={item.value} value={item.value}>{enhanceText(item.text)}</MenuItem>
                                     )}
                                 </Select>
                             </Box>

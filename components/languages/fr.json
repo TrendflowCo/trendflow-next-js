@@ -137,6 +137,9 @@
         "apply_filters": "appliquer les filtres",
         "delete_filters": "supprimer les filtres",
         "select_section": "sélectionner la section",
-        "select_brands": "sélectionner les marques"
+        "select_brands": "sélectionner les marques",
+        "brand": "marque",
+        "price": "prix",
+        "select_filter": "sélectionner un filtre"
     }
 }

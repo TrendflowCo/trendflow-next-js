@@ -137,6 +137,9 @@
             "apply_filters": "필터 적용",
             "delete_filters": "필터 삭제",
             "select_section": "섹션 선택",
-            "select_brands": "브랜드 선택"
+            "select_brands": "브랜드 선택",
+            "brand": "브랜드",
+            "price": "가격",
+            "select_filter": "필터 선택"
         }
 }

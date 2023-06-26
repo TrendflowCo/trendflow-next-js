@@ -135,6 +135,9 @@
             "apply_filters": "применить фильтры",
             "delete_filters": "удалить фильтры",
             "select_section": "выбрать раздел",
-            "select_brands": "выбрать бренды"
+            "select_brands": "выбрать бренды",
+            "brand": "бренд",
+            "price": "цена",
+            "select_filter": "выбрать фильтр"
         }
 }

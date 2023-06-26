@@ -135,6 +135,9 @@
         "apply_filters": "apply filters",
         "delete_filters": "delete filters",
         "select_section": "select section",
-        "select_brands": "select brands"
+        "select_brands": "select brands",
+        "brand": "brand",
+        "price": "price",
+        "select_filter": "select filter"
     }
 }
