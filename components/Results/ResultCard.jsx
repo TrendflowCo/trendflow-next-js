@@ -16,6 +16,7 @@ import { useAppSelector } from "../../redux/hooks";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from '../Utils/swalConfig';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import { CircularProgress } from "@mui/material";
 
 const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
@@ -82,25 +83,12 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
       })
     }
   };
-
-  const handleShareItem = (event) => {
-    event.stopPropagation();
-    setShareAnchor(event.currentTarget);
-    console.log('share this item: ' , productItem.id)
-  };
-
-  const handleClose = () => {
-    event.stopPropagation();
-    setShareAnchor(null);
-  };
   const handleVisitSite = () => {
     window.open(productItem.shop_link, '_blank');
-    handleClose();
   };
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(productItem.shop_link);
     toast.success('Copied to clipboard')    
-    handleClose();
   };
 
   return (
@@ -116,8 +104,8 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
               alt={productItem?.brand} 
               height={0} 
               width={0} 
-              sizes="100vh" 
-              style={{height: '65%' , width: 'auto' , objectFit: 'contain'}}
+              sizes="100vw" 
+              style={{height: '75%' , width: '35%' , objectFit: 'contain', alignSelf:'start' }}
             />
           </div>
         </div>
@@ -131,7 +119,6 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
         <section className='flex flex-row p-4 w-full'>
           <div className={`flex flex-col ${productItem.old_price_float !== productItem.price_float ? 'w-[70%]' : 'w-full'}`}>
             <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
-            {/* <p className='pr-2'>{productItem.name?.length < parragraphLimit ? enhanceText(productItem.name) : `${enhanceText(productItem.name.slice(0,parragraphLimit))}...`}</p> */}
             {
               productItem.old_price_float !== productItem.price_float ? 
               <div className='flex flex-row w-full'>
@@ -165,32 +152,25 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
             </IconButton>
           </Tooltip>
           <Tooltip 
-            title={enhanceText(translations?.results?.share_item)} 
+            title={enhanceText(translations?.results?.copy_to_clipboard)} 
             placement="bottom" 
             arrow={true}  
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleShareItem}
-            >
+            onClick={handleCopyToClipboard}
+          >
             <IconButton aria-label="share">
               <ShareIcon />
             </IconButton>
           </Tooltip>
-          <Menu
-            id="basic-menu"
-            anchorEl={shareAnchor}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
+          <Tooltip
+            title={enhanceText(translations?.results?.visit_site)}  
+            placement="bottom" 
+            arrow={true}  
+            onClick={handleVisitSite}
           >
-            <MenuItem>
-              <span onClick={() => handleCopyToClipboard()}>{enhanceText(translations?.results?.copy_to_clipboard)}</span>
-            </MenuItem>
-            <MenuItem onClick={handleVisitSite}>{enhanceText(translations?.results?.visit_site)}</MenuItem>
-          </Menu>
+            <IconButton>
+            <StorefrontIcon/>
+            </IconButton>
+          </Tooltip>
         </CardActions>
       </section>
     </Card>

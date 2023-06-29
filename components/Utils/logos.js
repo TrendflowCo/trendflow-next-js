@@ -26,5 +26,6 @@ export const logos = {
     'fila': 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Fila_logo.svg',
     'sandro': 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sandro-logo.jpg',
     'ysl':'https://upload.wikimedia.org/wikipedia/commons/2/29/Yves_Saint_Laurent_Logo.svg',
-    'parfois': 'https://upload.wikimedia.org/wikipedia/commons/2/2b/ParfoisLogo.jpg'
+    'parfois': 'https://upload.wikimedia.org/wikipedia/commons/2/2b/ParfoisLogo.jpg',
+    'hugo boss': 'https://upload.wikimedia.org/wikipedia/commons/7/73/Hugo-Boss-Logo.svg'
   };
