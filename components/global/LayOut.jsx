@@ -8,6 +8,8 @@ import LogInModal from '../Auth/LogInModal';
 import { useAppSelector , useAppDispatch } from '../../redux/hooks';
 import { setLogInFlag , setUser } from '../../redux/features/actions/auth';
 import { setTranslations } from '../../redux/features/actions/language';
+import { setUserId } from "firebase/analytics";
+import { analytics } from '../../services/firebase';
 import enTranslation from '../languages/en.json';
 import esTranslation from '../languages/es.json';
 import itTranslation from '../languages/it.json';
@@ -22,7 +24,7 @@ import chTranslation from '../languages/ch.json';
 import jpTranslation from '../languages/jp.json';
 import arTranslation from '../languages/ar.json';
 import hiTranslation from '../languages/hi.json';
-// import caTranslation from '../languages/ca.json';
+import caTranslation from '../languages/ca.json';
 
 const Layout = ({ children }) => {
   const dispatch = useAppDispatch()
@@ -59,6 +61,9 @@ const Layout = ({ children }) => {
       setLogged(false)
     }
     dispatch(setUser(user)); // set the user for every change
+    if(user) {
+      setUserId(analytics, user.uid); // set user.uid for analytics
+    }
   },[user]) // eslint-disable-line
   useEffect(() => {
     switch(language) {
@@ -104,6 +109,10 @@ const Layout = ({ children }) => {
       case "hi":
         dispatch(setTranslations(hiTranslation))
         break;
+      case "ca":
+        dispatch(setTranslations(caTranslation))
+        break;
+  
     }
   },[language]);
 

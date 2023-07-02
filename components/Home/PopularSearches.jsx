@@ -2,12 +2,17 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch , useAppSelector } from "../../redux/hooks";
 import { setCurrentSearch } from "../../redux/features/actions/search";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../services/firebase";
 
 const PopularSearches = () => {
     const router = useRouter();
     const { translations , language } = useAppSelector(state => state.language);
     const dispatch = useAppDispatch();
     const handleQuickSearch = (val) => {
+        logEvent(analytics, 'clickOnPopularSearches', {
+            search_term: val
+        });      
         dispatch(setCurrentSearch(val))
         router.push(`${language}/results/${val.split(' ').join('-').toLowerCase()}`)
     };

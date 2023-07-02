@@ -2,28 +2,17 @@ import { GoogleAuthProvider , signInWithPopup , getAuth } from "firebase/auth";
 import { query , getDocs, collection , where , addDoc , getFirestore } from "firebase/firestore";
 import Swal from "sweetalert2";
 import { getAnalytics , logEvent } from "firebase/analytics";
-import { app } from "../../services/firebase";
+import { app , analytics } from "../../services/firebase";
 
 // Initialize auth and db
 const auth = getAuth(app);
 const db = getFirestore(app);
-// Initialize analytics component
-const analyticsFunction = () => {
-  if (typeof window !== "undefined") {
-    return getAnalytics(app)
-  } else {
-    return null
-  }
-}
-const analytics = analyticsFunction();
 // initialize google auth provider
 const googleProvider = new GoogleAuthProvider();
 
 export const signInGoogleExternal = async () => { // basic sign in function
   try {
       const result = await signInWithPopup(auth,googleProvider);
-      // const credential = GoogleAuthProvider.credentialFromResult(result);
-      // const token = credential.accessToken;
       const user = result.user;
       console.log('user: ', user);
       const q = query(collection(db, "users"), where("uid", "==", user.uid)); // bring all users with their UID
@@ -51,6 +40,9 @@ export const signInGoogleExternal = async () => { // basic sign in function
           });  
         } catch (error) {
           console.error('failed log event: ', error);
+          logEvent(analytics, 'exception', {
+            description: 'login_signup_google_error'
+          });      
         }
       }
   } catch(error) {

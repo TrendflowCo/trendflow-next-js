@@ -21,6 +21,8 @@ import { setLanguage } from '../../redux/features/actions/language';
 import { settings_account } from '../Utils/settingsAccount';
 import { languages } from "../Utils/languages";
 import { enhanceText } from "../Utils/enhanceText";
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../../services/firebase';
 
 const Navbar = ({ logOut , user }) => {
   const { currentSearch } = useAppSelector(state => state.search);
@@ -41,6 +43,9 @@ const Navbar = ({ logOut , user }) => {
     router.push(`/${language}/${sel.toLowerCase()}`)
   };
   const handleOpenUserMenu = (event) => { // open user menu
+    logEvent(analytics, 'clickOnUserMenu', {
+      button: 'Main'
+    });
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => { // close user menu
@@ -48,8 +53,14 @@ const Navbar = ({ logOut , user }) => {
   };
   const handleMenuOption = (option) => { // options from user menu
     if (option === 'logout') {
+      logEvent(analytics, 'clickOnUserMenu', {
+        button: 'Logout'
+      });  
       logOut()
     } else if (option === 'wishlist') {
+      logEvent(analytics, 'clickOnUserMenu', {
+        button: 'Wishlist'
+      });  
       router.push(`/${language}/user/wishlist`)
     }
     handleCloseUserMenu()
@@ -61,6 +72,9 @@ const Navbar = ({ logOut , user }) => {
     if (e.key === 'Enter') {
       event.preventDefault();
       if (currentSearch !== '') {
+        logEvent(analytics, 'search', {
+          search_term: currentSearch
+        });        
           router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`)
       } else {
           Swal.fire({

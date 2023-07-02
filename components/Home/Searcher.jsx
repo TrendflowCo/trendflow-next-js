@@ -8,6 +8,8 @@ import { useAppDispatch , useAppSelector } from "../../redux/hooks";
 import { setCurrentSearch } from "../../redux/features/actions/search";
 import Swal from "sweetalert2";
 import { swalNoInputs } from "../Utils/swalConfig";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../services/firebase";
 
 const Searcher = () => {
     const dispatch = useAppDispatch();
@@ -41,6 +43,9 @@ const Searcher = () => {
     };
     const handleEnterSearch = (e) => { // click ENTER into form -> redirects to SHOP NOW
         if (e.key === 'Enter') {
+            logEvent(analytics, 'search', {
+                search_term: currentSearch
+            });        
             handleButtonSearch();
         }
     };

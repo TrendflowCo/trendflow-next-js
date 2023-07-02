@@ -6,6 +6,8 @@ import { muiColors } from "../../Utils/muiTheme";
 import { useAppSelector } from "../../../redux/hooks";
 import { enhanceText } from "../../Utils/enhanceText";
 import { useRouter } from "next/router";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../../services/firebase";
 
 const SortAndFilter = (props) => {
     const { totalFilters } = useAppSelector ( state => state.search);
@@ -17,9 +19,15 @@ const SortAndFilter = (props) => {
     const [totalSorts , setTotalSorts] = useState(0);
     const router = useRouter();
     const handleOpenFilterModal = () => { // function for opening filter modal
+        logEvent(analytics, 'FilterAndSorting', {
+            action: 'Get_into_filters'
+        });    
         setFilterModal(true);
     };
     const handleOpenSortingModal = () => { // function for opening sorting modal
+        logEvent(analytics, 'FilterAndSorting', {
+            action: 'Get_into_sortings'
+        });    
         setSortingModal(true);
     };
     useEffect(() => {

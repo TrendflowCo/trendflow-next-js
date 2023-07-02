@@ -11,13 +11,14 @@ import { enhanceText } from '../Utils/enhanceText';
 import { Menu, MenuItem, Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
 import { collection , addDoc , getDocs, query , where , getFirestore , deleteDoc , doc } from "firebase/firestore";
-import { app } from "../../services/firebase";
+import { analytics, app } from "../../services/firebase";
 import { useAppSelector } from "../../redux/hooks";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from '../Utils/swalConfig';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { CircularProgress } from "@mui/material";
+import { logEvent } from 'firebase/analytics';
 
 const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
   const { user } = useAppSelector(state => state.auth);
@@ -26,9 +27,6 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
   const db = getFirestore(app);
   const [loadingFav , setLoadingFav] = useState(false);
   const [showFocused , setShowFocused] = useState(false);
-  const [shareAnchor, setShareAnchor] = useState(null);
-  const open = Boolean(shareAnchor);
-  const parragraphLimit = 52;
   const handleShowSingleCard = () => {
     console.log('showing card: ' , productItem);
     // use dialog from MUI
@@ -44,15 +42,15 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
             uid: user.uid,
             img_id: productItem.id,
           })
-          //   logEvent(analytics, 'addToWishlist', {
-          //     img_id: img_id
-          //   });
+          // log add to wishlist
+          logEvent(analytics, 'addToWishlist', {
+            img_id: productItem.id
+          });
         } else { // delete if it exists
           // log remove from wishlist
-          //   logEvent(analytics, 'addToWishlist', {
-          //     img_id: img_id
-          //   });
-
+          logEvent(analytics, 'removeFromWishlist', {
+            img_id: productItem.id
+          });
           const q = query(collection(db, "wishlist"), where("img_id", "==", productItem.id)); // bring the query with the one with this img_id
           const querySnapshot = await getDocs(q); // load it
           let requestedFavourite = {};
@@ -84,9 +82,17 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
     }
   };
   const handleVisitSite = () => {
+    logEvent(analytics, 'select_content', {
+      content_type: 'product',
+      content_id: productItem.shop_link
+    });
     window.open(productItem.shop_link, '_blank');
   };
   const handleCopyToClipboard = () => {
+    logEvent(analytics, 'select_content', {
+      content_type: 'copy_to_clipboard',
+      content_id: productItem.shop_link
+    });
     navigator.clipboard.writeText(productItem.shop_link);
     toast.success('Copied to clipboard')    
   };

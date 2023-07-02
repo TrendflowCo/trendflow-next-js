@@ -104,6 +104,9 @@ const Filter = (props) => {
         if (priceRange[1] < priceLimits.max) {
             newQuery = {...newQuery, maxPrice: priceRange[1]}
         }
+        logEvent(analytics, 'FilterAndSorting', {
+            action: 'Apply_filter'
+        });        
         router.push({ href: "./", query: newQuery })
     };
     
@@ -138,7 +141,10 @@ const Filter = (props) => {
         setOnSaleChecked(false);
         setSectionFilter('');
         setSelectedBrands([]);
-        setPriceRange(currentPriceRange)
+        setPriceRange(currentPriceRange);
+        logEvent(analytics, 'FilterAndSorting', {
+            action: 'Delete_filter'
+        });        
     }
 
     return(

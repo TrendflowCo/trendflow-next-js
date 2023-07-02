@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY ,
@@ -11,8 +12,15 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-export const initFirebase = () => {
-  return app; // for SDK initialize
+const analyticsFunction = () => {
+  if (typeof window !== "undefined") {
+    return getAnalytics(app)
+  } else {
+    return null
+  }
 }
+const analytics = analyticsFunction();
+
+export {app , analytics}

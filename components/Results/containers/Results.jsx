@@ -3,7 +3,7 @@ import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { app } from "../../../services/firebase";
+import { analytics, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
@@ -18,6 +18,7 @@ import Filter from "../Filter";
 import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
 import { languageAdapter } from "../functions/languageAdapter";
+import { logEvent } from "firebase/analytics";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -91,6 +92,9 @@ const Results = () => {
                     setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
                 }
                 setProducts(rsp.results);
+                logEvent(analytics, 'page_view', {
+                    page_title: 'results',
+                });                
                 setLastPage(rsp.total_pages);
                 setTotalResults(rsp.total_results);
                 setLastSearch(querySearch);

@@ -1,5 +1,5 @@
 import { Box, IconButton , Typography , Link , Divider } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { motion } from "framer-motion";
 import styled from "@emotion/styled";
@@ -11,10 +11,17 @@ import SocialAuth from "./SocialAuth";
 import { useAppSelector , useAppDispatch } from "../../redux/hooks";
 import { setLogInFlag } from "../../redux/features/actions/auth";
 import LogInForm from "./LogInForm";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../services/firebase";
 
 const LogInModal = () => {
     const dispatch = useAppDispatch();
     const { logInFlag } = useAppSelector (state => state.auth);
+    useEffect(() =>{
+        logEvent(analytics, 'page_view', {
+            page_title: 'login',
+        });        
+    },[])
     let easing = [0.6, -0.05, 0.01, 0.99];
     const fadeInUp = {
       initial: {
