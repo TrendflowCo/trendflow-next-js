@@ -14,16 +14,16 @@ const Sort = ( props ) => {
     const { translations } = useAppSelector(state =>state.language);
     const { sortingModal , setSortingModal } = props;
     const optionsList = [{
-        text: translations?.results.price,
+        text: translations?.results?.price,
         value: 'price'
     },
     {
-        text: translations?.results.section,
+        text: translations?.results?.section,
         value: 'section'
 
     },
     {
-        text: translations?.results.brand,
+        text: translations?.results?.brand,
         value: 'brand'
 
     }];

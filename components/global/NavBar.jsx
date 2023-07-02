@@ -98,7 +98,7 @@ const Navbar = ({ logOut , user }) => {
   return (
   <ThemeProvider theme={muiColors}>
     <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[#D8D8D8]'>
-      <Container maxWidth="xl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
+      <Container maxWidth="xxl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
         {/* Title for desktop display */}
         <Box sx={{ mr: 2 , display: { xs: 'none', md: 'flex'}}}>
           <Typography
@@ -129,7 +129,7 @@ const Navbar = ({ logOut , user }) => {
           ))}
         </Box>
         {/* Menu bar for mobile display */}
-        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+        <Box sx={{ flexGrow: 0, mr: 2 ,  display: { xs: 'flex', md: 'none' } }}>
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -164,8 +164,8 @@ const Navbar = ({ logOut , user }) => {
                 key={page.name} 
                 onClick={handleCloseNavMenu}
                 href={page.src}
-                target="_blank" 
-                rel="noopener noreferrer"
+                // target="_blank" 
+                // rel="noopener noreferrer"
               >
                 <Typography textAlign="center">{page.name}</Typography>
               </MenuItem>
@@ -174,24 +174,26 @@ const Navbar = ({ logOut , user }) => {
           </Menu>
         </Box>
         {/* Title for mobile display */}
-        <Typography
-          variant="h5"
-          noWrap
-          component="a"
-          href="/"
-          sx={{
-            mr: 2,
-            display: { xs: 'flex', md: 'none' },
-            flexGrow: 1,
-            fontWeight: 700,
-            color: 'inherit',
-            textDecoration: 'none',
-          }}
-        >
-          Dokusō
-        </Typography>
+        {!router.pathname.includes('results') && 
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontWeight: 700,
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Dokusō
+          </Typography>
+        }
         {/* Nav bar right section */}
-        <Box sx={{ flexGrow: 0 , display: 'flex', flexDirection: 'row' , alignItems: 'center' }}>
+        <Box sx={{ flexGrow: 1 , width:'fit', maxWidth:'500px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' }}>
           { router.pathname.includes('results') &&
             // Searching section
             <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl h-full">

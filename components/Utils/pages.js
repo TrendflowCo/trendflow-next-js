@@ -1,5 +1,9 @@
 export const pages = [
     {
+        name: "Home",
+        src: "/"
+    },
+    {
         name: "About",
         src: "/manifesto"
     },

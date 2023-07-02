@@ -153,17 +153,6 @@ const Results = () => {
                 setSortingModal={setSortingModal}
             />
 
-            <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
-                <div className='mx-5'>
-                    <h6 className='text-black text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
-                    <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
-                </div>
-                {/* Buttons for filtering and sorting modal enabling */}
-                <SortAndFilter 
-                    setFilterModal={setFilterModal} 
-                    setSortingModal={setSortingModal}
-                />
-            </div>
             { loadingFlag ? 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <CircularProgress size={72} thickness={4} />
@@ -174,6 +163,17 @@ const Results = () => {
                         <section>No results for this search</section>
                     : 
                     <>
+                        <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
+                            <div className='mx-5'>
+                                <h6 className='text-black text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
+                            </div>
+                            {/* Buttons for filtering and sorting modal enabling */}
+                            <SortAndFilter 
+                                setFilterModal={setFilterModal} 
+                                setSortingModal={setSortingModal}
+                            />
+                        </div>
                         <section>
                             <Grid container spacing={2} sx={{padding: 2}}>
                                 {products.length > 0 && products.map((productItem,productIndex) => {return (

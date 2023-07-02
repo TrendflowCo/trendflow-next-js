@@ -44,7 +44,7 @@ const SortAndFilter = (props) => {
                 <Button variant="outlined" sx={{
                     width: {lg: '228px' , xs: '50%'} , 
                     height: '46px' , 
-                    mr: {lg: '8px' , sx: 0}, 
+                    mr: {lg: '8px' , xs: 0}, 
                     display: 'flex' , 
                     flexDirection: 'row' ,
                     alignItems: 'center',
@@ -65,12 +65,13 @@ const SortAndFilter = (props) => {
                 <Button variant="outlined" sx={{
                     width: {lg: '228px' , xs: '50%'} , 
                     height: '46px' , 
-                    ml: {lg: '8px' , sx: 0}, 
+                    ml: {lg: '8px' , xs: 0}, 
                     display: 'flex' , 
                     flexDirection: 'row' ,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 2 }}
+                    borderRadius: 2,
+                    }}
                     color="dokusoBlack"
                     onClick={() => handleOpenSortingModal()}
                     startIcon={<SortIcon/>}
