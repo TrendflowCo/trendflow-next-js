@@ -23,8 +23,9 @@ import { languages } from "../Utils/languages";
 import { enhanceText } from "../Utils/enhanceText";
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../services/firebase';
+import { CircularProgress } from '@mui/material';
 
-const Navbar = ({ logOut , user }) => {
+const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
   const { language , translations } = useAppSelector(state => state.language);
   const dispatch = useAppDispatch();
@@ -209,7 +210,13 @@ const Navbar = ({ logOut , user }) => {
             </div>
           }
           {/* Menu for a logged user */}
-          { user ?
+          {loading ?
+            <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
+              <CircularProgress size={36} thickness={3} />
+            </Box>
+          : 
+
+           user ?
             //  Avatar icon for user
             <Tooltip title="Open settings">
               <IconButton 
@@ -237,7 +244,38 @@ const Navbar = ({ logOut , user }) => {
               >
               Log in
             </Button>
+          
           }
+
+          {/* { user ?
+            //  Avatar icon for user
+            <Tooltip title="Open settings">
+              <IconButton 
+                onClick={handleOpenUserMenu} 
+                sx={{ p: 0 , width: {sm: 48 , xs: 40} , height: '100%' }}
+              >
+                <div className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'>
+                  <Image
+                    referrerPolicy='no-referrer'
+                    alt="avatar"
+                    src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
+                    width={48} 
+                    height={48} 
+                    className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'
+                  />
+                </div>
+              </IconButton>
+            </Tooltip>
+          :
+            <Button 
+              onClick={() => dispatch(setLogInFlag(true))}
+              className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
+              color="dokusoBlack"
+              sx={{fontWeight: 'bold' , flex: 'none'}}
+              >
+              Log in
+            </Button>
+          } */}
           {/* Menu toggle for the logged user */}
           <Menu
             sx={{ mt: '45px' }}
