@@ -10,6 +10,7 @@ import { setLogInFlag , setUser } from '../../redux/features/actions/auth';
 import { setTranslations } from '../../redux/features/actions/language';
 import { setUserId } from "firebase/analytics";
 import { analytics } from '../../services/firebase';
+import { Toaster, toast } from 'sonner';
 import enTranslation from '../languages/en.json';
 import esTranslation from '../languages/es.json';
 import itTranslation from '../languages/it.json';
@@ -62,6 +63,7 @@ const Layout = ({ children }) => {
     }
     dispatch(setUser(user)); // set the user for every change
     if(user) {
+      toast.success(`Logged as ${user.displayName}`)    
       setUserId(analytics, user.uid); // set user.uid for analytics
     }
   },[user]) // eslint-disable-line
@@ -125,6 +127,7 @@ const Layout = ({ children }) => {
       </Head>
       <NavBar logOut={logOut} user={user}/>
       <main className='flex flex-col flex-auto p-0 m-0 overflow-auto scrollbar'>
+        <Toaster richColors/>
         {children}
         {logInFlag && <LogInModal/>}
         {/* Include log in from MUI snack bar as dynamic message */}

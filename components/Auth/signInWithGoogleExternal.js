@@ -14,7 +14,6 @@ export const signInGoogleExternal = async () => { // basic sign in function
   try {
       const result = await signInWithPopup(auth,googleProvider);
       const user = result.user;
-      console.log('user: ', user);
       const q = query(collection(db, "users"), where("uid", "==", user.uid)); // bring all users with their UID
       const docs = await getDocs(q);
       if (docs.docs.length === 0) { // If theres no user with the current UID

@@ -193,7 +193,7 @@ const Navbar = ({ logOut , user }) => {
           </Typography>
         }
         {/* Nav bar right section */}
-        <Box sx={{ flexGrow: 1 , width:'fit', maxWidth:'500px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' }}>
+        <Box sx={{ flexGrow: 1 , width:'fit', maxWidth:'500px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' , justifyContent:'end' }}>
           { router.pathname.includes('results') &&
             // Searching section
             <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl h-full">

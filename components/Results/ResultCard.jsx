@@ -8,7 +8,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { logos } from '../Utils/logos';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
-import { Menu, MenuItem, Tooltip } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
 import { collection , addDoc , getDocs, query , where , getFirestore , deleteDoc , doc } from "firebase/firestore";
 import { analytics, app } from "../../services/firebase";
@@ -46,6 +46,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
           logEvent(analytics, 'addToWishlist', {
             img_id: productItem.id
           });
+          toast.success('Added item to wishlist')    
         } else { // delete if it exists
           // log remove from wishlist
           logEvent(analytics, 'removeFromWishlist', {
@@ -59,6 +60,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
           })
           if(requestedFavourite.id) {
             await deleteDoc(doc(db, "wishlist", requestedFavourite.id));
+            toast.success('Removed item from wishlist')    
           } else {
             Swal.fire({
               ...swalNoInputs,
