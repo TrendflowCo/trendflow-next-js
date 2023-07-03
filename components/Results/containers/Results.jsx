@@ -19,6 +19,7 @@ import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
 import { languageAdapter } from "../functions/languageAdapter";
 import { logEvent } from "firebase/analytics";
+import SingleCard from "../SingleCard";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -152,7 +153,8 @@ const Results = () => {
                 sortingModal={sortingModal}
                 setSortingModal={setSortingModal}
             />
-
+            {/* Single card view */}
+            <SingleCard />
             { loadingFlag ? 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <CircularProgress size={72} thickness={4} />

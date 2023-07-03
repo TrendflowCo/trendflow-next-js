@@ -19,18 +19,20 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { CircularProgress } from "@mui/material";
 import { logEvent } from 'firebase/analytics';
+import { setFocusedCard } from '../../redux/features/actions/search';
+import { useAppDispatch } from '../../redux/hooks';
 
 const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
   const { translations } = useAppSelector(state => state.language);
   const db = getFirestore(app);
   const [loadingFav , setLoadingFav] = useState(false);
-  const [showFocused , setShowFocused] = useState(false);
   const handleShowSingleCard = () => {
     console.log('showing card: ' , productItem);
+    dispatch(setFocusedCard(productItem));
     // use dialog from MUI
-    setShowFocused(true);
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();
