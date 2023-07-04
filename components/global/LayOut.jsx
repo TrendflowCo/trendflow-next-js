@@ -26,7 +26,6 @@ import jpTranslation from '../languages/jp.json';
 import arTranslation from '../languages/ar.json';
 import hiTranslation from '../languages/hi.json';
 import caTranslation from '../languages/ca.json';
-import { Box, CircularProgress } from '@mui/material';
 
 const Layout = ({ children }) => {
   const dispatch = useAppDispatch()
@@ -64,7 +63,6 @@ const Layout = ({ children }) => {
     }
     dispatch(setUser(user)); // set the user for every change
     if(user) {
-      toast.success(`Logged as ${user.displayName}`)    
       setUserId(analytics, user.uid); // set user.uid for analytics
     }
   },[user]) // eslint-disable-line
