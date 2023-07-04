@@ -1,8 +1,10 @@
 import { GoogleAuthProvider , signInWithPopup , getAuth } from "firebase/auth";
 import { query , getDocs, collection , where , addDoc , getFirestore } from "firebase/firestore";
 import Swal from "sweetalert2";
-import { getAnalytics , logEvent } from "firebase/analytics";
+import { logEvent } from "firebase/analytics";
 import { app , analytics } from "../../services/firebase";
+import { toast } from 'sonner';
+
 
 // Initialize auth and db
 const auth = getAuth(app);
@@ -28,6 +30,8 @@ export const signInGoogleExternal = async () => { // basic sign in function
           logEvent(analytics, 'sign_up', {
             method: 'google'
           }); 
+          toast.success(`Logged as ${user.displayName}`)    
+          
         } catch (err) {
           console.error('Login failed: ' , err);
         }
@@ -37,6 +41,7 @@ export const signInGoogleExternal = async () => { // basic sign in function
           logEvent(analytics, 'login', {
             method: 'google'
           });  
+          toast.success(`Logged as ${user.displayName}`)    
         } catch (error) {
           console.error('failed log event: ', error);
           logEvent(analytics, 'exception', {
