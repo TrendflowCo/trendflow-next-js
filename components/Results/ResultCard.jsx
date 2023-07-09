@@ -23,16 +23,17 @@ import { setFocusedCard } from '../../redux/features/actions/search';
 import { useAppDispatch } from '../../redux/hooks';
 import { wishlistChange } from './functions/wishlistChange';
 import { setWishlist } from '../../redux/features/actions/search';
+import { useRouter } from 'next/router';
 
 const ResultCard = ({productItem }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
   const { translations } = useAppSelector(state => state.language);
   const [loadingFav , setLoadingFav] = useState(false);
   const handleShowSingleCard = () => {
-    dispatch(setFocusedCard(productItem));
-    // use dialog from MUI
+    router.push(`/${router.query.lan}/results/explore/${productItem.id}`)
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();

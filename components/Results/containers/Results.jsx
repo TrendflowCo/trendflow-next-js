@@ -17,7 +17,6 @@ import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
 import { languageAdapter } from "../functions/languageAdapter";
 import { logEvent } from "firebase/analytics";
-import SingleCard from "../SingleCard";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -85,7 +84,6 @@ const Results = () => {
                 const pageQuery = `&page=${currentPage}`
                 const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
-                console.log('results: ', rsp)
                 if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) {
                     setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                     setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
@@ -151,8 +149,6 @@ const Results = () => {
                 sortingModal={sortingModal}
                 setSortingModal={setSortingModal}
             />
-            {/* Single card view */}
-            <SingleCard />
             { loadingFlag ? 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <CircularProgress size={72} thickness={4} />
@@ -165,7 +161,7 @@ const Results = () => {
                     <>
                         <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
-                                <h6 className='text-black text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
                                 <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
                             </div>
                             {/* Buttons for filtering and sorting modal enabling */}
