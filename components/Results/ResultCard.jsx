@@ -21,16 +21,16 @@ import { CircularProgress } from "@mui/material";
 import { logEvent } from 'firebase/analytics';
 import { setFocusedCard } from '../../redux/features/actions/search';
 import { useAppDispatch } from '../../redux/hooks';
+import { wishlistChange } from './functions/wishlistChange';
+import { setWishlist } from '../../redux/features/actions/search';
 
-const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
+const ResultCard = ({productItem }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
   const { translations } = useAppSelector(state => state.language);
-  const db = getFirestore(app);
   const [loadingFav , setLoadingFav] = useState(false);
   const handleShowSingleCard = () => {
-    console.log('showing card: ' , productItem);
     dispatch(setFocusedCard(productItem));
     // use dialog from MUI
   };
@@ -38,44 +38,18 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
     event.stopPropagation();
     if (user) {
       setLoadingFav(true);
-      try {
-        if (!wishlist.includes(productItem.id)) { // if the image is not included yet, add it
-          await addDoc(collection(db, "wishlist"), {
-            uid: user.uid,
-            img_id: productItem.id,
-          })
-          // log add to wishlist
-          logEvent(analytics, 'addToWishlist', {
-            img_id: productItem.id
-          });
-          toast.success('Added item to wishlist')    
-        } else { // delete if it exists
-          // log remove from wishlist
-          logEvent(analytics, 'removeFromWishlist', {
-            img_id: productItem.id
-          });
-          const q = query(collection(db, "wishlist"), where("img_id", "==", productItem.id)); // bring the query with the one with this img_id
-          const querySnapshot = await getDocs(q); // load it
-          let requestedFavourite = {};
-          querySnapshot.forEach((doc) => {
-            requestedFavourite = {...doc.data(), id: doc.id} // include it here
-          })
-          if(requestedFavourite.id) {
-            await deleteDoc(doc(db, "wishlist", requestedFavourite.id));
-            toast.success('Removed item from wishlist')    
-          } else {
-            Swal.fire({
-              ...swalNoInputs,
-              text: "Impossible to delete this item",
-              confirmButtonText: "Damn"
-            });
-          }
-        }
-        setReloadFlag(!reloadFlag); // reload wishlist
+      const response = await wishlistChange(productItem.id , user , wishlist);
+      if(response === 'added'){
+        let newWishlist = [...wishlist];
+        newWishlist.push(productItem.id);
+        dispatch(setWishlist(newWishlist))
         setLoadingFav(false);
-      } catch (err) {
+      } else if (response === 'deleted') {
+        let newWishlist = [...wishlist];
+        const index = newWishlist.findIndex(item => item === productItem.id);
+        newWishlist.splice(index, 1); // 2nd parameter means remove one item only
+        dispatch(setWishlist(newWishlist))
         setLoadingFav(false);
-        console.error(err);
       }
     } else {
       Swal.fire({
@@ -123,7 +97,7 @@ const ResultCard = ({productItem , reloadFlag , setReloadFlag }) => {
           component="img"
           image={productItem.img_url}
           alt={productItem.name}
-          sx={{ height: 400 , objectFit: 'cover' }}
+          sx={{ height: 400 , objectFit: 'cover' , cursor: 'pointer' }}
           onClick={() => {handleShowSingleCard()}}
         />
         <section className='flex flex-row p-4 w-full'>

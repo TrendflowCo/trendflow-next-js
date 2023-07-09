@@ -1,8 +1,6 @@
 import React , {useState , useEffect} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { analytics, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -98,7 +96,7 @@ const Results = () => {
                 });                
                 setLastPage(rsp.total_pages);
                 setTotalResults(rsp.total_results);
-                setLastSearch(querySearch);
+                setLastSearch(querySearch);    
                 setLoadingFlag(false);
             } catch (err) {
                 console.error(err);
@@ -110,14 +108,14 @@ const Results = () => {
             fetchData();
         }
         // re-renders if some query or page changes
-    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , currentPage ]);
+    },[user,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , currentPage ]); // eslint-disable-line
     //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
         localStorage.setItem('language', language);
         router.push(`/${language}/results/${querySearch}`)
         // router.push(`/${language}`); // redirect to home into the new language
-    },[language]);
+    },[language]); // eslint-disable-line
     //
     useEffect(() => { // wishlist search
         const fetchData = async () => {
@@ -134,7 +132,7 @@ const Results = () => {
             }
         };
     fetchData();
-    }, [user , reloadFlag])
+    }, [user , reloadFlag]) // eslint-disable-line
 
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);

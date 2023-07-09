@@ -14,9 +14,9 @@ import { Box, CircularProgress, Grid, Pagination, ThemeProvider } from "@mui/mat
 import { muiColors } from "../../Utils/muiTheme";
 import { enhanceText } from "../../Utils/enhanceText";
   
-
 const Wishlist = () => {
     const dispatch = useAppDispatch();
+    const { wishlist } = useAppSelector(state => state.search);
     const { translations } = useAppSelector(state => state.language);
     const db = getFirestore(app);
     const auth = getAuth(app); // instance of auth method
@@ -25,7 +25,6 @@ const Wishlist = () => {
     const [products , setProducts] = useState([]);
     const [lastPage , setLastPage] = useState(0);
     const [currentPage , setCurrentPage] = useState(1);
-    const [reloadFlag , setReloadFlag] = useState(false);
     const router = useRouter();
 
     useEffect(() => { // ejemplo basico para traerme los IDs de los items que tengo en mi wishlist - solo lo id
@@ -47,11 +46,12 @@ const Wishlist = () => {
                     setLoadingFlag(false);
                 } catch (err) {
                     console.error(err);
+                    setLoadingFlag(false);
                 }
             }
         };
     fetchData();
-    },[router.query.lan , currentPage , user]);
+    },[router.query.lan , currentPage , user]); // eslint-disable-line
     useEffect(() => { // funcion solo para remover favoritos de la wishlist - sin loader general
         const fetchData = async () => {
             if (user) {
@@ -66,12 +66,12 @@ const Wishlist = () => {
                     setProducts(wishlistProducts.data.results);
                 } catch (err) {
                     console.error(err);
+                    setLoadingFlag(false);
                 }
             }
         };
     fetchData();
-    },[reloadFlag]);
-
+    },[]); // eslint-disable-line
 
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
@@ -89,19 +89,12 @@ const Wishlist = () => {
                         <div className='mx-5'>
                             <h6 className='text-black text-4xl leading-10 font-semibold'>{translations?.wishlist?.title && enhanceText(translations?.wishlist?.title)}</h6>
                         </div>
-                        {/* Buttons for filtering and sorting modal enabling
-                        <SortAndFilter 
-                            filtersApplied={filtersApplied} 
-                            sortsApplied={sortsApplied} 
-                            setFilterModal={setFilterModal} 
-                            setSortingModal={setSortingModal}
-                        /> */}
                     </div>
                     <section>
                         <Grid container spacing={2} sx={{padding: 2}}>
                             {products.length > 0 && products.map((productItem,productIndex) => {return (
                                 <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                    <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
+                                    <ResultCard productItem={productItem}/>
                                 </Grid>
                             )})}
                         </Grid>

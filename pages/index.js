@@ -16,7 +16,7 @@ const HomeRedirect = () => {
       dispatch(setLanguage(defLanguage)); // the language found is dispatched to redux
       router.push(`/${defLanguage}`); // redirect to current language url
     }
-  },[])
+  },[]) // eslint-disable-line
 }
 
 export default HomeRedirect

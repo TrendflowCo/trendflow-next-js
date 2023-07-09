@@ -115,7 +115,7 @@ const Layout = ({ children }) => {
         break;
   
     }
-  },[language]);
+  },[language]); // eslint-disable-line
 
   return (
     <div className='w-screen h-screen flex flex-col bg-dokuso-white'>
