@@ -1,8 +1,6 @@
 import React , {useState , useEffect} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { analytics, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -86,7 +84,6 @@ const Results = () => {
                 const pageQuery = `&page=${currentPage}`
                 const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
-                console.log('results: ', rsp)
                 if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) {
                     setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                     setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
@@ -97,7 +94,7 @@ const Results = () => {
                 });                
                 setLastPage(rsp.total_pages);
                 setTotalResults(rsp.total_results);
-                setLastSearch(querySearch);
+                setLastSearch(querySearch);    
                 setLoadingFlag(false);
             } catch (err) {
                 console.error(err);
@@ -109,14 +106,14 @@ const Results = () => {
             fetchData();
         }
         // re-renders if some query or page changes
-    },[ router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , currentPage ]);
+    },[user,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , currentPage ]); // eslint-disable-line
     //
     useEffect(() => { // for a language change into results section
         const querySearch = router.query.id;
         localStorage.setItem('language', language);
         router.push(`/${language}/results/${querySearch}`)
         // router.push(`/${language}`); // redirect to home into the new language
-    },[language]);
+    },[language]); // eslint-disable-line
     //
     useEffect(() => { // wishlist search
         const fetchData = async () => {
@@ -133,7 +130,7 @@ const Results = () => {
             }
         };
     fetchData();
-    }, [user , reloadFlag])
+    }, [user , reloadFlag]) // eslint-disable-line
 
     const handleChangePage = (event, newPage) => {
         setCurrentPage(newPage);
@@ -152,7 +149,6 @@ const Results = () => {
                 sortingModal={sortingModal}
                 setSortingModal={setSortingModal}
             />
-
             { loadingFlag ? 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <CircularProgress size={72} thickness={4} />
@@ -165,7 +161,7 @@ const Results = () => {
                     <>
                         <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
-                                <h6 className='text-black text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
                                 <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
                             </div>
                             {/* Buttons for filtering and sorting modal enabling */}
