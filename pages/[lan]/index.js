@@ -13,7 +13,7 @@ const Home = () => {
     const defLanguage = localStorage.getItem("language", language);
     router.push(`/${defLanguage}`)
     dispatch(setLanguage(defLanguage))
-  },[language])
+  },[language]) // eslint-disable-line
 
   return ( 
     <> 

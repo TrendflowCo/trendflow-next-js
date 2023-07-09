@@ -2,8 +2,9 @@ export const enhanceText = (string) => {
     if(string === undefined) {
         return 'N/A'
     } else {
-        const firstValue = string.charAt(0).toUpperCase();
-        const secondValue = string.slice(1).toLowerCase();
+        const trimBefore = string.trim();
+        const firstValue = trimBefore.charAt(0).toUpperCase();
+        const secondValue = trimBefore.slice(1).toLowerCase();
         const finalString = firstValue + secondValue;
         return finalString;    
     }

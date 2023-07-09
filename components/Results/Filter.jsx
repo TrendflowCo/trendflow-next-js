@@ -55,7 +55,7 @@ const Filter = (props) => {
             finalFilterAmount += 1
         }
         dispatch(setTotalFilters(finalFilterAmount));
-    },[onSaleChecked , sectionFilter , selectedBrands , priceRange])
+    },[onSaleChecked , sectionFilter , selectedBrands , priceRange]) // eslint-disable-line
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
