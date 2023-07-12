@@ -36,8 +36,11 @@ const Explore = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true)
-            const currentId = router.query.id;
+            setLoading(true);
+            const completeQuery = router.query.id;
+            const currentArray = completeQuery.split(' ');
+            const currentId = currentArray[1];
+            // const currentId = router.query.id;
             const currentLanguage = router.query.lan;
             // traer el de la query
             try {
@@ -190,7 +193,7 @@ const Explore = () => {
                                 similarProducts?.length > 0 &&
                                 <section className="w-full px-4 mt-8">
                                     <h6 className='text-dokuso-black text-lg md:text-xl leading-10 font-semibold'>Related products</h6>
-                                    <div className="flex flex-row w-full overflow-x-auto scrollbar mt-4 mb-8 pb-4">
+                                    <div className="flex flex-row w-full overflow-x-auto scrollbar mt-4 mb-16 pb-8">
                                         {similarProducts?.map((item , index) => <SimilarCard key={index} productItem={item}/>)}
                                     </div>
                                     

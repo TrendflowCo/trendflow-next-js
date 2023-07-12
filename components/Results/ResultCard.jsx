@@ -33,7 +33,7 @@ const ResultCard = ({productItem }) => {
   const { translations } = useAppSelector(state => state.language);
   const [loadingFav , setLoadingFav] = useState(false);
   const handleShowSingleCard = () => {
-    router.push(`/${router.query.lan}/results/explore/${productItem.id}`)
+    router.push(`/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id}`)
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();
