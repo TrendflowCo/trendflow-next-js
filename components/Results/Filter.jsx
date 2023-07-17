@@ -12,6 +12,9 @@ import { setTotalFilters } from "../../redux/features/actions/search";
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Slider from '@mui/material/Slider';
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../services/firebase";
+
 
 const Filter = (props) => {
     const router = useRouter();
@@ -98,15 +101,16 @@ const Filter = (props) => {
         } else {
             delete newQuery.onSale;
         }
-        if (priceRange[0] > priceLimits.min) {
+        if (priceRange[0] >= priceLimits.min) {
             newQuery = {...newQuery, minPrice: priceRange[0]}
         }
-        if (priceRange[1] < priceLimits.max) {
+        if (priceRange[1] <= priceLimits.max) {
             newQuery = {...newQuery, maxPrice: priceRange[1]}
         }
+        newQuery = {...newQuery, page: 1}
         logEvent(analytics, 'FilterAndSorting', {
             action: 'Apply_filter'
-        });        
+        });
         router.push({ href: "./", query: newQuery })
     };
     
@@ -133,6 +137,7 @@ const Filter = (props) => {
         params.delete('brands');
         params.delete('minPrice');
         params.delete('maxPrice');
+        params.delete('page');
         router.replace(
             { pathname, query: params.toString() },
             undefined, 

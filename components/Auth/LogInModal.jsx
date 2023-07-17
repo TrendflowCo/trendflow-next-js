@@ -93,7 +93,7 @@ const LogInModal = () => {
                 <div className="w-full h-full p-2">
                     <HeadingStyle component={motion.div} {...fadeInUp}>
                         <div className="flex flex-col lg:flex-row w-full h-full">
-                            <section className="w-full lg:w-1/2 h-full flex flex-col">
+                            <section className="w-full lg:w-1/2 h-fit flex flex-col">
                                 <ThemeProvider theme={muiColors}>
                                     <Typography 
                                         variant="h4" 
@@ -112,13 +112,13 @@ const LogInModal = () => {
                                     />
                                 </div>
                             </section>
-                            <section className="w-full lg:w-1/2 h-full flex flex-col">
+                            <section className="w-full lg:w-1/2 h-full flex flex-col justify-center">
                                 <ThemeProvider theme={muiColors}>
                                     <Typography 
                                         variant="h5" 
                                         component="h5" 
                                         style={{ 'textAlign': 'center'}}
-                                        sx={{ mb: 6 }}
+                                        sx={{ mb: 3 }}
                                     >
                                         {`Don't have an account? `}
                                         <Link 
@@ -131,14 +131,14 @@ const LogInModal = () => {
                                     </Typography>
                                 </ThemeProvider>
                                 <SocialAuth/>
-                                <Divider sx={{ my: 3 }} component={motion.div} {...fadeInUp}>
+                                {/* <Divider sx={{ my: 3 }} component={motion.div} {...fadeInUp}>
                                     <Typography variant="body2" sx={{ color: "text.secondary" }}>
                                     OR
                                     </Typography>
-                                </Divider>
-                                <Box component={motion.div} {...fadeInUp}>
+                                </Divider> */}
+                                {/* <Box component={motion.div} {...fadeInUp}>
                                     <LogInForm />
-                                </Box>
+                                </Box> */}
                             </section>
                         </div>
                     </HeadingStyle>
