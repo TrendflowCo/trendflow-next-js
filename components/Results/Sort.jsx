@@ -38,6 +38,7 @@ const Sort = ( props ) => {
         const params = new URLSearchParams(query);
         params.delete('sortBy');
         params.delete('ascending');
+        params.delete('page');
         router.replace(
             { pathname, query: params.toString() },
             undefined, 
@@ -64,6 +65,7 @@ const Sort = ( props ) => {
                 delete newQuery.ascending;
             }
             newQuery = {...newQuery, sortBy: selectedSort}
+            newQuery = {...newQuery, page: 1}
             router.push({ href: "./", query: newQuery })    
         }
     };

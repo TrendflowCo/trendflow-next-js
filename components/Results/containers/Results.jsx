@@ -8,7 +8,7 @@ import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
-import { setCurrentSearch , setWishlist } from "../../../redux/features/actions/search";
+import { setCurrentSearch , setSearchPage, setWishlist } from "../../../redux/features/actions/search";
 import { setLanguage } from "../../../redux/features/actions/language";
 import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
@@ -42,13 +42,16 @@ const Results = () => {
     const [sortingModal , setSortingModal] = useState(false); // modal controller
     //
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (id ,lan) => {
             try {
                 setFailedSearch(false);
                 setLoadingFlag(true);
                 setTotalResults(0)
-                const querySearch = router.query.id.split('-').join(' ');
-                const queryLanguage = router.query.lan;
+                const querySearch = id.split('-').join(' ');
+                // const querySearch = router.query.id.split('-').join(' ');
+                // const queryLanguage = router.query.lan;
+                const queryLanguage = lan;
+                const selectedPage = router.query.page;
                 let onSaleQuery = '';
                 if (router.query.onSale) {
                     onSaleQuery = '&onSale=true';
@@ -77,11 +80,16 @@ const Results = () => {
                 if(router.query.ascending) {
                     ascendingQuery = `&ascending=${router.query.ascending}`;
                 }
+                if (selectedPage === undefined) {
+                    setCurrentPage(1)
+                } else {
+                    setCurrentPage(parseInt(selectedPage))
+                }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
-                const pageQuery = `&page=${currentPage}`
+                const pageQuery = `&page=${selectedPage}`
                 const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get data
                 if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) {
@@ -102,18 +110,25 @@ const Results = () => {
                 setFailedSearch(true);
             }
         };
-        if (router.query.id && router.query.lan) {
-            fetchData();
+        // if (router.query.id !== undefined && router.query.lan !== undefined) {
+        if (router.isReady) {
+            const { id , lan } = router.query;
+            if(id && lan) {
+                fetchData(id , lan);
+            }
         }
         // re-renders if some query or page changes
-    },[user,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , currentPage ]); // eslint-disable-line
+    // },[router.isReady]); // eslint-disable-line
+    },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
+    
     //
-    useEffect(() => { // for a language change into results section
-        const querySearch = router.query.id;
-        localStorage.setItem('language', language);
-        router.push(`/${language}/results/${querySearch}`)
-        // router.push(`/${language}`); // redirect to home into the new language
-    },[language]); // eslint-disable-line
+    // useEffect(() => { // for a language change into results section
+    //     let newQuery = {...router.query};
+    //     const querySearch = router.query.id;
+    //     localStorage.setItem('language', language);
+    //     router.push(`/${language}/results/${querySearch}`)
+    //     // router.push(`/${language}`); // redirect to home into the new language
+    // },[language]); // eslint-disable-line
     //
     useEffect(() => { // wishlist search
         const fetchData = async () => {
@@ -133,7 +148,9 @@ const Results = () => {
     }, [user , reloadFlag]) // eslint-disable-line
 
     const handleChangePage = (event, newPage) => {
-        setCurrentPage(newPage);
+        let newQuery = {...router.query};
+        newQuery = {...newQuery, page: newPage}
+        router.push({ href: "./", query: newQuery })
     };
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>

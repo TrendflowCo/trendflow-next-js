@@ -10,8 +10,7 @@ import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
 import { Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
-import { collection , addDoc , getDocs, query , where , getFirestore , deleteDoc , doc } from "firebase/firestore";
-import { analytics, app } from "../../services/firebase";
+import { analytics } from "../../services/firebase";
 import { useAppSelector } from "../../redux/hooks";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from '../Utils/swalConfig';
@@ -19,7 +18,6 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { CircularProgress } from "@mui/material";
 import { logEvent } from 'firebase/analytics';
-import { setFocusedCard } from '../../redux/features/actions/search';
 import { useAppDispatch } from '../../redux/hooks';
 import { wishlistChange } from './functions/wishlistChange';
 import { setWishlist } from '../../redux/features/actions/search';
@@ -53,6 +51,9 @@ const ResultCard = ({productItem }) => {
         setLoadingFav(false);
       }
     } else {
+      logEvent(analytics, 'clickAddToWishlist', {
+        img_id: productItem.id
+      });
       Swal.fire({
         ...swalNoInputs,
         text: "You're not logged in",
@@ -78,22 +79,10 @@ const ResultCard = ({productItem }) => {
 
   return (
     <Card 
-      sx={{ height: 650 , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , justifyContent: 'space-between' }} 
+      sx={{ height: '100%' , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , justifyContent: 'space-between' }} 
       className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
     >
-      <section className='flex flex-col w-full h-full'>
-        <div className='flex flex-row items-center justify-start w-full h-20 py-2 px-4'>
-          <div className='w-full h-full flex flex-col justify-center items-start'>
-            <Image 
-              src={logos[productItem?.brand?.toLowerCase()]} 
-              alt={productItem?.brand} 
-              height={0} 
-              width={0} 
-              sizes="100vw" 
-              style={{height: '75%' , width: '35%' , objectFit: 'contain', alignSelf:'start' }}
-            />
-          </div>
-        </div>
+      <section className='flex flex-col w-full h-full relative'>
         <CardMedia
           component="img"
           image={productItem.img_url}
@@ -101,8 +90,13 @@ const ResultCard = ({productItem }) => {
           sx={{ height: 400 , objectFit: 'cover' , cursor: 'pointer' }}
           onClick={() => {handleShowSingleCard()}}
         />
-        <section className='flex flex-row p-4 w-full'>
-          <div className={`flex flex-col ${productItem.old_price_float !== productItem.price_float ? 'w-[70%]' : 'w-full'}`}>
+        {productItem.old_price_float !== productItem.price_float && 
+          <div className='flex-none absolute shadow-xl border border-dokuso-white top-2 right-2 w-[30%] h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
+            <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
+          </div>
+        }
+        <section className='flex flex-row p-3 mt-1 w-full'>
+          <div className={`flex flex-col w-2/3`}>
             <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
             {
               productItem.old_price_float !== productItem.price_float ? 
@@ -114,12 +108,18 @@ const ResultCard = ({productItem }) => {
               <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
             }
           </div>
-          {/* On sale checking */}
-          {productItem.old_price_float !== productItem.price_float && 
-            <div className='flex-none w-[30%] h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
-              <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
+          <div className='flex flex-row items-center justify-start w-1/3'>
+            <div className='w-full h-full flex flex-col justify-center items-start'>
+              <Image 
+                src={logos[productItem?.brand?.toLowerCase()]} 
+                alt={productItem?.brand} 
+                height={0} 
+                width={0} 
+                sizes="100vw" 
+                style={{height: 'auto' , width: '100%' , objectFit: 'contain', alignSelf:'start' }}
+              />
             </div>
-          }
+          </div>
         </section>
       </section>
       <section className='flex flex-col h-fit w-full flex-none'>
