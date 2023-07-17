@@ -16,14 +16,14 @@ export const wishlistChange = async (id , user , wishlist) => {
             img_id: id,
           })
           // log add to wishlist
-          logEvent(analytics, 'addToWishlist', {
+          logEvent(analytics, 'clickAddToWishlist', {
             img_id: id
           });
           toast.success('Added item to wishlist');
           return 'added'
         } else { // delete if it exists
           // log remove from wishlist
-          logEvent(analytics, 'removeFromWishlist', {
+          logEvent(analytics, 'clickRemoveFromWishlist', {
             img_id: id
           });
           const q = query(collection(db, "wishlist"), where("img_id", "==", id)); // bring the query with the one with this img_id
