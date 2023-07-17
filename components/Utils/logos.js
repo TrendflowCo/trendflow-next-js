@@ -27,5 +27,6 @@ export const logos = {
     'sandro': 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Sandro-logo.jpg',
     'ysl':'https://upload.wikimedia.org/wikipedia/commons/2/29/Yves_Saint_Laurent_Logo.svg',
     'parfois': 'https://upload.wikimedia.org/wikipedia/commons/2/2b/ParfoisLogo.jpg',
-    'hugo boss': 'https://upload.wikimedia.org/wikipedia/commons/7/73/Hugo-Boss-Logo.svg'
+    'hugo boss': 'https://upload.wikimedia.org/wikipedia/commons/7/73/Hugo-Boss-Logo.svg',
+    'hyein seo':'https://www.ink-clothing.com/category/XrVGHs4cbTcWxgor.jpg'
   };

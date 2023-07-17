@@ -26,9 +26,9 @@ const SocialAuth = () => {
               flex: 1,
             }}
           >
-            <Icon icon="eva:google-fill" color="#DF3E30" width={50} height={50} />
+            <Icon icon="eva:google-fill" color="#FA39BE" width={60} height={60} />
           </IconButton>
-          <IconButton
+          {/* <IconButton
             onClick={handleSignInFacebook}
             sx={{
               borderRadius: "5px",
@@ -42,7 +42,7 @@ const SocialAuth = () => {
               width={50}
               height={50}
             />
-          </IconButton>
+          </IconButton> */}
         </Stack>
       </>
     )

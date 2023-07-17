@@ -41,7 +41,10 @@ const Navbar = ({ logOut , user , loading }) => {
     setAnchorElNav(null);
   };
   const handleSelectPage = (sel) => {
-    router.push(`/${language}/${sel.toLowerCase()}`)
+    if(sel === 'home') {
+      router.push('/')
+    }
+    // router.push(`/${language}/${sel.toLowerCase()}`)
   };
   const handleOpenUserMenu = (event) => { // open user menu
     logEvent(analytics, 'clickOnUserMenu', {
@@ -168,7 +171,7 @@ const Navbar = ({ logOut , user , loading }) => {
                 // target="_blank" 
                 // rel="noopener noreferrer"
               >
-                <Typography textAlign="center">{page.name}</Typography>
+                <Typography textAlign="center">{enhanceText(page.name)}</Typography>
               </MenuItem>
             
             ))}

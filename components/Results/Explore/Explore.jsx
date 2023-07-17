@@ -59,7 +59,7 @@ const Explore = () => {
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    },[router.query.id])
+    },[router.query.id]) //eslint-disable-line
 
 
     const handleAddWishlist = async (event) => {
