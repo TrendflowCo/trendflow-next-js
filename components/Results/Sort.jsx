@@ -93,7 +93,7 @@ const Sort = ( props ) => {
                                     onChange={handleChangeSort}
                                     renderValue={(selected) => {
                                         if (selected.length === 0) {
-                                            return <span>{enhanceText(translations?.results?.select_filter)}</span>;
+                                            return <span>{enhanceText(translations?.results?.sort_by)}</span>;
                                         }
                                         return enhanceText(translations?.results?.[selected]);
                                     }}

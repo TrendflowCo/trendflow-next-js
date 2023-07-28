@@ -35,8 +35,12 @@
     },
     "action": "오늘 Dokuso의 파워를 체험해보세요.",
     "signup": "회원 가입",
-    "login": "로그인",
-    "About": "소개",
+    "login": {
+        "log_in": "로그인",
+        "log_in_and_stay_ahead_in_fashion": "로그인하고 패션 선도",
+        "continue_with_your_google_account": "Google 계정으로 계속하기"
+    },
+        "About": "소개",
     "Brands": "브랜드",
     "Manifesto": "성명서",
     "searchLabel": "검색",

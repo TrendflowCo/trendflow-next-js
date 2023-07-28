@@ -34,7 +34,11 @@
     },
     "action": "立即加入革命，体验Dokuso的力量。",
     "signup": "注册",
-    "login": "登录",
+    "login": {
+        "log_in": "登录",
+        "log_in_and_stay_ahead_in_fashion": "登录并保持时尚领先",
+        "continue_with_your_google_account": "继续使用您的Google帐户"
+    },
     "About": "关于",
     "Brands": "品牌",
     "Manifesto": "宣言",

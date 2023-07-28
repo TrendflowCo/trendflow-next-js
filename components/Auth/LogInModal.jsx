@@ -17,6 +17,7 @@ import { analytics } from "../../services/firebase";
 const LogInModal = () => {
     const dispatch = useAppDispatch();
     const { logInFlag } = useAppSelector (state => state.auth);
+    const { translations } = useAppSelector(state => state.language);
     useEffect(() =>{
         logEvent(analytics, 'page_view', {
             page_title: 'login',
@@ -101,7 +102,7 @@ const LogInModal = () => {
                                         style={{ 'textAlign': 'center' , 'flex': 'none'}}
                                         // sx={{ mb: 4 }}
                                     >
-                                        Log In and Stay Ahead in Fashion
+                                        {translations.login.log_in_and_stay_ahead_in_fashion}
                                     </Typography>
                                 </ThemeProvider>
                                 <div className="w-full h-full hidden lg:flex lg:items-center lg:justify-center"> 
@@ -118,16 +119,16 @@ const LogInModal = () => {
                                         variant="h5" 
                                         component="h5" 
                                         style={{ 'textAlign': 'center'}}
-                                        sx={{ mb: 3 }}
+                                        sx={{ mb: 2 }}
                                     >
-                                        {`Don't have an account? `}
-                                        <Link 
+                                        {translations.login.continue_with_your_google_account}
+                                        {/* <Link 
                                             variant="h5" 
                                             onClick={handleSignUp}
                                             sx={{'cursor': 'pointer'}}
                                         >
                                             Sign up
-                                        </Link>
+                                        </Link> */}
                                     </Typography>
                                 </ThemeProvider>
                                 <SocialAuth/>

@@ -35,7 +35,11 @@
     },
     "action": "Unisciti alla rivoluzione oggi e sperimenta il potere di Dokuso.",
     "signup": "Registrati",
-    "login": "Accedi",
+    "login": {
+        "log_in": "Accedi",
+        "log_in_and_stay_ahead_in_fashion": "Accedi e rimani avanti nella moda",
+        "continue_with_your_google_account": "Continua con il tuo account Google"
+    },
     "About": "Informazioni su",
     "Brands": "Marchi",
     "Manifesto": "Manifesto",

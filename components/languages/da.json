@@ -34,7 +34,11 @@
     },
     "action": "Bliv en del af revolutionen i dag og oplev kraften i Dokuso.",
     "signup": "Tilmeld dig",
-    "login": "Log ind",
+    "login": {
+        "log_in": "Log ind",
+        "log_in_and_stay_ahead_in_fashion": "Log ind og hold dig foran i mode",
+        "continue_with_your_google_account": "Fortsæt med din Google-konto"
+    },
     "About": "Om",
     "Brands": "Mærker",
     "Manifesto": "Manifest",

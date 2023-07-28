@@ -34,7 +34,11 @@
     },
     "action": "Doe vandaag mee aan de revolutie en ervaar de kracht van Dokuso.",
     "signup": "Aanmelden",
-    "login": "Inloggen",
+    "login": {
+        "log_in": "Inloggen",
+        "log_in_and_stay_ahead_in_fashion": "Inloggen en blijf voorop in de mode",
+        "continue_with_your_google_account": "Doorgaan met je Google-account"
+    },
     "About": "Over",
     "Brands": "Merken",
     "Manifesto": "Manifest",

@@ -19,7 +19,7 @@ const SecondaryLogin = () => {
                             onClick={() => {dispatch(setLogInFlag(true))}}
                             className="text-dokuso-black font-semibold hover:text-dokuso-white bg-gradient-to-r from-dokuso-green mt-4 to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
                         >
-                            <p className="sm:text-lg text-base">{translations?.login}</p>
+                            <p className="sm:text-lg text-base">{translations?.login?.log_in}</p>
                         </Button>
                     </div>
                 </div>
