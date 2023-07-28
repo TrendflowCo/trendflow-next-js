@@ -34,7 +34,11 @@
     },
     "action": "Join the revolution today and experience the power of Dokuso.",
     "signup": "Sign up",
-    "login": "Log in",
+    "login": {
+        "log_in": "Log in",
+        "log_in_and_stay_ahead_in_fashion": "Log In and Stay Ahead in Fashion",
+        "continue_with_your_google_account": "Continue with your Google account"
+    },
     "About": "About",
     "Brands": "Brands",
     "Manifesto": "Manifesto",

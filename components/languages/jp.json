@@ -35,7 +35,11 @@
     },
     "action": "今すぐDokusoのパワーを体験してみてください。",
     "signup": "サインアップ",
-    "login": "ログイン",
+    "login": {
+        "log_in": "ログイン",
+        "log_in_and_stay_ahead_in_fashion": "ログインしてファッションを先取り",
+        "continue_with_your_google_account": "Googleアカウントで続行"
+    },
     "About": "について",
     "Brands": "ブランド",
     "Manifesto": "宣言",

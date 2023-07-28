@@ -34,7 +34,11 @@
     },
     "action": "Присоединяйтесь к революции сегодня и испытайте силу Dokuso.",
     "signup": "Зарегистрироваться",
-    "login": "Войти",
+    "login": {
+        "log_in": "Войти",
+        "log_in_and_stay_ahead_in_fashion": "Войти и оставаться на шаг впереди в моде",
+        "continue_with_your_google_account": "Продолжить с вашей учетной записью Google"
+    },
     "About": "О нас",
     "Brands": "Бренды",
     "Manifesto": "Манифест",

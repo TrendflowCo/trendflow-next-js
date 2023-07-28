@@ -245,7 +245,7 @@ const Navbar = ({ logOut , user , loading }) => {
               color="dokusoBlack"
               sx={{fontWeight: 'bold' , flex: 'none'}}
               >
-              Log in
+              {translations?.login?.log_in}
             </Button>
           
           }

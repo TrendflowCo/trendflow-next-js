@@ -24,6 +24,8 @@ const SocialAuth = () => {
               borderRadius: "5px",
               padding: "0.5675rem",
               flex: 1,
+              boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+              mb: 5
             }}
           >
             <Icon icon="eva:google-fill" color="#FA39BE" width={60} height={60} />

@@ -34,7 +34,11 @@
     },
     "action": "انضم إلى الثورة اليوم واستمتع بقوة Dokuso.",
     "signup": "سجّل",
-    "login": "تسجيل الدخول",
+    "login": {
+        "log_in": "تسجيل الدخول",
+        "log_in_and_stay_ahead_in_fashion": "تسجيل الدخول والبقاء في طليعة الموضة",
+        "continue_with_your_google_account": "المتابعة باستخدام حساب جوجل الخاص بك"
+    },
     "About": "عن",
     "Brands": "العلامات التجارية",
     "Manifesto": "البيان الوجيه",

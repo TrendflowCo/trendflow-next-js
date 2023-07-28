@@ -34,7 +34,11 @@
     },
     "action": "Uneix-te a la revolució avui mateix i experimenta el poder de Dokuso.",
     "signup": "Registra't",
-    "login": "Inicia la sessió",
+    "login": {
+        "log_in": "Iniciar sessió",
+        "log_in_and_stay_ahead_in_fashion": "Iniciar sessió i estar al capdavant en moda",
+        "continue_with_your_google_account": "Continuar amb el teu compte de Google"
+    },
     "About": "Sobre nosaltres",
     "Brands": "Marques",
     "Manifesto": "Manifest",
