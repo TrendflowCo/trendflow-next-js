@@ -87,6 +87,7 @@ const Results = () => {
                 }
                 dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
+                localStorage.setItem('language',queryLanguage.toLowerCase());
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
                 const pageQuery = `&page=${selectedPage}`
