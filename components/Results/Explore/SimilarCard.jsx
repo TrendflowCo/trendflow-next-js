@@ -15,7 +15,7 @@ const SimilarCard = ({productItem}) => {
   }
   return (
     <Card 
-      sx={{ height: '100%' , width: {xs: 140 , sm: 230 , md: 330}  , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1}}
+      sx={{ height: '100%' , width: {xs: 160 , sm: 230 , md: 330}  , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1}}
       className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
     >
       <section className='flex flex-col w-full h-full relative'>
@@ -27,14 +27,14 @@ const SimilarCard = ({productItem}) => {
             onClick={() => {handleShowSingleCard()}}
           />
         {productItem.old_price_float !== productItem.price_float && 
-          <div className='flex-none absolute shadow-xl border border-dokuso-white top-2 right-2 w-[25%] h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
-            <span className='text-base font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
+          <div className='flex flex-col items-center justify-center absolute shadow-xl border border-dokuso-white top-2 right-2 w-fit h-fit p-1 md:p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
+            <span className='text-xs md:text-sm lg:text-base font-semibold text-dokuso-white leading-full'>{translations?.results?.on_sale.toUpperCase()}</span>
           </div>
         }
       </section>
       <section className='flex flex-row p-3 mt-1 w-full'>
 
-          <div className={`flex flex-col w-2/3`}>
+          <div className={`flex flex-col w-2/3 text-xs md:text-sm xl:text-base`}>
             <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
             {
               productItem.old_price_float !== productItem.price_float ? 
