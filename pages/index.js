@@ -6,7 +6,7 @@ import { setLanguage } from "../redux/features/actions/language";
 const HomeRedirect = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  useEffect(() => {
+  useEffect(() => { // this is made when someone enters to www.dokuso.app/
     const defLanguage = localStorage.getItem("language"); // takes language from localStorage
     if(!defLanguage) { // by complete default, define english as first language
       dispatch(setLanguage("en")); // redux

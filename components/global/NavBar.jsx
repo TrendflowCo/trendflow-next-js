@@ -44,7 +44,6 @@ const Navbar = ({ logOut , user , loading }) => {
     if(sel === 'home') {
       router.push('/')
     }
-    // router.push(`/${language}/${sel.toLowerCase()}`)
   };
   const handleOpenUserMenu = (event) => { // open user menu
     logEvent(analytics, 'clickOnUserMenu', {
@@ -94,8 +93,12 @@ const Navbar = ({ logOut , user , loading }) => {
     setAnchorElLanguage(null);
   };
   const handleClickLanguage = (selectedLanguage) => {
-    localStorage.setItem("language",selectedLanguage.toLowerCase())
-    dispatch(setLanguage(selectedLanguage.toLowerCase()))
+    const clickedLanguage = selectedLanguage.toLowerCase();
+    const { pathname, query } = router;
+    const params = new URLSearchParams(query);
+    router.replace(
+      { pathname, query: {...query,lan: clickedLanguage} }, undefined, { shallow: true }
+    );
     handleLanguageMenuClose();
   };
   

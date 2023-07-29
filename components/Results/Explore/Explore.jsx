@@ -50,6 +50,7 @@ const Explore = () => {
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
                 setSimilarProducts(similars.results);
                 dispatch(setLanguage(currentLanguage)); // write redux variable - avoid refresh
+                localStorage.setItem('language',currentLanguage.toLowerCase());
                 setLoading(false);    
             } catch (err) {
                 setLoading(false);
@@ -59,7 +60,7 @@ const Explore = () => {
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    },[router.query.id]) //eslint-disable-line
+    },[router.query.id , router.query.lan]) //eslint-disable-line
 
 
     const handleAddWishlist = async (event) => {
