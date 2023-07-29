@@ -92,12 +92,12 @@ const ResultCard = ({productItem }) => {
         />
         {productItem.old_price_float !== productItem.price_float && 
           <div className='flex-none absolute shadow-xl border border-dokuso-white top-2 right-2 w-[30%] h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
-            <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
+            <span className='text-sm md:text-base lg:text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
           </div>
         }
         <section className='flex flex-row p-3 mt-1 w-full'>
           <div className={`flex flex-col w-2/3`}>
-            <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
+            <span className='text-sm md:text-base xl:text-lg pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
             {
               productItem.old_price_float !== productItem.price_float ? 
               <div className='flex flex-row w-full'>
