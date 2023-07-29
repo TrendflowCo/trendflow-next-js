@@ -11,7 +11,10 @@ const SimilarCard = ({productItem}) => {
   const router = useRouter();
   const { translations } = useAppSelector(state => state.language);
   const handleShowSingleCard = () => {
-    router.push(`/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id}`)
+    const firstEdition = productItem.name.toLowerCase().split(' ').join('-');
+    const secondEdition = firstEdition.split('/').join('_');
+    const thirdEdition = secondEdition.split('%20').join('-');
+    router.push(`/${router.query.lan}/results/explore/${thirdEdition}%20${productItem.id}`);
   }
   return (
     <Card 
