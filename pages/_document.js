@@ -16,6 +16,15 @@ export default function Document() {
         height="0" width="0" style="display:none;visibility:hidden"></iframe>`}}></noscript>
       <Main/>
       <NextScript />
+      <script type="text/javascript">
+        var vglnk = {key: '943d03467515b42f0939f466068c6f50'};
+        (function(d, t) {var s = d.createElement(t);
+          s.type = 'text/javascript';s.async = true;
+          s.src = '//clickcdn.sovrn.com/api/sovrncm.js';
+          var r = d.getElementsByTagName(t)[0];
+          r.parentNode.insertBefore(s, r);
+        }(document, 'script'));
+      </script>
     </body>
   </Html>
   )
