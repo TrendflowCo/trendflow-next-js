@@ -20,6 +20,7 @@ import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
 import SimilarCard from "./SimilarCard";
 import { setLanguage } from "../../../redux/features/actions/language";
+import CarouselComp from "./CarouselComp";
 
 const Explore = () => {
     const router = useRouter();
@@ -194,10 +195,7 @@ const Explore = () => {
                                 similarProducts?.length > 0 &&
                                 <section className="w-full px-4 mt-8">
                                     <h6 className='text-dokuso-black text-lg md:text-xl leading-10 font-semibold'>Related products</h6>
-                                    <div className="flex flex-row w-full overflow-x-auto scrollbar mt-4 mb-16 pb-8">
-                                        {similarProducts?.map((item , index) => <SimilarCard key={index} productItem={item}/>)}
-                                    </div>
-                                    
+                                    <CarouselComp similarProducts={similarProducts}/>                                    
                                 </section>
                             }
                         </>
