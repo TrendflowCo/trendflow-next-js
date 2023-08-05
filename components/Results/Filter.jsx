@@ -43,22 +43,6 @@ const Filter = (props) => {
           label: `$${currentPriceRange[1]}`,
         },
     ];
-    useEffect(() => {
-        let finalFilterAmount = 0;
-        if(onSaleChecked) {
-            finalFilterAmount += 1
-        };
-        if (sectionFilter !== '') {
-            finalFilterAmount += 1
-        }
-        if (selectedBrands.length > 0) {
-            finalFilterAmount += 1
-        }
-        if (priceRange[0] !== currentPriceRange[0] || priceRange[1] !== currentPriceRange[1]) {
-            finalFilterAmount += 1
-        }
-        dispatch(setTotalFilters(finalFilterAmount));
-    },[onSaleChecked , sectionFilter , selectedBrands , priceRange]) // eslint-disable-line
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
     const MenuProps = {
@@ -69,7 +53,6 @@ const Filter = (props) => {
             },
         },
     };
-
     const handleSetOnSale = (event) => { // set on sale value
         setOnSaleChecked(event.target.checked);
     };
