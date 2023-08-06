@@ -17,9 +17,9 @@ const SimilarCard = ({productItem}) => {
     router.push(`/${router.query.lan}/results/explore/${thirdEdition}%20${productItem.id}`);
   }
   return (
-    <section className='pt-2 pb-4'>
+    <section className='pt-2 pb-12'>
       <Card 
-        sx={{ height: '100%' , width: {xs: 160 , sm: 230 , md: 330}  , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1 }}
+        sx={{ height: '100%' , width: {xs: 160 , sm: 170 , md: 200 , lg: 280 , xl: 350}  , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1 }}
         className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
       >
         <section className='flex flex-col w-full h-full relative'>
@@ -27,7 +27,7 @@ const SimilarCard = ({productItem}) => {
               component="img"
               image={productItem.img_url}
               alt={productItem.name}
-              sx={{ height: {xs: 200 , sm: 300 , md: 400 } ,  borderRadius: 2 ,   objectFit: 'cover' , cursor: 'pointer'  }}
+              sx={{ height: {xs: 167 , sm: 209 , md: 245 , lg: 344 , xl: 430 } ,  borderRadius: 2 ,   objectFit: 'cover' , cursor: 'pointer'  }}
               onClick={() => {handleShowSingleCard()}}
             />
           {productItem.old_price_float !== productItem.price_float && 
