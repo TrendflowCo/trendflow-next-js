@@ -13,5 +13,5 @@ export const languages = [
     { name: 'JP', flag: '🇯🇵' },
     { name: 'AR', flag: '🇸🇦' },
     { name: 'HI', flag: '🇮🇳' },
-    { name: 'CA', flag: 'CT' },
+    // { name: 'CA', flag: 'CT' },
   ];  
