@@ -15,6 +15,7 @@ import { logEvent } from "firebase/analytics";
 import { analytics } from "../../../services/firebase";
 import { wishlistChange } from "./../functions/wishlistChange";
 import { setWishlist } from "../../../redux/features/actions/search";
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
