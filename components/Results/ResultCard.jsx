@@ -8,7 +8,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { logos } from '../Utils/logos';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
-import { Tooltip } from '@mui/material';
+import { Skeleton, Tooltip } from '@mui/material';
 import { Toaster, toast } from 'sonner';
 import { analytics } from "../../services/firebase";
 import { useAppSelector } from "../../redux/hooks";
@@ -22,6 +22,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { wishlistChange } from './functions/wishlistChange';
 import { setWishlist } from '../../redux/features/actions/search';
 import { useRouter } from 'next/router';
+import CloudOffIcon from '@mui/icons-material/CloudOff';
 
 const ResultCard = ({productItem }) => {
   const router = useRouter();
@@ -30,6 +31,10 @@ const ResultCard = ({productItem }) => {
   const { wishlist } = useAppSelector(state => state.search);
   const { translations } = useAppSelector(state => state.language);
   const [loadingFav , setLoadingFav] = useState(false);
+  const [isLoading , setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [finalHeight , setFInalHeight] = useState(0);
+
   const handleShowSingleCard = () => {
     router.push(`/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id}`)
   };
@@ -76,6 +81,14 @@ const ResultCard = ({productItem }) => {
     navigator.clipboard.writeText(productItem.shop_link);
     toast.success('Copied to clipboard')    
   };
+  const handleMediaLoad = () => {
+    setIsLoading(false);
+    setFInalHeight(400);
+  };
+  const handleMediaError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
 
   return (
     <Card 
@@ -87,9 +100,18 @@ const ResultCard = ({productItem }) => {
           component="img"
           image={productItem.img_url}
           alt={productItem.name}
-          sx={{ height: 400 , objectFit: 'cover' , cursor: 'pointer' }}
+          sx={{ height: finalHeight , objectFit: 'cover' , cursor: 'pointer' }}
           onClick={() => {handleShowSingleCard()}}
-        />
+          onLoad={handleMediaLoad}
+          onError={handleMediaError}  
+        /> 
+        {isLoading && <Skeleton variant="rectangular" width={'100%'} height={400} />}
+        {hasError && 
+          <div className='h-[400px] flex flex-col items-center justify-center'>
+            <CloudOffIcon fontSize='large'/>
+            <span>Error loading media</span>
+          </div>
+        }
         {productItem.old_price_float !== productItem.price_float && 
           <div className='flex-none absolute shadow-xl border border-dokuso-white top-2 right-2 w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
             <span className='text-xs md:text-sm lg:text-base font-semibold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>

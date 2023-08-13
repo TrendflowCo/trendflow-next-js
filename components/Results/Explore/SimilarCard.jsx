@@ -16,8 +16,9 @@ const SimilarCard = ({productItem}) => {
     const thirdEdition = secondEdition.split('%20').join('-');
     router.push(`/${router.query.lan}/results/explore/${thirdEdition}%20${productItem.id}`);
   }
+
   return (
-    <section className='pt-2 pb-12'>
+    <section className='mt-4 mb-10'>
       <Card 
         sx={{ height: '100%' , width: {xs: 160 , sm: 170 , md: 200 , lg: 280 , xl: 350}  , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1 }}
         className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
