@@ -42,14 +42,19 @@ const Results = () => {
     // Sorting
     const [sortingModal , setSortingModal] = useState(false); // modal controller
     // device size
-    const [dimensions, setDimensions] = React.useState({
-        width: window.innerWidth,
+    const [dimensions, setDimensions] = useState({
+        width: 0,
     });
     const handleResize = () => {
-        setDimensions({
-            width: window.innerWidth,
-        });
+        setDimensions({width: window.innerWidth});
     }
+    useEffect(() => {
+        setDimensions({width: window.innerWidth});
+        window.addEventListener("resize", handleResize, false);
+    },[])
+
+
+
     useEffect(() => {
         const fetchData = async (id ,lan) => {
             try {
@@ -142,9 +147,6 @@ const Results = () => {
     // },[router.isReady]); // eslint-disable-line
     },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
     // window size manager
-    useEffect(() => {
-        window.addEventListener("resize", handleResize, false);
-    },[])
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
