@@ -40,7 +40,15 @@ const Results = () => {
     const [filterModal , setFilterModal] = useState(false); // modal controller
     // Sorting
     const [sortingModal , setSortingModal] = useState(false); // modal controller
-    //
+    // device size
+    const [dimensions, setDimensions] = React.useState({
+        width: window.innerWidth,
+    });
+    const handleResize = () => {
+        setDimensions({
+            width: window.innerWidth,
+        });
+    }
     useEffect(() => {
         const fetchData = async (id ,lan) => {
             try {
@@ -132,7 +140,10 @@ const Results = () => {
         // re-renders if some query or page changes
     // },[router.isReady]); // eslint-disable-line
     },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
-    //
+    // window size manager
+    useEffect(() => {
+        window.addEventListener("resize", handleResize, false);
+    },[])
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
@@ -163,11 +174,13 @@ const Results = () => {
                 filterModal={filterModal}
                 availableBrands={availableBrands}
                 currentPriceRange={currentPriceRange}
+                deviceWidth={dimensions.width}
             />
             {/* Sorting component */}
             <Sort 
                 sortingModal={sortingModal}
                 setSortingModal={setSortingModal}
+                deviceWidth={dimensions.width}
             />
             { loadingFlag ? 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>

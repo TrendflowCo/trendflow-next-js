@@ -12,7 +12,7 @@ import { analytics } from "../../services/firebase";
 const Sort = ( props ) => {
     const router = useRouter();
     const { translations } = useAppSelector(state =>state.language);
-    const { sortingModal , setSortingModal } = props;
+    const { sortingModal , setSortingModal , deviceWidth } = props;
     const optionsList = [{
         text: translations?.results?.price,
         value: 'price'
@@ -48,7 +48,10 @@ const Sort = ( props ) => {
             action: 'Delete_sorting'
         });        
         setSelectedSort('');
-        setAscending(true)
+        setAscending(true);
+        if (deviceWidth < 1024) {
+            setSortingModal(false);
+        }       
     }
     const handleChangeAscending = () => {
         setAscending(!ascending);
@@ -66,7 +69,10 @@ const Sort = ( props ) => {
             }
             newQuery = {...newQuery, sortBy: selectedSort}
             newQuery = {...newQuery, page: 1}
-            router.push({ href: "./", query: newQuery })    
+            router.push({ href: "./", query: newQuery }) 
+            if (deviceWidth < 1024) {
+                setSortingModal(false);
+            };       
         }
     };
 
