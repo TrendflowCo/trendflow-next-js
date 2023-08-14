@@ -17,6 +17,7 @@ import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
 import { languageAdapter } from "../functions/languageAdapter";
 import { logEvent } from "firebase/analytics";
+import Head from "next/head";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -201,6 +202,11 @@ const Results = () => {
                         </section>
                     : 
                     <>
+                        <Head>
+                            {lastSearch && <title>{`Dokusō - ${enhanceText(lastSearch)}`}</title>}
+                            {lastSearch && <meta name="description" content={enhanceText(lastSearch)}/>}
+                            {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
+                        </Head>
                         <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
                                 <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
