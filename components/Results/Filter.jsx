@@ -20,7 +20,7 @@ const Filter = (props) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { translations } = useAppSelector(state => state.language);
-    const { setFilterModal , filterModal , availableBrands , currentPriceRange } = props;
+    const { setFilterModal , filterModal , availableBrands , currentPriceRange , deviceWidth } = props;
     const sectionOptions = ['men','women','kids','home','gift']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
     const [sectionFilter , setSectionFilter] = useState('');
@@ -95,23 +95,12 @@ const Filter = (props) => {
             action: 'Apply_filter'
         });
         router.push({ href: "./", query: newQuery })
+        if (deviceWidth < 1024) {
+            setFilterModal(false);
+        }
     };
     
     const ref = useRef(null);
-    // auto close by click outside. Revisit function
-    // useEffect(() => {
-    //     if (filterModal){
-    //         const checkIfClickedOutside = (e) => {
-    //             if (filterModal && ref.current && !ref.current.contains(e.target)) {
-    //                 setFilterModal(false)
-    //             }
-    //         }
-    //         document.addEventListener("mousedown", checkIfClickedOutside)
-    //         return () => {
-    //             document.removeEventListener("mousedown", checkIfClickedOutside)
-    //         }
-    //     }
-    // },[filterModal]);
     const deleteFilter = () => {
         const { pathname, query } = router;
         const params = new URLSearchParams(query);
@@ -132,7 +121,10 @@ const Filter = (props) => {
         setPriceRange(currentPriceRange);
         logEvent(analytics, 'FilterAndSorting', {
             action: 'Delete_filter'
-        });        
+        }); 
+        if (deviceWidth < 1024) {
+            setFilterModal(false);
+        }       
     }
 
     return(
