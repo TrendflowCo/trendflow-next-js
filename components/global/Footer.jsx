@@ -45,7 +45,7 @@ const Footer = () => {
 
     return (
         <section className='flex flex-col items-center bg-dokuso-black bg-opacity-20 w-full'>
-            <div className='flex flex-row justify-center sm:justify-start w-full max-w-xl pt-4'>
+            <div className='flex flex-row justify-center w-full max-w-xl pt-4'>
                 <ThemeProvider theme={theme}>
                     {socialMedia.map((itemMedia , indexMedia) => {return (
                         <Tooltip key={indexMedia} title={itemMedia.name.charAt(0).toUpperCase() + itemMedia.name.slice(1)}>

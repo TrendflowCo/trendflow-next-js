@@ -20,22 +20,20 @@ import { swalNoInputs } from "../../Utils/swalConfig";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
-import SimilarCard from "./SimilarCard";
 import { setLanguage } from "../../../redux/features/actions/language";
 import CarouselComp from "./CarouselComp";
+import Head from "next/head";
 
 const Explore = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
-    const { focusedCard } = useAppSelector(state => state.search);
     const { translations } = useAppSelector(state => state.language);
     const { wishlist } = useAppSelector(state => state.search);
     const [loadingFav , setLoadingFav] = useState(false);
     const [currentProduct , setCurrentProduct] = useState({});
     const [similarProducts , setSimilarProducts] = useState([]);
     const [loading , setLoading] = useState(true);
-    const [ready , setReady] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,7 +62,6 @@ const Explore = () => {
             fetchData();
         }
     },[router.query.id , router.query.lan]) //eslint-disable-line
-
 
     const handleAddWishlist = async (event) => {
         event.stopPropagation();
@@ -117,6 +114,12 @@ const Explore = () => {
                 <>
                     {!loading && currentProduct.id ? 
                         <>
+                            <Head>
+                                {currentProduct?.name && <title>{`Dokusō - ${enhanceText(currentProduct.name)}`}</title>}
+                                {currentProduct?.name && <meta name="description" content={enhanceText(currentProduct.name)}/>}
+                                {currentProduct?.brand && <meta name="brand" content={enhanceText(currentProduct.brand)}/>}
+                                {currentProduct?.section && <meta name="section" content={enhanceText(currentProduct.section)}/>}
+                            </Head>
                             <div className='flex flex-row items-between justify-between lg:justify-between mx-5'>
                                 <Image
                                     src={logos[currentProduct?.brand?.toLowerCase()]} 
