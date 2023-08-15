@@ -36,7 +36,8 @@ const ResultCard = ({productItem }) => {
   const [finalHeight , setFInalHeight] = useState(0);
 
   const handleShowSingleCard = () => {
-    router.push(`/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id}`)
+    const withoutSlash = productItem.name.split('/').join('%2F');
+    router.push(`/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id}`)
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();
