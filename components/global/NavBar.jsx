@@ -16,6 +16,7 @@ import { setLogInFlag } from '../../redux/features/actions/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { setCurrentSearch } from '../../redux/features/actions/search';
+import Swal from 'sweetalert2';
 import { pages } from '../Utils/pages';
 import { setLanguage } from '../../redux/features/actions/language';
 import { settings_account } from '../Utils/settingsAccount';
@@ -310,7 +311,7 @@ const Navbar = ({ logOut , user , loading }) => {
             // Language selector
             <Tooltip title="Select language" className='cursor-pointer'>
               <Button color="inherit" onClick={handleLanguageMenuOpen} sx={{width: 48 , height: 48, borderRadius: 24, ml: 0.5}}>
-              {`${language}`}
+              {`${(languages.find(lan => lan.name.toLowerCase() === language.toLowerCase()) || {}).flag}`}
               </Button>
             </Tooltip>
           }
