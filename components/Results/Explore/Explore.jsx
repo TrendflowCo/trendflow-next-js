@@ -118,7 +118,7 @@ const Explore = () => {
                                 {currentProduct?.name && <title>{`Dokusō - ${enhanceText(currentProduct.name)}`}</title>}
                                 {currentProduct?.name && <meta name="description" content={enhanceText(currentProduct.name)}/>}
                                 {currentProduct?.brand && <meta name="brand" content={enhanceText(currentProduct.brand)}/>}
-                                {currentProduct?.section && <meta name="section" content={enhanceText(currentProduct.section)}/>}
+                                {currentProduct?.category && <meta name="section" content={enhanceText(currentProduct.section)}/>}
                             </Head>
                             <div className='flex flex-row items-between justify-between lg:justify-between mx-5'>
                                 <Image
@@ -140,20 +140,20 @@ const Explore = () => {
                             </div>
                             <section className='flex flex-row items-center justify-between p-4 w-full'>
                                 <div className="flex flex-col w-full">
-                                    <div className={`flex flex-col ${currentProduct.old_price_float !== currentProduct.price_float ? 'w-[70%]' : 'w-full'}`}>
+                                    <div className={`flex flex-col ${currentProduct.old_price !== currentProduct.price ? 'w-[70%]' : 'w-full'}`}>
                                         <span className='pr-2'>{`${enhanceText(currentProduct.name)}`}</span>
                                         {
-                                        currentProduct.old_price_float !== currentProduct.price_float ? 
+                                        currentProduct.old_price !== currentProduct.price ? 
                                         <div className='flex flex-row w-full'>
-                                            <span className='font-semibold text-dokuso-pink mr-1'>{`$${currentProduct.price_float}`}</span> 
-                                            <span className='font-semibold line-through'>{`$${currentProduct.old_price_float}`}</span> 
+                                            <span className='font-semibold text-dokuso-pink mr-1'>{`$${currentProduct.price}`}</span> 
+                                            <span className='font-semibold line-through'>{`$${currentProduct.old_price}`}</span> 
                                         </div>
                                         : 
-                                        <span className='font-semibold'>{currentProduct.price_float !== 0 ? `$${currentProduct.price_float}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
+                                        <span className='font-semibold'>{currentProduct.price !== 0 ? `$${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
                                         }
                                     </div>
                                     {/* On sale checking */}
-                                    {currentProduct.old_price_float !== currentProduct.price_float && 
+                                    {currentProduct.old_price !== currentProduct.price && 
                                         <div className='flex-none w-fit h-fit py-2 px-4 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
                                         <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
                                         </div>

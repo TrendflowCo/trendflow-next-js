@@ -72,10 +72,10 @@ const Results = () => {
                     filtersAmount += 1
                     onSaleQuery = '&onSale=true';
                 }
-                let sectionQuery = '';
-                if(router.query.section) {
+                let categoryQuery = '';
+                if(router.query.category) {
                     filtersAmount += 1
-                    sectionQuery = `&section=${router.query.section}`;
+                    categoryQuery = `&category=${router.query.category}`;
                 }
                 let brandsQuery ='';
                 if(router.query.brands) {
@@ -109,9 +109,12 @@ const Results = () => {
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
                 const limitQuery = `&limit=${searchLimit}`
                 const pageQuery = `&page=${selectedPage !== undefined ? selectedPage : '1'}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${sectionQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
-                const rsp = (await axios.get(requestURI)).data; // get data
-                if(!router.query.brands && !router.query.section && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
+                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${categoryQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
+                const rsp = (await axios.get(requestURI)).data; // get datac
+                console.log(endpoints('results'))
+                console.log(requestURI)
+                console.log(rsp)
+                if(!router.query.brands && !router.query.category && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
                     setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                     setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
                 }
@@ -145,7 +148,7 @@ const Results = () => {
         }
         // re-renders if some query or page changes
     // },[router.isReady]); // eslint-disable-line
-    },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.section , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
+    },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
     // window size manager
     useEffect(() => { // wishlist search
         const fetchData = async () => {

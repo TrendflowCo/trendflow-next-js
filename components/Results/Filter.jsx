@@ -21,9 +21,9 @@ const Filter = (props) => {
     const dispatch = useAppDispatch();
     const { translations } = useAppSelector(state => state.language);
     const { setFilterModal , filterModal , availableBrands , currentPriceRange , deviceWidth } = props;
-    const sectionOptions = ['men','women','kids','home','gift']
+    const categoryOptions = ['men','women','kids','home','gift']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
-    const [sectionFilter , setSectionFilter] = useState('');
+    const [categoryFilter , setCategoryFilter] = useState('');
     const [selectedBrands, setSelectedBrands] = useState([]);
     const priceLimits = { // for query management
         min: currentPriceRange[0],
@@ -56,8 +56,8 @@ const Filter = (props) => {
     const handleSetOnSale = (event) => { // set on sale value
         setOnSaleChecked(event.target.checked);
     };
-    const handleChangeSection = (event) => { // set section value
-        setSectionFilter(event.target.value);
+    const handleChangeCategory = (event) => { // set category value
+        setCategoryFilter(event.target.value);
     };
     const handleChangeBrands = (event) => { // set brands for router
         const { target: { value } } = event;
@@ -69,8 +69,8 @@ const Filter = (props) => {
     }
     const handleApplyFilter = () => {
         let newQuery = {...router.query};
-        if (sectionFilter !== '') { // section filtering
-            newQuery = {...newQuery, section: sectionFilter}
+        if (categoryFilter !== '') { // category filtering
+            newQuery = {...newQuery, category: categoryFilter}
         }
         if (selectedBrands.length > 0) { // brands filtering
             if (selectedBrands.length > 1) {
@@ -105,7 +105,7 @@ const Filter = (props) => {
         const { pathname, query } = router;
         const params = new URLSearchParams(query);
         params.delete('onSale');
-        params.delete('section');
+        params.delete('category');
         params.delete('brands');
         params.delete('minPrice');
         params.delete('maxPrice');
@@ -116,7 +116,7 @@ const Filter = (props) => {
             { shallow: true }
         );
         setOnSaleChecked(false);
-        setSectionFilter('');
+        setCategoryFilter('');
         setSelectedBrands([]);
         setPriceRange(currentPriceRange);
         logEvent(analytics, 'FilterAndSorting', {
@@ -158,8 +158,8 @@ const Filter = (props) => {
                             <Select
                                 sx={{width: '100%'}}
                                 displayEmpty
-                                value={sectionFilter}
-                                onChange={handleChangeSection}
+                                value={categoryFilter}
+                                onChange={handleChangeCategory}
                                 renderValue={(selected) => {
                                     if (selected.length === 0) {
                                         return <span>{enhanceText(translations?.results?.select_section)}</span>;
@@ -167,7 +167,7 @@ const Filter = (props) => {
                                     return enhanceText(selected);
                                 }}
                             >
-                                {[...sectionOptions].sort((a,b) => a.localeCompare(b)).map(item => 
+                                {[...categoryOptions].sort((a,b) => a.localeCompare(b)).map(item => 
                                     <MenuItem key={item} value={item}>{enhanceText(item)}</MenuItem>
                                 )}
                             </Select>
