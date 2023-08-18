@@ -19,7 +19,7 @@ const Sort = ( props ) => {
     },
     {
         text: translations?.results?.section,
-        value: 'section'
+        value: 'category'
 
     },
     {

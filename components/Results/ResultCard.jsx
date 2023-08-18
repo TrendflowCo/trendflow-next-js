@@ -113,7 +113,7 @@ const ResultCard = ({productItem }) => {
             <span>Error loading media</span>
           </div>
         }
-        {productItem.old_price_float !== productItem.price_float && 
+        {productItem.old_price !== productItem.price && 
           <div className='flex-none absolute shadow-xl border border-dokuso-white top-2 right-2 w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
             <span className='text-xs md:text-sm lg:text-base font-semibold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
           </div>
@@ -122,13 +122,13 @@ const ResultCard = ({productItem }) => {
           <div className={`flex flex-col w-2/3`}>
             <span className='text-sm md:text-base xl:text-lg pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
             {
-              productItem.old_price_float !== productItem.price_float ? 
+              productItem.old_price !== productItem.price ? 
               <div className='flex flex-row w-full'>
-                <span className='font-semibold text-dokuso-pink mr-1'>{`$${productItem.price_float}`}</span> 
-                <span className='font-semibold line-through'>{`$${productItem.old_price_float}`}</span> 
+                <span className='font-semibold text-dokuso-pink mr-1'>{`$${""+productItem.price}`}</span> 
+                <span className='font-semibold line-through'>{`$${""+productItem.old_price}`}</span> 
               </div>
             : 
-              <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
+              <span className='font-semibold'>{productItem.price !== 0 ? `$${productItem.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
             }
           </div>
           <div className='flex flex-row items-center justify-start w-1/3'>
