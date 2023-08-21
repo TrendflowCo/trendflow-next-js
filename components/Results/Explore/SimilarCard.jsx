@@ -31,7 +31,7 @@ const SimilarCard = ({productItem}) => {
               sx={{ height: {xs: 167 , sm: 209 , md: 245 , lg: 344 , xl: 430 } ,  borderRadius: 2 ,   objectFit: 'cover' , cursor: 'pointer'  }}
               onClick={() => {handleShowSingleCard()}}
             />
-          {productItem.old_price_float !== productItem.price_float && 
+          {productItem.old_price !== productItem.price && 
             <div className='flex flex-col items-center justify-center absolute shadow-xl border border-dokuso-white top-2 right-2 w-fit h-fit p-1 md:p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
               <span className='text-xs md:text-sm lg:text-base font-semibold text-dokuso-white leading-full'>{translations?.results?.on_sale.toUpperCase()}</span>
             </div>
@@ -42,13 +42,13 @@ const SimilarCard = ({productItem}) => {
             <div className={`flex flex-col w-2/3 text-xs md:text-sm xl:text-base`}>
               <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
               {
-                productItem.old_price_float !== productItem.price_float ? 
+                productItem.old_price !== productItem.price ? 
                 <div className='flex flex-row w-full'>
-                  <span className='font-semibold text-dokuso-pink mr-1'>{`$${productItem.price_float}`}</span> 
-                  <span className='font-semibold line-through'>{`$${productItem.old_price_float}`}</span> 
+                  <span className='font-semibold text-dokuso-pink mr-1'>{`$${""+productItem.price}`}</span> 
+                  <span className='font-semibold line-through'>{`$${""+productItem.old_price}`}</span> 
                 </div>
               : 
-                <span className='font-semibold'>{productItem.price_float !== 0 ? `$${productItem.price_float}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
+                <span className='font-semibold'>{productItem.price !== 0 ? `$${""+productItem.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
               }
             </div>
             <div className='flex flex-row items-center justify-start w-1/3'>

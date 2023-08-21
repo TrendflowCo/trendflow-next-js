@@ -128,7 +128,7 @@ const ResultCard = ({productItem }) => {
                 <span className='font-semibold line-through'>{`$${""+productItem.old_price}`}</span> 
               </div>
             : 
-              <span className='font-semibold'>{productItem.price !== 0 ? `$${productItem.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
+              <span className='font-semibold'>{productItem.price !== 0 ? `$${""+productItem.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
             }
           </div>
           <div className='flex flex-row items-center justify-start w-1/3'>
