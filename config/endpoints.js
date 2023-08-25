@@ -5,7 +5,8 @@ export const endpoints = (name) => {
         // -- old endpoints --
         results: `${CLIP_API}search?query=`,
         byIds:  `${CLIP_API}search?ids=`,
-        similarProducts: `${CLIP_API}most_similar_items?top_k=20&id=`
+        similarProducts: `${CLIP_API}most_similar_items?top_k=20&id=`,
+        dedicatedProduct: `${CLIP_API}product?id=`
     }
     return endpoints[name];
 }
