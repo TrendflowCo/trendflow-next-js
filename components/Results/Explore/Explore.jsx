@@ -47,6 +47,7 @@ const Explore = () => {
             try {
                 const currentIdProduct = (await axios.get(`${endpoints('byIds')}${currentId}`)).data;
                 setCurrentProduct(currentIdProduct.results[0])
+                console.log(currentIdProduct.results[0])
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
                 setSimilarProducts(similars.results);
@@ -140,20 +141,20 @@ const Explore = () => {
                             </div>
                             <section className='flex flex-row items-center justify-between p-4 w-full'>
                                 <div className="flex flex-col w-full">
-                                    <div className={`flex flex-col ${currentProduct.old_price !== currentProduct.price ? 'w-[70%]' : 'w-full'}`}>
+                                    <div className={`flex flex-col ${currentProduct.sale ? 'w-[70%]' : 'w-full'}`}>
                                         <span className='pr-2'>{`${enhanceText(currentProduct.name)}`}</span>
                                         {
-                                        currentProduct.old_price !== currentProduct.price ? 
+                                        currentProduct.sale ? 
                                         <div className='flex flex-row w-full'>
-                                            <span className='font-semibold text-dokuso-pink mr-1'>{`$${currentProduct.price}`}</span> 
-                                            <span className='font-semibold line-through'>{`$${currentProduct.old_price}`}</span> 
+                                            <span className='font-semibold text-dokuso-pink mr-1'>{`${currentProduct.currency} ${currentProduct.price}`}</span> 
+                                            <span className='line-through text-xs self-center'>{`${currentProduct.currency} ${currentProduct.old_price}`}</span> 
                                         </div>
                                         : 
-                                        <span className='font-semibold'>{currentProduct.price !== 0 ? `$${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
+                                        <span className='font-semibold'>{currentProduct.price !== 0 ? `${currentProduct.currency} ${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
                                         }
                                     </div>
                                     {/* On sale checking */}
-                                    {currentProduct.old_price !== currentProduct.price && 
+                                    {currentProduct.sale && 
                                         <div className='flex-none w-fit h-fit py-2 px-4 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
                                         <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
                                         </div>
