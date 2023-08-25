@@ -50,6 +50,7 @@ const Explore = () => {
                 console.log(currentIdProduct.results[0])
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
+                console.log('similars: ', similars)
                 setSimilarProducts(similars.results);
                 dispatch(setLanguage(currentLanguage)); // write redux variable - avoid refresh
                 localStorage.setItem('language',currentLanguage.toLowerCase());
@@ -121,85 +122,84 @@ const Explore = () => {
                                 {currentProduct?.brand && <meta name="brand" content={enhanceText(currentProduct.brand)}/>}
                                 {currentProduct?.category && <meta name="section" content={enhanceText(currentProduct.section)}/>}
                             </Head>
-                            <div className='flex flex-row items-between justify-between lg:justify-between mx-5'>
-                                <Image
-                                    src={logos[currentProduct?.brand?.toLowerCase()]} 
-                                    alt={currentProduct?.brand} 
-                                    sizes="100vw" 
-                                    height={0} 
-                                    width={0} 
-                                    style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'center' }}
-                                />
-                            </div>
-                            <div className="w-full flex flex-col items-center justify-start mt-4">
-                                <CardMedia
-                                    component="img"
-                                    image={currentProduct.img_url}
-                                    alt={currentProduct.name}
-                                    sx={{ maxHeight:'70vh', width:'90%', objectFit:'scale-down' }}
-                                />
-                            </div>
-                            <section className='flex flex-row items-center justify-between p-4 w-full'>
-                                <div className="flex flex-col w-full">
-                                    <div className={`flex flex-col ${currentProduct.sale ? 'w-[70%]' : 'w-full'}`}>
-                                        <span className='pr-2'>{`${enhanceText(currentProduct.name)}`}</span>
-                                        {
+                            <section className="flex lg:flex-row flex-col w-full items-center mt-4">
+                                <div className="lg:w-1/2 w-full flex flex-col items-center justify-start">
+                                    <CardMedia
+                                        component="img"
+                                        image={currentProduct.img_url}
+                                        alt={currentProduct.name}
+                                        sx={{ maxHeight:'70vh', width:'90%', objectFit:'scale-down' }}
+                                    />
+                                </div>
+                                <div className="lg:w-1/2 w-full px-5 mt-8 lg:mt-0 h-full flex flex-col items-start justify-start">
+                                    <span className='text-xl font-semibold mb-6'>{`${enhanceText(currentProduct.name)}`}</span>
+                                    <Image
+                                        src={logos[currentProduct?.brand?.toLowerCase()]} 
+                                        alt={currentProduct?.brand} 
+                                        sizes="100vw" 
+                                        height={0} 
+                                        width={0} 
+                                        style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'start', marginBottom: 24 }}
+                                    />
+                                    {
                                         currentProduct.sale ? 
-                                        <div className='flex flex-row w-full'>
-                                            <span className='font-semibold text-dokuso-pink mr-1'>{`${currentProduct.currency} ${currentProduct.price}`}</span> 
-                                            <span className='line-through text-xs self-center'>{`${currentProduct.currency} ${currentProduct.old_price}`}</span> 
+                                        <div className='flex flex-col mb-6'>
+                                            <div className="flex flex-row">
+                                                <span className='font-semibold text-dokuso-pink mr-1'>{`${currentProduct.currency} ${currentProduct.price}`}</span> 
+                                                <span className='line-through text-xs self-center mr-6'>{`${currentProduct.currency} ${currentProduct.old_price}`}</span> 
+                                            </div>
+                                            <span className="font-extrabold text-transparent text-xl bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-blue">{`${parseInt(currentProduct.discount_rate*100)}% OFF`}</span>
                                         </div>
                                         : 
                                         <span className='font-semibold'>{currentProduct.price !== 0 ? `${currentProduct.currency} ${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
-                                        }
-                                    </div>
-                                    {/* On sale checking */}
-                                    {currentProduct.sale && 
-                                        <div className='flex-none w-fit h-fit py-2 px-4 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
-                                        <span className='text-lg font-bold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
-                                        </div>
                                     }
-                                </div>
-                                <div className='flex flex-col h-fit flex-none'>
-                                    <Toaster richColors/>
-                                    <CardActions disableSpacing>
-                                    <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)} placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
-                                        <IconButton>
-                                        { loadingFav ?
-                                            <CircularProgress style={{'color': "#FA39BE"}} size={24} thickness={4}/> 
-                                        :
-                                            wishlist.includes(currentProduct.id) ? 
-                                            <FavoriteIcon style={{'color': "#FA39BE"}} /> : 
-                                            <FavoriteBorderOutlinedIcon/>
-                                        }
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip 
-                                        title={enhanceText(translations?.results?.copy_to_clipboard)} 
-                                        placement="bottom" 
-                                        arrow={true}  
-                                        onClick={handleCopyToClipboard}
-                                    >
-                                        <IconButton aria-label="share">
-                                        <ShareIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip
-                                        title={enhanceText(translations?.results?.visit_site)}  
-                                        placement="bottom" 
-                                        arrow={true}  
-                                        onClick={handleVisitSite}
-                                    >
-                                        <IconButton>
-                                        <StorefrontIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    </CardActions>
+                                    {currentProduct.desc_1 !== '' && 
+                                        <div className="mb-6">{currentProduct.desc_1}</div>
+                                    }
+                                    {currentProduct.desc_2 !== '' && 
+                                        <div className="mb-6">{currentProduct.desc_2}</div>
+                                    }
+                                    <div className='flex flex-col h-fit flex-none p-0'>
+                                        <Toaster richColors/>
+                                        <CardActions disableSpacing sx={{padding: 0}}>
+                                        <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)} placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
+                                            <IconButton>
+                                            { loadingFav ?
+                                                <CircularProgress style={{'color': "#FA39BE"}} size={24} thickness={4}/> 
+                                            :
+                                                wishlist.includes(currentProduct.id) ? 
+                                                <FavoriteIcon style={{'color': "#FA39BE"}} /> : 
+                                                <FavoriteBorderOutlinedIcon/>
+                                            }
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip 
+                                            title={enhanceText(translations?.results?.copy_to_clipboard)} 
+                                            placement="bottom" 
+                                            arrow={true}  
+                                            onClick={handleCopyToClipboard}
+                                        >
+                                            <IconButton aria-label="share">
+                                            <ShareIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip
+                                            title={enhanceText(translations?.results?.visit_site)}  
+                                            placement="bottom" 
+                                            arrow={true}  
+                                            onClick={handleVisitSite}
+                                        >
+                                            <IconButton>
+                                            <StorefrontIcon/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        </CardActions>
+                                    </div>
                                 </div>
                             </section>
                             {
                                 similarProducts?.length > 0 &&
-                                <section className="w-full px-4 mt-8">
+                                <section className="w-full px-4 mt-10">
                                     <h6 className='text-dokuso-black text-lg md:text-xl leading-10 font-semibold'>Related products</h6>
                                     <CarouselComp similarProducts={similarProducts}/>                                    
                                 </section>
