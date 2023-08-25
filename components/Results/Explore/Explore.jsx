@@ -23,12 +23,14 @@ import { useRouter } from "next/router";
 import { setLanguage } from "../../../redux/features/actions/language";
 import CarouselComp from "./CarouselComp";
 import Head from "next/head";
+import ExploreCarousel from "./ExploreCarousel";
+import arrow from "../../../public/Arrow1.svg";
 
 const Explore = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
-    const { translations } = useAppSelector(state => state.language);
+    const { translations , language } = useAppSelector(state => state.language);
     const { wishlist } = useAppSelector(state => state.search);
     const [loadingFav , setLoadingFav] = useState(false);
     const [currentProduct , setCurrentProduct] = useState({});
@@ -45,9 +47,9 @@ const Explore = () => {
             const currentLanguage = router.query.lan;
             // traer el de la query
             try {
-                const currentIdProduct = (await axios.get(`${endpoints('byIds')}${currentId}`)).data;
-                setCurrentProduct(currentIdProduct.results[0])
-                console.log(currentIdProduct.results[0])
+                const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${currentId}`)).data;
+                setCurrentProduct(currentIdProduct.result)
+                console.log('results from dedicated product: ', currentIdProduct.result)
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
                 console.log('similars: ', similars)
@@ -105,6 +107,9 @@ const Explore = () => {
         navigator.clipboard.writeText(currentProduct.shop_link);
         toast.success('Copied to clipboard')    
     };
+    const redirectToBrand = (brandName) => {
+        window.open(`/${language}/results/${brandName}?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
+    };
     
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
@@ -123,24 +128,33 @@ const Explore = () => {
                                 {currentProduct?.category && <meta name="section" content={enhanceText(currentProduct.section)}/>}
                             </Head>
                             <section className="flex lg:flex-row flex-col w-full items-center mt-4">
-                                <div className="lg:w-1/2 w-full flex flex-col items-center justify-start">
-                                    <CardMedia
-                                        component="img"
-                                        image={currentProduct.img_url}
-                                        alt={currentProduct.name}
-                                        sx={{ maxHeight:'70vh', width:'90%', objectFit:'scale-down' }}
-                                    />
+                                <div className="lg:w-1/2 lg:px-5 w-full flex flex-col items-center justify-start">
+                                    <ExploreCarousel images={currentProduct.img_url}/>
                                 </div>
-                                <div className="lg:w-1/2 w-full px-5 mt-8 lg:mt-0 h-full flex flex-col items-start justify-start">
+                                <section className="lg:w-1/2 w-full h-full px-5 mt-8 lg:mt-0 flex flex-col items-start justify-start">
                                     <span className='text-xl font-semibold mb-6'>{`${enhanceText(currentProduct.name)}`}</span>
-                                    <Image
-                                        src={logos[currentProduct?.brand?.toLowerCase()]} 
-                                        alt={currentProduct?.brand} 
-                                        sizes="100vw" 
-                                        height={0} 
-                                        width={0} 
-                                        style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'start', marginBottom: 24 }}
-                                    />
+                                    <div className="flex flex-row items-start justify-between w-full">
+                                        <Image
+                                            src={logos[currentProduct?.brand?.toLowerCase()]} 
+                                            alt={currentProduct?.brand} 
+                                            sizes="100vw" 
+                                            height={0} 
+                                            width={0} 
+                                            style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'start', marginBottom: 24 }}
+                                        />
+                                        <div className="flex flex-row items-center justify-start hover:underline text-sm" onClick={() => redirectToBrand(currentProduct.brand)}>
+                                            <span className="cursor-pointer mr-2">
+                                                {`Search for `} <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-orange">{`${currentProduct?.brand} `}</span> {`brand`}
+                                            </span>
+                                            <Image
+                                                src={arrow} 
+                                                alt={'arrow'} 
+                                                height={0} 
+                                                width={0} 
+                                                style={{height: '8px' , width: 'auto' , objectFit: 'contain', rotate: '180deg' }}
+                                            />
+                                        </div>
+                                    </div>
                                     {
                                         currentProduct.sale ? 
                                         <div className='flex flex-col mb-6'>
@@ -151,15 +165,20 @@ const Explore = () => {
                                             <span className="font-extrabold text-transparent text-xl bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-blue">{`${parseInt(currentProduct.discount_rate*100)}% OFF`}</span>
                                         </div>
                                         : 
-                                        <span className='font-semibold'>{currentProduct.price !== 0 ? `${currentProduct.currency} ${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
+                                        <span className='font-semibold mb-6'>{currentProduct.price !== 0 ? `${currentProduct.currency} ${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
                                     }
+                                    {(currentProduct.desc_1 !== '' || currentProduct.desc_2 !== '') && <span className="text-lg font-semibold mb-2">Description</span>}
                                     {currentProduct.desc_1 !== '' && 
-                                        <div className="mb-6">{currentProduct.desc_1}</div>
+                                        <div className="mb-6">{enhanceText(currentProduct.desc_1)}</div>
                                     }
                                     {currentProduct.desc_2 !== '' && 
-                                        <div className="mb-6">{currentProduct.desc_2}</div>
+                                        <div className="mb-6">{enhanceText(currentProduct.desc_2)}</div>
                                     }
-                                    <div className='flex flex-col h-fit flex-none p-0'>
+                                    {currentProduct.category !== '' && <span className="text-lg font-semibold mb-2">Product category</span>}
+                                    {currentProduct.category !== '' && 
+                                        <div className="mb-6">{enhanceText(currentProduct.category)}</div>
+                                    }
+                                    <div className='flex flex-col h-fit flex-none p-0 w-full'>
                                         <Toaster richColors/>
                                         <CardActions disableSpacing sx={{padding: 0}}>
                                         <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)} placement="bottom" arrow={true} onClick={(event) => {handleAddWishlist(event)}}>
@@ -195,7 +214,7 @@ const Explore = () => {
                                         </Tooltip>
                                         </CardActions>
                                     </div>
-                                </div>
+                                </section>
                             </section>
                             {
                                 similarProducts?.length > 0 &&
