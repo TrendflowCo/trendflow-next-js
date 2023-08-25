@@ -68,6 +68,7 @@ const Results = () => {
                 const selectedPage = router.query.page;
                 let filtersAmount = 0;
                 let onSaleQuery = '';
+                console.log('router:' , router)
                 if (router.query.onSale) {
                     filtersAmount += 1
                     onSaleQuery = '&onSale=true';
@@ -80,7 +81,7 @@ const Results = () => {
                 let brandsQuery ='';
                 if(router.query.brands) {
                     filtersAmount += 1
-                    brandsQuery = `&brands=${router.query.brands.split('-').join(' ')}`;
+                    brandsQuery = `&brands=${router.query.brands.split('-').join(' ').split('&').join('%26')}`;
                 }
                 let minPriceQuery = '';
                 if(router.query.minPrice) {
@@ -111,7 +112,7 @@ const Results = () => {
                 const pageQuery = `&page=${selectedPage !== undefined ? selectedPage : '1'}`
                 const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${categoryQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
                 const rsp = (await axios.get(requestURI)).data; // get datac
-                console.log(endpoints('results'))
+                console.log('reqiest to: ', endpoints('results'))
                 console.log(requestURI)
                 console.log(rsp)
                 if(!router.query.brands && !router.query.category && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
