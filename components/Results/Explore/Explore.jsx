@@ -110,7 +110,7 @@ const Explore = () => {
     };
     const handleAddTag = (tag) => {
         const prevSearch = currentSearch;
-        const newSearch = currentSearch === '' ? tag : `${prevSearch} ${tag}`;
+        const newSearch = currentSearch.includes(tag) ? currentSearch : (currentSearch === '' ? tag : `${currentSearch} ${tag}`);
         logEvent(analytics, 'clickAddTag', {
             tag: tag,
             prev_search: prevSearch,
