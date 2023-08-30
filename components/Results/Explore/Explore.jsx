@@ -1,8 +1,6 @@
-import { Box, CardActions, CardMedia, CircularProgress, IconButton, Tooltip } from "@mui/material";
+import { Box, CardActions, CircularProgress, IconButton, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
-import { setFocusedCard } from "../../../redux/features/actions/search";
 import { logos } from "../../Utils/logos";
 import Image from "next/image";
 import { enhanceText } from "../../Utils/enhanceText";
@@ -14,7 +12,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../../services/firebase";
 import { wishlistChange } from "./../functions/wishlistChange";
-import { setWishlist } from "../../../redux/features/actions/search";
+import { setWishlist , setCurrentSearch } from "../../../redux/features/actions/search";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from "../../Utils/swalConfig";
 import axios from "axios";
@@ -31,7 +29,7 @@ const Explore = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
     const { translations , language } = useAppSelector(state => state.language);
-    const { wishlist } = useAppSelector(state => state.search);
+    const { wishlist , currentSearch } = useAppSelector(state => state.search);
     const [loadingFav , setLoadingFav] = useState(false);
     const [currentProduct , setCurrentProduct] = useState({});
     const [similarProducts , setSimilarProducts] = useState([]);
@@ -110,6 +108,11 @@ const Explore = () => {
     const redirectToBrand = (brandName) => {
         window.open(`/${language}/results/${brandName}?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
     };
+    const handleAddTag = (tag) => {
+        const prevSearch = currentSearch;
+        const newSearch = currentSearch === '' ? tag : `${prevSearch} ${tag}`;
+        dispatch(setCurrentSearch(newSearch))
+    };
     
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
@@ -133,17 +136,19 @@ const Explore = () => {
                                 </div>
                                 <section className="lg:w-1/2 w-full h-full px-5 mt-8 lg:mt-0 flex flex-col items-start justify-start">
                                     <span className='text-xl font-semibold mb-6'>{`${enhanceText(currentProduct.name)}`}</span>
-                                    <div className="flex flex-row items-start justify-between w-full">
-                                        <Image
-                                            src={logos[currentProduct?.brand?.toLowerCase()]} 
-                                            alt={currentProduct?.brand} 
-                                            sizes="100vw" 
-                                            height={0} 
-                                            width={0} 
-                                            style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'start', marginBottom: 24 }}
-                                        />
+                                    <div className="flex flex-row items-center justify-between w-full mb-6">
+                                        <div className="max-w-[66%] w-fit h-full flex flex-col justify-center">
+                                            <Image
+                                                src={logos[currentProduct?.brand?.toLowerCase()]} 
+                                                alt={currentProduct?.brand} 
+                                                sizes="100vw" 
+                                                height={0} 
+                                                width={0} 
+                                                style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'start'}}
+                                            />
+                                        </div>
                                         <div className="flex flex-row items-center justify-start hover:underline text-sm" onClick={() => redirectToBrand(currentProduct.brand)}>
-                                            <span className="cursor-pointer mr-2">
+                                            <span className="cursor-pointer mr-2 ml-3 text-end">
                                                 {`Search for `} <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-orange">{`${currentProduct?.brand} `}</span> {`brand`}
                                             </span>
                                             <Image
@@ -177,6 +182,23 @@ const Explore = () => {
                                     {currentProduct.category !== '' && <span className="text-lg font-semibold mb-2">Product category</span>}
                                     {currentProduct.category !== '' && 
                                         <div className="mb-6">{enhanceText(currentProduct.category)}</div>
+                                    }
+                                    {currentProduct?.tags?.length > 0 && 
+                                        <section className="h-fit w-full flex flex-row flex-wrap mb-5">
+                                            <span className="text-lg font-semibold mb-2">Related tags</span>
+                                            <div className="h-fit w-full flex flex-row flex-wrap">
+                                                {currentProduct.tags.map((itemTag, indexTag) =>
+                                                    <Tooltip key={indexTag} title={`Add ${itemTag} to searchbar`} placement="top" arrow={true}> 
+                                                        <div 
+                                                            className="bg-dokuso-black text-dokuso-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange "
+                                                            onClick={()=>{handleAddTag(itemTag)}}>
+                                                            {enhanceText(itemTag)}
+                                                        </div>
+                                                    </Tooltip>
+                                                    )
+                                                }
+                                            </div>
+                                        </section>
                                     }
                                     <div className='flex flex-col h-fit flex-none p-0 w-full'>
                                         <Toaster richColors/>
