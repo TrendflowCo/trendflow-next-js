@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import { logos } from '../../Utils/logos';
 import { CardMedia } from '@mui/material';
 import { useAppSelector } from '../../../redux/hooks';
+import { analytics} from "../../../services/firebase";
+import { logEvent } from "firebase/analytics";
 
 const SimilarCard = ({productItem}) => {
   const router = useRouter();
