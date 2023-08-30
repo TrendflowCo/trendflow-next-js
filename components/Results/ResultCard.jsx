@@ -36,6 +36,9 @@ const ResultCard = ({productItem }) => {
   const [finalHeight , setFInalHeight] = useState(0);
   const handleShowSingleCard = () => {
     const withoutSlash = productItem.name.split('/').join('%2F');
+    logEvent(analytics, 'clickSingleCard', {
+      img_id: productItem.id
+    });
     router.push(`/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id}`)
   };
   const handleAddWishlist = async (event) => {

@@ -111,6 +111,11 @@ const Explore = () => {
     const handleAddTag = (tag) => {
         const prevSearch = currentSearch;
         const newSearch = currentSearch === '' ? tag : `${prevSearch} ${tag}`;
+        logEvent(analytics, 'clickAddTag', {
+            tag: tag,
+            prev_search: prevSearch,
+            new_search: newSearch
+          });
         dispatch(setCurrentSearch(newSearch))
     };
     
