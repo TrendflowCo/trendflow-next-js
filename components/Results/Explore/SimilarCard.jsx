@@ -14,6 +14,9 @@ const SimilarCard = ({productItem}) => {
     const firstEdition = productItem.name.toLowerCase().split(' ').join('-');
     const secondEdition = firstEdition.split('/').join('_');
     const thirdEdition = secondEdition.split('%20').join('-');
+    logEvent(analytics, 'clickSingleCard', {
+      img_id: productItem.id
+    });
     router.push(`/${router.query.lan}/results/explore/${thirdEdition}%20${productItem.id}`);
   }
 
