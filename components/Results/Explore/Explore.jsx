@@ -19,6 +19,7 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
 import { setLanguage } from "../../../redux/features/actions/language";
+import { languageAdapter } from "../functions/languageAdapter";
 import CarouselComp from "./CarouselComp";
 import Head from "next/head";
 import ExploreCarousel from "./ExploreCarousel";
@@ -43,9 +44,10 @@ const Explore = () => {
             const currentId = currentArray[1];
             // const currentId = router.query.id;
             const currentLanguage = router.query.lan;
+            const languageQuery = `&language=${languageAdapter(currentLanguage)}`;
             // traer el de la query
             try {
-                const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${currentId}`)).data;
+                const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${currentId}${languageQuery}`)).data;
                 setCurrentProduct(currentIdProduct.result)
                 console.log('results from dedicated product: ', currentIdProduct.result)
                 // traer los similares
