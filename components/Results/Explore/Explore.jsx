@@ -108,7 +108,7 @@ const Explore = () => {
         toast.success('Copied to clipboard')    
     };
     const redirectToBrand = (brandName) => {
-        window.open(`/${language}/results/${currentSearch}?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
+        window.open(`/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
     };
     const handleAddTag = (tag) => {
         const prevSearch = currentSearch;

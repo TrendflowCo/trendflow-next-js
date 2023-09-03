@@ -34,7 +34,7 @@ const Searcher = () => {
     const handleButtonSearch = () => { // click into SHOP NOW button
         event.preventDefault();
         if (currentSearch !== '') {
-            router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`) // url will be with joined spaces
+            router.push(`/${language}/results?query=${currentSearch.split(' ').join('-')}`) // url will be with joined spaces
         } else {
             Swal.fire({
                 ...swalNoInputs
@@ -49,9 +49,62 @@ const Searcher = () => {
             handleButtonSearch();
         }
     };
+    const handleQuickSearch = (val) => {
+        logEvent(analytics, 'clickOnPopularSearches', {
+            search_term: val
+        });      
+        dispatch(setCurrentSearch(val))
+        router.push(`${language}/results?query=${val.split(' ').join('-').toLowerCase()}`)
+    };
+    const handleSearchRandom = () => {
+        const values = Object.values(translations?.prompts);
+        const currentLength = values.length - 1;
+        const random = Math.random();
+        const finalValue = parseInt(random*(currentLength));
+        handleQuickSearch(values[finalValue])
+    };
+
     return (
+        // <div className="flex flex-col flex-auto items-center w-full mt-4">
+        //     <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl py-4">
+        //         <section className="flex-auto w-full lg:w-fit px-4 md:px-0">
+        //             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+        //             <input 
+        //                 className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-4 pr-10 pl-5 relative flex-auto w-full items-center text-dokuso-black"
+        //                 type="text"
+        //                 placeholder={translations?.search?.placeholder}
+        //                 style={{'fontFamily':"Arial, FontAwesome"}}
+        //                 onChange={(e) => {handleSearchPhrase(e)}}
+        //                 onKeyDown={handleEnterSearch}
+        //             />
+        //         </section>
+        //         <section className="px-2 lg:mt-0 mt-6">
+        //             <Stack direction={'column'} spacing={3} align={'center'} alignSelf={'center'} position={'relative'}>
+        //                 <Box>
+        //                     <Icon as={Arrow} w={71} position={'absolute'} right={-71} top={'20px'}/>
+        //                     <Text fontSize={'lg'} fontFamily={'Caveat'} position={'absolute'} right={'-125px'} top={'-24px'} transform={'rotate(10deg)'}>
+        //                         {translations?.try_me}
+        //                     </Text>
+        //                 </Box>
+        //             </Stack>
+        //             <ThemeProvider theme={muiColors}>
+        //                 <Button 
+        //                     className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" 
+        //                     variant="contained" 
+        //                     onClick={() => handleButtonSearch()} 
+        //                     onKeyDown={(e) => {handleEnterSearch(e)}}
+        //                     sx={{fontWeight: 'bold'}}
+        //                     color="dokusoBlack"
+        //                     style={{width:'92px'}}
+        //                 >
+        //                     {translations?.shop_now}
+        //                 </Button>
+        //             </ThemeProvider>
+        //         </section>
+        //     </div>
+        // </div>
         <div className="flex flex-col flex-auto items-center w-full mt-4">
-            <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl py-4">
+            <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-[50%] py-4">
                 <section className="flex-auto w-full lg:w-fit px-4 md:px-0">
                     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
                     <input 
@@ -66,10 +119,10 @@ const Searcher = () => {
                 <section className="px-2 lg:mt-0 mt-6">
                     <Stack direction={'column'} spacing={3} align={'center'} alignSelf={'center'} position={'relative'}>
                         <Box>
-                            <Icon as={Arrow} w={71} position={'absolute'} right={-71} top={'20px'}/>
-                            <Text fontSize={'lg'} fontFamily={'Caveat'} position={'absolute'} right={'-125px'} top={'-24px'} transform={'rotate(10deg)'}>
+                            {/* <Icon as={Arrow} w={71} position={'absolute'} right={-71} top={'20px'}/> */}
+                            {/* <Text fontSize={'lg'} fontFamily={'Caveat'} position={'absolute'} right={'-125px'} top={'-24px'} transform={'rotate(10deg)'}>
                                 {translations?.try_me}
-                            </Text>
+                            </Text> */}
                         </Box>
                     </Stack>
                     <ThemeProvider theme={muiColors}>
@@ -78,16 +131,37 @@ const Searcher = () => {
                             variant="contained" 
                             onClick={() => handleButtonSearch()} 
                             onKeyDown={(e) => {handleEnterSearch(e)}}
-                            sx={{fontWeight: 'bold'}}
+                            sx={{fontWeight: 'bold', height: '56px'}}
                             color="dokusoBlack"
                             style={{width:'92px'}}
                         >
-                            {translations?.shop_now}
+                            Search
                         </Button>
                     </ThemeProvider>
                 </section>
+                <section className="w-full h-80 overflow-y-auto scrollbar mt-2">
+                    <div className="flex-wrap flex flex-col justify-start">
+                        <p className="px-6 py-3 text-dokuso-black font-semibold text-base leading-tight hover:bg-dokuso-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
+                        onClick={() => handleSearchRandom()}>
+                            {`Don't know what to search? Let the random start!`}
+                        </p>
+                        {translations?.prompts && Object.values(translations?.prompts).sort().map((prompt) => (
+                            <p 
+                                key={prompt}
+                                type="button"  
+                                onClick={() => {handleQuickSearch(prompt)}} 
+                                value={prompt} 
+                                className="px-6 py-3 text-dokuso-blue font-semibold text-base leading-tight hover:bg-dokuso-pink hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer"
+                            >
+                                {prompt}
+                            </p>
+                            ))
+                        }
+                    </div>
+                </section>
             </div>
         </div>
+    
     )
 };
 
