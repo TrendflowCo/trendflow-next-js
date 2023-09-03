@@ -19,7 +19,13 @@ const Filter = (props) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { translations } = useAppSelector(state => state.language);
-    const { setFilterModal , filterModal , availableBrands , currentPriceRange , deviceWidth } = props;
+    const { 
+        setFilterModal , 
+        filterModal , 
+        availableBrands , 
+        currentPriceRange , 
+        deviceWidth
+    } = props;
     const categoryOptions = ['men','women','kids','home','gift']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
     const [categoryFilter , setCategoryFilter] = useState('');
@@ -30,7 +36,8 @@ const Filter = (props) => {
     };
     const [priceRange , setPriceRange] = useState(currentPriceRange); // for edition
     useEffect(() => { // sets price range for filter if it changes
-        setPriceRange(currentPriceRange)
+        setPriceRange(currentPriceRange);
+        
     },[currentPriceRange])
     const priceMarks = [ // for range selector marks
         {
@@ -83,10 +90,10 @@ const Filter = (props) => {
         } else {
             delete newQuery.onSale;
         }
-        if (priceRange[0] >= priceLimits.min) {
+        if (priceRange[0] > priceLimits.min) {
             newQuery = {...newQuery, minPrice: priceRange[0]}
         }
-        if (priceRange[1] <= priceLimits.max) {
+        if (priceRange[1] < priceLimits.max) {
             newQuery = {...newQuery, maxPrice: priceRange[1]}
         }
         newQuery = {...newQuery, page: 1}
