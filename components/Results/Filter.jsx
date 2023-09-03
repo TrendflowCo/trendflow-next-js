@@ -8,7 +8,6 @@ import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import { enhanceText } from "../Utils/enhanceText";
 import { useAppDispatch , useAppSelector } from "../../redux/hooks";
-import { setTotalFilters } from "../../redux/features/actions/search";
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Slider from '@mui/material/Slider';
@@ -20,7 +19,13 @@ const Filter = (props) => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { translations } = useAppSelector(state => state.language);
-    const { setFilterModal , filterModal , availableBrands , currentPriceRange , deviceWidth } = props;
+    const { 
+        setFilterModal , 
+        filterModal , 
+        availableBrands , 
+        currentPriceRange , 
+        deviceWidth
+    } = props;
     const categoryOptions = ['men','women','kids','home','gift']
     const [onSaleChecked, setOnSaleChecked] = useState(false);
     const [categoryFilter , setCategoryFilter] = useState('');
@@ -31,7 +36,8 @@ const Filter = (props) => {
     };
     const [priceRange , setPriceRange] = useState(currentPriceRange); // for edition
     useEffect(() => { // sets price range for filter if it changes
-        setPriceRange(currentPriceRange)
+        setPriceRange(currentPriceRange);
+        
     },[currentPriceRange])
     const priceMarks = [ // for range selector marks
         {
@@ -84,10 +90,10 @@ const Filter = (props) => {
         } else {
             delete newQuery.onSale;
         }
-        if (priceRange[0] >= priceLimits.min) {
+        if (priceRange[0] > priceLimits.min) {
             newQuery = {...newQuery, minPrice: priceRange[0]}
         }
-        if (priceRange[1] <= priceLimits.max) {
+        if (priceRange[1] < priceLimits.max) {
             newQuery = {...newQuery, maxPrice: priceRange[1]}
         }
         newQuery = {...newQuery, page: 1}
@@ -187,13 +193,16 @@ const Filter = (props) => {
                                         return <span>{enhanceText(translations?.results?.select_brands)}</span>
                                     }
                                     
-                                    return selected.join(', ').split('-').join(' ')
+                                    return selected.join(', ')
+                                    // return selected.join(', ').split('-').join(' ')
                                 }}
                                 MenuProps={MenuProps}
                             >
                                 {[...availableBrands].sort((a,b) => a.localeCompare(b)).map((brand) => (
-                                <MenuItem key={brand} value={brand.split(' ').join('-')}>
-                                    <Checkbox checked={selectedBrands.indexOf(brand.split(' ').join('-')) > -1} />
+                                // <MenuItem key={brand} value={brand.split(' ').join('-')}>
+                                <MenuItem key={brand} value={brand}>
+                                    <Checkbox checked={selectedBrands.indexOf(brand) > -1} />
+                                    {/* <Checkbox checked={selectedBrands.indexOf(brand.split(' ').join('-')) > -1} /> */}
                                     <ListItemText primary={brand} />
                                 </MenuItem>
                             ))}                                

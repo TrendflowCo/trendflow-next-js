@@ -8,37 +8,43 @@ import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
-import { setCurrentSearch , setSearchPage, setTotalFilters, setWishlist } from "../../../redux/features/actions/search";
+import { setCurrentSearch , setTotalFilters, setWishlist } from "../../../redux/features/actions/search";
 import { setLanguage } from "../../../redux/features/actions/language";
 import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
 import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
-import { languageAdapter } from "../functions/languageAdapter";
+// import { languageAdapter } from "../functions/languageAdapter";
 import { logEvent } from "firebase/analytics";
 import Head from "next/head";
+import { handleAddTag } from "../../functions/handleAddTag";
+import { countFilters } from "../../functions/countFilters";
+// import InfiniteScroll from 'react-infinite-scroll-component';
  
 const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.language);
     const { user } = useAppSelector(state => state.auth);
+    const { currentSearch } = useAppSelector(state => state.search);
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
     const [failedSearch , setFailedSearch] = useState(false);
     //
-    const [searchLimit , setSearchLimit] = useState(20); // search limit value
+    const [lastSearch , setLastSearch] = useState('')
     const [currentPage , setCurrentPage] = useState(1); // current page value
     const [lastPage , setLastPage] = useState(0); // last page value
-    const [lastSearch , setLastSearch] = useState(''); // text display of search
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
+    const [searchTags , setSearchTags] = useState([]);
+    const [filteredBrand , setFilteredBrand] = useState('');
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
+    const [currentFilters, setCurrentFilters] = useState({});
     // Sorting
     const [sortingModal , setSortingModal] = useState(false); // modal controller
     // device size
@@ -52,105 +58,63 @@ const Results = () => {
         setDimensions({width: window.innerWidth});
         window.addEventListener("resize", handleResize, false);
     },[])
-
-
-
-    useEffect(() => {
-        const fetchData = async (id ,lan) => {
-            try {
-                setFailedSearch(false);
-                setLoadingFlag(true);
-                setTotalResults(0)
-                const querySearch = id.split('-').join(' ');
-                // const querySearch = router.query.id.split('-').join(' ');
-                // const queryLanguage = router.query.lan;
-                const queryLanguage = lan;
-                const selectedPage = router.query.page;
-                let filtersAmount = 0;
-                let onSaleQuery = '';
-                console.log('router:' , router)
-                if (router.query.onSale) {
-                    filtersAmount += 1
-                    onSaleQuery = '&onSale=true';
-                }
-                let categoryQuery = '';
-                if(router.query.category) {
-                    filtersAmount += 1
-                    categoryQuery = `&category=${router.query.category}`;
-                }
-                let brandsQuery ='';
-                if(router.query.brands) {
-                    filtersAmount += 1
-                    brandsQuery = `&brands=${router.query.brands.split('-').join(' ').split('&').join('%26')}`;
-                }
-                let minPriceQuery = '';
-                if(router.query.minPrice) {
-                    minPriceQuery = `&minPrice=${router.query.minPrice}`;
-                }
-                let maxPriceQuery = '';
-                if(router.query.maxPrice) {
-                    maxPriceQuery = `&maxPrice=${router.query.maxPrice}`;
-                }
-                let sortByQuery = '';
-                if(router.query.sortBy) {
-                    sortByQuery = `&sortBy=${router.query.sortBy}`;
-                }
-                let ascendingQuery = '';
-                if(router.query.ascending) {
-                    ascendingQuery = `&ascending=${router.query.ascending}`;
-                }
-                if (selectedPage === undefined) {
-                    setCurrentPage(1)
-                } else {
-                    setCurrentPage(parseInt(selectedPage))
-                }
-                dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
-                dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
-                localStorage.setItem('language',queryLanguage.toLowerCase());
-                const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
-                const limitQuery = `&limit=${searchLimit}`
-                const pageQuery = `&page=${selectedPage !== undefined ? selectedPage : '1'}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${categoryQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
-                const rsp = (await axios.get(requestURI)).data; // get datac
-                console.log('reqiest to: ', endpoints('results'))
-                console.log(requestURI)
-                console.log(rsp)
-                if(!router.query.brands && !router.query.category && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
-                    setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
-                    setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
-                }
-                if(router.query.minPrice && currentPriceRange[0] < router.query.minPrice) {
-                    filtersAmount += 1
-                }
-                if(router.query.maxPrice && currentPriceRange[1] > router.query.maxPrice) {
-                    filtersAmount += 1
-                }
-                setProducts(rsp.results);
-                logEvent(analytics, 'page_view', {
-                    page_title: 'results',
-                });         
-                dispatch(setTotalFilters(filtersAmount));
-                setLastPage(rsp.total_pages);
-                setTotalResults(rsp.total_results);
-                setLastSearch(querySearch);    
-                setLoadingFlag(false);
-            } catch (err) {
-                console.error(err);
-                setLoadingFlag(false);
-                setFailedSearch(true);
+    const fetchDataToAPI = async(filters,sortings) => {
+        try {
+            setFailedSearch(false);
+            setLoadingFlag(true);
+            setTotalResults(0);
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`
+            const rsp = (await axios.get(requestURI)).data; // get data
+            setLastSearch(router.query.query ? router.query.query : '');
+            dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
+            setFilteredBrand(router.query.brands ? router.query.brands : '')
+            setProducts(rsp?.results);
+            setSearchTags(rsp?.metadata?.tags)
+            setTotalResults(rsp?.total_results);
+            setCurrentPage(router.query.page ? parseInt(router.query.page) : 1)
+            setLastPage(rsp?.total_pages);
+            setAvailableBrands(rsp?.metadata?.brands || []); // sets available brands if its a base request
+            if (filters.maxPrice === '' && filters.minPrice === '') {
+                setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]); // sets available prices if its a base request
             }
-        };
-        // if (router.query.id !== undefined && router.query.lan !== undefined) {
+            logEvent(analytics, 'page_view', {
+                page_title: 'results',
+            });         
+            setLoadingFlag(false);    
+        } catch(err) {
+            console.error(err);
+            setLoadingFlag(false);
+            setFailedSearch(true);
+        }
+    };
+    useEffect(() => {
         if (router.isReady) {
-            const { id , lan } = router.query;
-            if(id && lan) {
-                fetchData(id , lan);
+            const { lan } = router.query;
+            if(lan) {
+                dispatch(setLanguage(lan)); // write redux variable - avoid refresh
+                localStorage.setItem('language',lan.toLowerCase());
+                const filters = {
+                    language: `language=${lan}`,
+                    page: router.query.page ? `&page=${router.query.page}` : '&page=1',
+                    limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
+                    query: router.query.query ? `&query=${router.query.query}` : '',
+                    brands: router.query.brands ? `&brands=${router.query.brands}` : '', // list of brands
+                    category: router.query.category ? `&category=${router.query.category}` : '',
+                    minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
+                    maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
+                    onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '', // si no quiero lo tengo que sacar
+                }
+                setCurrentFilters(filters); // set the current filters
+                const sortings = {
+                    sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '', // price, category
+                    ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '', // default false
+                };
+                fetchDataToAPI(filters,sortings);
+                dispatch(setTotalFilters(countFilters(filters)));
             }
         }
-        // re-renders if some query or page changes
-    // },[router.isReady]); // eslint-disable-line
-    },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
-    // window size manager
+    },[user, router.isReady ,  router.query.lan , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
+    
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
@@ -198,7 +162,7 @@ const Results = () => {
                     {failedSearch ? 
                         <section className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
-                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{currentSearch ? enhanceText(currentSearch) : ''}</h6>
                                 <h6 className="text-sm mt-1">No results for this search</h6>
                             </div>
                             <SortAndFilter 
@@ -215,7 +179,8 @@ const Results = () => {
                         </Head>
                         <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
-                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
+                                { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
                                 <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
                             </div>
                             {/* Buttons for filtering and sorting modal enabling */}
@@ -224,9 +189,18 @@ const Results = () => {
                                 setSortingModal={setSortingModal}
                             />
                         </div>
+                        {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-2'>
+                            <div className="flex flex-row h-fit flex-wrap w-full">
+                            {searchTags.sort().map((tag,index) => <div 
+                                className="flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit bg-dokuso-black text-dokuso-white rounded-full cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue" 
+                                key={index}
+                                onClick={()=> {handleAddTag( dispatch , currentSearch , tag )}}
+                                >{enhanceText(tag)}</div>)}
+                            </div>
+                        </section>}
                         <section>
                             <Grid container spacing={2} sx={{padding: 2}}>
-                                {products.length > 0 && products.map((productItem,productIndex) => {return (
+                                {products?.length > 0 && products.map((productItem,productIndex) => {return (
                                     <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
                                         <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
                                     </Grid>

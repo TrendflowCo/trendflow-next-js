@@ -20,7 +20,7 @@ const Home = () => {
         <div className='px-4 sm:px-0'>
           <TitleAndImage/>
           <Searcher/>
-          <PopularSearches/>
+          {/* <PopularSearches/> */}
           <FashionForward/>
           <FeatureImages/>
           <SecondaryLogin/>

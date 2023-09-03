@@ -25,6 +25,8 @@ import { enhanceText } from "../Utils/enhanceText";
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../services/firebase';
 import { CircularProgress } from '@mui/material';
+import { handleSearchQuery } from '../functions/handleSearchQuery';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
@@ -75,16 +77,7 @@ const Navbar = ({ logOut , user , loading }) => {
   const handleEnterSearch = (e) => { // click ENTER into form -> redirects to SHOP NOW
     if (e.key === 'Enter') {
       event.preventDefault();
-      if (currentSearch !== '') {
-        logEvent(analytics, 'search', {
-          search_term: currentSearch
-        });        
-          router.push(`/${language}/results/${currentSearch.split(' ').join('-')}`)
-      } else {
-          Swal.fire({
-              ...swalNoInputs
-        })
-      }
+      handleSearchQuery(language , currentSearch , 'search' , router)
     }
   };
   const handleLanguageMenuOpen = (event) => {
@@ -204,17 +197,27 @@ const Navbar = ({ logOut , user , loading }) => {
         <Box sx={{ flexGrow: 1 , width:'fit', maxWidth:'500px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' , justifyContent:'end' }}>
           { router.pathname.includes('results') &&
             // Searching section
-            <div className="flex flex-row items-center justify-center flex-wrap items-center w-full max-w-xl h-full">
-              <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+            <div className="flex flex-row items-center outline-none justify-center items-center w-full h-full relative mr-4">
+              {/* <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> */}
               <input 
-                  className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 mr-4 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
-                  type="text"
-                  placeholder={currentSearch.split('-').join(' ') || "Tell me what you like"}
-                  value={currentSearch.split('-').join(' ')}
-                  style={{'fontFamily':"Arial, FontAwesome"}}
-                  onChange={(e) => {handleSearchPhrase(e)}}
-                  onKeyDown={handleEnterSearch}
-                  />
+                className="bg-dokuso-black outline-none bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
+                type="text"
+                placeholder={currentSearch.split('-').join(' ') || "Tell me what you like"}
+                value={currentSearch.split('-').join(' ')}
+                onChange={(e) => {handleSearchPhrase(e)}}
+                onKeyDown={handleEnterSearch}
+              />
+              <Tooltip title="Search query">
+                <IconButton 
+                  onClick={() => {handleSearchQuery(language , currentSearch , 'search' , router)}} 
+                  sx={{ p: 0 , width: '40px' , height: '40px', position: 'absolute', right: '0px' }}
+                >
+                  <div className='h-[40px] w-[40px] rounded-r-[5px] bg-gradient-to-tl from-dokuso-pink to-dokuso-blue'>
+                    <SearchIcon fontSize='medium' style={{'color': "#FAFAFA"}}/>
+                  </div>
+                </IconButton>
+              </Tooltip>
+
             </div>
           }
           {/* Menu for a logged user */}
@@ -254,36 +257,6 @@ const Navbar = ({ logOut , user , loading }) => {
             </Button>
           
           }
-
-          {/* { user ?
-            //  Avatar icon for user
-            <Tooltip title="Open settings">
-              <IconButton 
-                onClick={handleOpenUserMenu} 
-                sx={{ p: 0 , width: {sm: 48 , xs: 40} , height: '100%' }}
-              >
-                <div className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'>
-                  <Image
-                    referrerPolicy='no-referrer'
-                    alt="avatar"
-                    src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
-                    width={48} 
-                    height={48} 
-                    className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'
-                  />
-                </div>
-              </IconButton>
-            </Tooltip>
-          :
-            <Button 
-              onClick={() => dispatch(setLogInFlag(true))}
-              className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
-              color="dokusoBlack"
-              sx={{fontWeight: 'bold' , flex: 'none'}}
-              >
-              Log in
-            </Button>
-          } */}
           {/* Menu toggle for the logged user */}
           <Menu
             sx={{ mt: '45px' }}
@@ -312,7 +285,7 @@ const Navbar = ({ logOut , user , loading }) => {
             // Language selector
             <Tooltip title="Select language" className='cursor-pointer'>
               <Button color="inherit" onClick={handleLanguageMenuOpen} sx={{width: 48 , height: 48, borderRadius: 24, ml: 0.5}}>
-              {`${(languages.find(lan => lan.name.toLowerCase() === language.toLowerCase()) || {}).flag}`}
+              {`${(languages?.find(lan => lan?.name?.toLowerCase() === language?.toLowerCase()) || {}).flag}`}
               </Button>
             </Tooltip>
           }

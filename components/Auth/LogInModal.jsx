@@ -80,7 +80,7 @@ const LogInModal = () => {
         }
     };
     const handleSignUp = () => {
-        console.log("redirect to sign up modal")
+        // console.log("redirect to sign up modal")
     };
 
     return (
