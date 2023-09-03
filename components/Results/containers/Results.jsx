@@ -41,6 +41,7 @@ const Results = () => {
     const [availableBrands , setAvailableBrands] = useState([]);
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
     const [searchTags , setSearchTags] = useState([]);
+    const [filteredBrand , setFilteredBrand] = useState('');
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
     // Sorting
@@ -86,7 +87,9 @@ const Results = () => {
                 let brandsQuery ='';
                 if(router.query.brands) {
                     filtersAmount += 1
-                    brandsQuery = `&brands=${router.query.brands.split('-').join(' ').split('&').join('%26')}`;
+                    // brandsQuery = `&brands=${router.query.brands.split('-').join(' ').split('&').join('%26')}`;
+                    brandsQuery = `&brands=${router.query.brands}`;
+                    setFilteredBrand(router.query.brands)
                 }
                 let minPriceQuery = '';
                 if(router.query.minPrice) {
@@ -120,8 +123,8 @@ const Results = () => {
                 // console.log('reqiest to: ', endpoints('results'))
                 // console.log(requestURI)
                 console.log('response: ', rsp)
-                setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                 if(!router.query.brands && !router.query.category && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
+                    setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                     setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
                 }
                 if(router.query.minPrice && currentPriceRange[0] < router.query.minPrice) {
@@ -221,7 +224,8 @@ const Results = () => {
                         </Head>
                         <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
-                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
+                                { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
                                 <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
                             </div>
                             {/* Buttons for filtering and sorting modal enabling */}
@@ -230,7 +234,7 @@ const Results = () => {
                                 setSortingModal={setSortingModal}
                             />
                         </div>
-                        {searchTags.length > 0 && <section className='mx-5 mt-6 mb-2'>
+                        {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-2'>
                             <div className="flex flex-row h-fit flex-wrap w-full">
                             {searchTags.sort().map((tag,index) => <div 
                                 className="flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit bg-dokuso-black text-dokuso-white rounded-full cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue" 
@@ -241,7 +245,7 @@ const Results = () => {
                         </section>}
                         <section>
                             <Grid container spacing={2} sx={{padding: 2}}>
-                                {products.length > 0 && products.map((productItem,productIndex) => {return (
+                                {products?.length > 0 && products.map((productItem,productIndex) => {return (
                                     <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
                                         <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
                                     </Grid>
