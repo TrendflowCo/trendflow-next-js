@@ -27,24 +27,43 @@ const FeatureImages = () => {
     const subTitles = [translations?.features?.feature1?.text,translations?.features?.feature2?.text,translations?.features?.feature3?.text];
 
     return (
-        <div className="flex flex-col items-center w-full pt-16">
-            <div className='flex lg:flex-row flex-wrap w-full items-center justify-center'>
-                {titles.map((itemTitle, indexTitle) => {return (
-                    <div key={indexTitle} className='w-[300px] flex flex-col flex-none items-center m-5'>
-                        <Image src={`/ilustration${indexTitle+1}.png`} className="mb-5" width={150} height={150} alt={`illustration${indexTitle+1}`}/>
-                        <ThemeProvider theme={muiColors}>
-                            <Typography gutterBottom 
-                                variant="h2" 
-                                component="h2" 
-                            >
-                                {itemTitle}
-                            </Typography>
-                        </ThemeProvider>
-                        <p className="text-center text-dokuso-black">{subTitles[indexTitle]}</p>
-                    </div>
-                )})}
-            </div>
+        // <div className="flex flex-col items-center w-full pt-16">
+        //     <div className='flex lg:flex-row flex-wrap w-full items-center justify-center'>
+        //         {titles.map((itemTitle, indexTitle) => {return (
+        //             <div key={indexTitle} className='w-[300px] flex flex-col flex-none items-center m-5'>
+        //                 <Image src={`/ilustration${indexTitle+1}.png`} className="mb-5" width={150} height={150} alt={`illustration${indexTitle+1}`}/>
+        //                 <ThemeProvider theme={muiColors}>
+        //                     <Typography gutterBottom 
+        //                         variant="h2" 
+        //                         component="h2" 
+        //                     >
+        //                         {itemTitle}
+        //                     </Typography>
+        //                 </ThemeProvider>
+        //                 <p className="text-center text-dokuso-black">{subTitles[indexTitle]}</p>
+        //             </div>
+        //         )})}
+        //     </div>
+        // </div>
+        <div className="flex flex-col items-center w-full pb-8">
+        <div className='flex lg:flex-row flex-wrap w-full items-center justify-center'>
+            {titles.map((itemTitle, indexTitle) => {return (
+                <div key={indexTitle} className='w-[300px] flex flex-col flex-none items-center m-5'>
+                    <Image src={`/ilustration${indexTitle+1}.png`} className="mb-5" width={150} height={150} alt={`illustration${indexTitle+1}`}/>
+                    <ThemeProvider theme={muiColors}>
+                        <Typography gutterBottom 
+                            variant="h2" 
+                            component="h2" 
+                        >
+                            {itemTitle}
+                        </Typography>
+                    </ThemeProvider>
+                    <p className="text-center text-dokuso-black">{subTitles[indexTitle]}</p>
+                </div>
+            )})}
         </div>
+    </div>
+
     )
 };
 
