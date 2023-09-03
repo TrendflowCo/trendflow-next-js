@@ -53,22 +53,23 @@ const Results = () => {
         window.addEventListener("resize", handleResize, false);
     },[])
 
-
-
     useEffect(() => {
-        const fetchData = async (id ,lan) => {
+        const fetchData = async (lan) => {
             try {
                 setFailedSearch(false);
                 setLoadingFlag(true);
                 setTotalResults(0)
-                const querySearch = id.split('-').join(' ');
-                // const querySearch = router.query.id.split('-').join(' ');
-                // const queryLanguage = router.query.lan;
                 const queryLanguage = lan;
                 const selectedPage = router.query.page;
                 let filtersAmount = 0;
                 let onSaleQuery = '';
-                console.log('router:' , router)
+                console.log('router:' , router);
+                let querySearch = '';
+                if (router.query.query) {
+                    querySearch = `&query=${router.query.query}`;
+                    dispatch(setCurrentSearch(router.query.query)); // write redux variable - avoid refresh
+                    setLastSearch(router.query.query);    
+                }
                 if (router.query.onSale) {
                     filtersAmount += 1
                     onSaleQuery = '&onSale=true';
@@ -104,19 +105,19 @@ const Results = () => {
                 } else {
                     setCurrentPage(parseInt(selectedPage))
                 }
-                dispatch(setCurrentSearch(querySearch)); // write redux variable - avoid refresh
                 dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                 localStorage.setItem('language',queryLanguage.toLowerCase());
                 const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
-                const limitQuery = `&limit=${searchLimit}`
-                const pageQuery = `&page=${selectedPage !== undefined ? selectedPage : '1'}`
-                const requestURI = `${endpoints('results')}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${categoryQuery}${sortByQuery}${ascendingQuery}${limitQuery}${pageQuery}`
+                const limitQuery = `limit=${searchLimit}`
+                const pageQuery = `&page=${selectedPage !== undefined ? selectedPage : '1'}`;
+                const requestURI = `${endpoints('results')}${limitQuery}${pageQuery}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${categoryQuery}${sortByQuery}${ascendingQuery}`
+                console.log('request to: ', requestURI)
                 const rsp = (await axios.get(requestURI)).data; // get datac
-                console.log('reqiest to: ', endpoints('results'))
-                console.log(requestURI)
-                console.log(rsp)
+                // console.log('reqiest to: ', endpoints('results'))
+                // console.log(requestURI)
+                console.log('response: ', rsp)
+                setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                 if(!router.query.brands && !router.query.category && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
-                    setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
                     setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
                 }
                 if(router.query.minPrice && currentPriceRange[0] < router.query.minPrice) {
@@ -132,7 +133,6 @@ const Results = () => {
                 dispatch(setTotalFilters(filtersAmount));
                 setLastPage(rsp.total_pages);
                 setTotalResults(rsp.total_results);
-                setLastSearch(querySearch);    
                 setLoadingFlag(false);
             } catch (err) {
                 console.error(err);
@@ -141,15 +141,16 @@ const Results = () => {
             }
         };
         // if (router.query.id !== undefined && router.query.lan !== undefined) {
+            console.log('router: ', router)
         if (router.isReady) {
-            const { id , lan } = router.query;
-            if(id && lan) {
-                fetchData(id , lan);
+            const { lan } = router.query;
+            if(lan) {
+                fetchData(lan);
             }
         }
         // re-renders if some query or page changes
     // },[router.isReady]); // eslint-disable-line
-    },[user, router.isReady ,  router.query.lan , router.query.id , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
+    },[user, router.isReady ,  router.query.lan , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
     // window size manager
     useEffect(() => { // wishlist search
         const fetchData = async () => {
