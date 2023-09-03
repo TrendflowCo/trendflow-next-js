@@ -15,10 +15,12 @@ import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
 import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
-import { languageAdapter } from "../functions/languageAdapter";
+// import { languageAdapter } from "../functions/languageAdapter";
 import { logEvent } from "firebase/analytics";
 import Head from "next/head";
 import { handleAddTag } from "../../functions/handleAddTag";
+import { countFilters } from "../../functions/countFilters";
+// import InfiniteScroll from 'react-infinite-scroll-component';
  
 const Results = () => {
     const db = getFirestore(app);
@@ -26,17 +28,15 @@ const Results = () => {
     const { language } = useAppSelector(state => state.language);
     const { user } = useAppSelector(state => state.auth);
     const { currentSearch } = useAppSelector(state => state.search);
-
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
     const [failedSearch , setFailedSearch] = useState(false);
     //
-    const [searchLimit , setSearchLimit] = useState(20); // search limit value
+    const [lastSearch , setLastSearch] = useState('')
     const [currentPage , setCurrentPage] = useState(1); // current page value
     const [lastPage , setLastPage] = useState(0); // last page value
-    const [lastSearch , setLastSearch] = useState(''); // text display of search
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
@@ -57,109 +57,62 @@ const Results = () => {
         setDimensions({width: window.innerWidth});
         window.addEventListener("resize", handleResize, false);
     },[])
+    const fetchDataToAPI = async(filters,sortings) => {
+        try {
+            setFailedSearch(false);
+            setLoadingFlag(true);
+            setTotalResults(0);
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`
+            const rsp = (await axios.get(requestURI)).data; // get data
+            // console.log('response: ', rsp)
+            setLastSearch(router.query.query ? router.query.query : '');
+            dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
+            setFilteredBrand(router.query.brands ? router.query.brands : '')
+            setProducts(rsp?.results);
+            setSearchTags(rsp?.metadata?.tags)
+            setTotalResults(rsp?.total_results);
+            setCurrentPage(router.query.page ? parseInt(router.query.page) : 1)
+            setLastPage(rsp?.total_pages);
+            setAvailableBrands(rsp?.metadata?.brands); // sets available brands if its a base request
+            setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]); // sets available prices if its a base request
+            // logEvent(analytics, 'page_view', {
+            //     page_title: 'results',
+            // });         
+            setLoadingFlag(false);    
+        } catch(err) {
+            console.error(err);
+            setLoadingFlag(false);
+            setFailedSearch(true);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async (lan) => {
-            try {
-                setFailedSearch(false);
-                setLoadingFlag(true);
-                setTotalResults(0)
-                const queryLanguage = lan;
-                const selectedPage = router.query.page;
-                let filtersAmount = 0;
-                let onSaleQuery = '';
-                console.log('router:' , router);
-                let querySearch = '';
-                if (router.query.query) {
-                    querySearch = `&query=${router.query.query}`;
-                    dispatch(setCurrentSearch(router.query.query)); // write redux variable - avoid refresh
-                    setLastSearch(router.query.query);    
-                }
-                if (router.query.onSale) {
-                    filtersAmount += 1
-                    onSaleQuery = '&onSale=true';
-                }
-                let categoryQuery = '';
-                if(router.query.category) {
-                    filtersAmount += 1
-                    categoryQuery = `&category=${router.query.category}`;
-                }
-                let brandsQuery ='';
-                if(router.query.brands) {
-                    filtersAmount += 1
-                    // brandsQuery = `&brands=${router.query.brands.split('-').join(' ').split('&').join('%26')}`;
-                    brandsQuery = `&brands=${router.query.brands}`;
-                    setFilteredBrand(router.query.brands)
-                }
-                let minPriceQuery = '';
-                if(router.query.minPrice) {
-                    minPriceQuery = `&minPrice=${router.query.minPrice}`;
-                }
-                let maxPriceQuery = '';
-                if(router.query.maxPrice) {
-                    maxPriceQuery = `&maxPrice=${router.query.maxPrice}`;
-                }
-                let sortByQuery = '';
-                if(router.query.sortBy) {
-                    sortByQuery = `&sortBy=${router.query.sortBy}`;
-                }
-                let ascendingQuery = '';
-                if(router.query.ascending) {
-                    ascendingQuery = `&ascending=${router.query.ascending}`;
-                }
-                if (selectedPage === undefined) {
-                    setCurrentPage(1)
-                } else {
-                    setCurrentPage(parseInt(selectedPage))
-                }
-                dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
-                localStorage.setItem('language',queryLanguage.toLowerCase());
-                const languageQuery = `&language=${languageAdapter(queryLanguage)}`;
-                const limitQuery = `limit=${searchLimit}`
-                const pageQuery = `&page=${selectedPage !== undefined ? selectedPage : '1'}`;
-                const requestURI = `${endpoints('results')}${limitQuery}${pageQuery}${querySearch}${languageQuery}${onSaleQuery}${brandsQuery}${minPriceQuery}${maxPriceQuery}${categoryQuery}${sortByQuery}${ascendingQuery}`
-                console.log('request to: ', requestURI)
-                const rsp = (await axios.get(requestURI)).data; // get datac
-                // console.log('reqiest to: ', endpoints('results'))
-                // console.log(requestURI)
-                console.log('response: ', rsp)
-                if(!router.query.brands && !router.query.category && !router.query.onSale && !router.query.minPrice && !router.query.maxPrice) { // es la busqueda inicial
-                    setAvailableBrands(rsp.metadata.brands); // sets available brands if its a base request
-                    setCurrentPriceRange([rsp.metadata.min_price,rsp.metadata.max_price]); // sets available prices if its a base request
-                }
-                if(router.query.minPrice && currentPriceRange[0] < router.query.minPrice) {
-                    filtersAmount += 1
-                }
-                if(router.query.maxPrice && currentPriceRange[1] > router.query.maxPrice) {
-                    filtersAmount += 1
-                }
-                setProducts(rsp.results);
-                setSearchTags(rsp.metadata?.tags)
-                logEvent(analytics, 'page_view', {
-                    page_title: 'results',
-                });         
-                dispatch(setTotalFilters(filtersAmount));
-                setLastPage(rsp.total_pages);
-                setTotalResults(rsp.total_results);
-                setLoadingFlag(false);
-            } catch (err) {
-                console.error(err);
-                setLoadingFlag(false);
-                setFailedSearch(true);
-            }
-        };
-        // if (router.query.id !== undefined && router.query.lan !== undefined) {
-            console.log('router: ', router)
         if (router.isReady) {
             const { lan } = router.query;
             if(lan) {
-                fetchData(lan);
+                dispatch(setLanguage(lan)); // write redux variable - avoid refresh
+                localStorage.setItem('language',lan.toLowerCase());
+                const filters = {
+                    language: `language=${lan}`,
+                    page: router.query.page ? `&page=${router.query.page}` : '&page=1',
+                    limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
+                    query: router.query.query ? `&query=${router.query.query}` : '',
+                    category: router.query.category ? `&category=${router.query.category}` : '',
+                    minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
+                    maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
+                    onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '', // si no quiero lo tengo que sacar
+                    brands: router.query.brands ? `&brands=${router.query.brands}` : '', // list of brands
+                }
+                const sortings = {
+                    sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '', // price, category
+                    ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '', // default false
+                };
+                fetchDataToAPI(filters,sortings);
+                dispatch(setTotalFilters(countFilters(filters)));
             }
         }
-        // re-renders if some query or page changes
-    // },[router.isReady]); // eslint-disable-line
     },[user, router.isReady ,  router.query.lan , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
-    // window size manager
+    
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
@@ -207,7 +160,7 @@ const Results = () => {
                     {failedSearch ? 
                         <section className='flex flex-col lg:flex-row lg:justify-between mt-25'>
                             <div className='mx-5'>
-                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{lastSearch ? enhanceText(lastSearch) : ''}</h6>
+                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{currentSearch ? enhanceText(currentSearch) : ''}</h6>
                                 <h6 className="text-sm mt-1">No results for this search</h6>
                             </div>
                             <SortAndFilter 
