@@ -25,6 +25,7 @@ import { enhanceText } from "../Utils/enhanceText";
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../services/firebase';
 import { CircularProgress } from '@mui/material';
+import { handleSearchQuery } from '../functions/handleSearchQuery';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
@@ -75,16 +76,7 @@ const Navbar = ({ logOut , user , loading }) => {
   const handleEnterSearch = (e) => { // click ENTER into form -> redirects to SHOP NOW
     if (e.key === 'Enter') {
       event.preventDefault();
-      if (currentSearch !== '') {
-        logEvent(analytics, 'search', {
-          search_term: currentSearch
-        });        
-          router.push(`/${language}/results?query=${currentSearch.split(' ').join('-')}`)
-      } else {
-          Swal.fire({
-              ...swalNoInputs
-        })
-      }
+      handleSearchQuery(language , currentSearch , 'search' , router)
     }
   };
   const handleLanguageMenuOpen = (event) => {

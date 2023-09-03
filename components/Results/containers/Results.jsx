@@ -8,7 +8,7 @@ import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
-import { setCurrentSearch , setSearchPage, setTotalFilters, setWishlist } from "../../../redux/features/actions/search";
+import { setCurrentSearch , setTotalFilters, setWishlist } from "../../../redux/features/actions/search";
 import { setLanguage } from "../../../redux/features/actions/language";
 import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
@@ -18,12 +18,15 @@ import { muiColors } from "../../Utils/muiTheme";
 import { languageAdapter } from "../functions/languageAdapter";
 import { logEvent } from "firebase/analytics";
 import Head from "next/head";
+import { handleAddTag } from "../../functions/handleAddTag";
  
 const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.language);
     const { user } = useAppSelector(state => state.auth);
+    const { currentSearch } = useAppSelector(state => state.search);
+
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
@@ -37,6 +40,7 @@ const Results = () => {
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
+    const [searchTags , setSearchTags] = useState([]);
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
     // Sorting
@@ -127,6 +131,7 @@ const Results = () => {
                     filtersAmount += 1
                 }
                 setProducts(rsp.results);
+                setSearchTags(rsp.metadata?.tags)
                 logEvent(analytics, 'page_view', {
                     page_title: 'results',
                 });         
@@ -225,6 +230,15 @@ const Results = () => {
                                 setSortingModal={setSortingModal}
                             />
                         </div>
+                        {searchTags.length > 0 && <section className='mx-5 mt-6 mb-2'>
+                            <div className="flex flex-row h-fit flex-wrap w-full">
+                            {searchTags.sort().map((tag,index) => <div 
+                                className="flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit bg-dokuso-black text-dokuso-white rounded-full cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue" 
+                                key={index}
+                                onClick={()=> {handleAddTag( dispatch , currentSearch , tag )}}
+                                >{enhanceText(tag)}</div>)}
+                            </div>
+                        </section>}
                         <section>
                             <Grid container spacing={2} sx={{padding: 2}}>
                                 {products.length > 0 && products.map((productItem,productIndex) => {return (
