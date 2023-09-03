@@ -20,12 +20,10 @@ const Sort = ( props ) => {
     {
         text: translations?.results?.section,
         value: 'category'
-
     },
     {
         text: translations?.results?.brand,
         value: 'brand'
-
     }];
     const [selectedSort , setSelectedSort] = useState('');
     const [ascending , setAscending] = useState(true);

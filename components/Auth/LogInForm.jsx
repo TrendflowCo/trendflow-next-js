@@ -31,14 +31,12 @@ const LogInForm = () => {
     const logInWithEmailAndPassword = async (email, password) => {
         try {
           await signInWithEmailAndPassword(auth, email, password);
-          console.log('login_email')
             // logEvent(analytics, 'login', {
             //   method: 'email'
             // });
         } catch (err) {
           console.error(err);
           alert(err.message);
-          console.log('login_email_error')
         //   logEvent(analytics, 'exception', {
         //     description: 'login_email_error',
         //   });

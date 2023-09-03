@@ -12,7 +12,7 @@ const SocialAuth = () => {
     signInGoogleExternal();
   };
   const handleSignInFacebook = () => {
-    console.log("ingresar con facebook");
+    // console.log("ingresar con facebook");
   };
 
     return (

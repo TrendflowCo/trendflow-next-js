@@ -24,6 +24,7 @@ import CarouselComp from "./CarouselComp";
 import Head from "next/head";
 import ExploreCarousel from "./ExploreCarousel";
 import arrow from "../../../public/Arrow1.svg";
+import { handleAddTag } from "../../functions/handleAddTag";
 
 const Explore = () => {
     const router = useRouter();
@@ -49,10 +50,8 @@ const Explore = () => {
             try {
                 const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${currentId}${languageQuery}`)).data;
                 setCurrentProduct(currentIdProduct.result)
-                console.log('results from dedicated product: ', currentIdProduct.result)
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
-                console.log('similars: ', similars)
                 setSimilarProducts(similars.results);
                 dispatch(setLanguage(currentLanguage)); // write redux variable - avoid refresh
                 localStorage.setItem('language',currentLanguage.toLowerCase());
@@ -108,18 +107,18 @@ const Explore = () => {
         toast.success('Copied to clipboard')    
     };
     const redirectToBrand = (brandName) => {
-        window.open(`/${language}/results/${currentSearch}?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
+        window.open(`/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
     };
-    const handleAddTag = (tag) => {
-        const prevSearch = currentSearch;
-        const newSearch = currentSearch.includes(tag) ? currentSearch : (currentSearch === '' ? tag : `${currentSearch} ${tag}`);
-        logEvent(analytics, 'clickAddTag', {
-            tag: tag,
-            prev_search: prevSearch,
-            new_search: newSearch
-          });
-        dispatch(setCurrentSearch(newSearch))
-    };
+    // const handleAddTag = (tag) => {
+    //     const prevSearch = currentSearch;
+    //     const newSearch = currentSearch.includes(tag) ? currentSearch : (currentSearch === '' ? tag : `${currentSearch} ${tag}`);
+    //     logEvent(analytics, 'clickAddTag', {
+    //         tag: tag,
+    //         prev_search: prevSearch,
+    //         new_search: newSearch
+    //       });
+    //     dispatch(setCurrentSearch(newSearch))
+    // };
     
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
@@ -194,11 +193,11 @@ const Explore = () => {
                                         <section className="h-fit w-full flex flex-row flex-wrap mb-5">
                                             <span className="text-lg font-semibold mb-2">Related tags</span>
                                             <div className="h-fit w-full flex flex-row flex-wrap">
-                                                {currentProduct.tags.map((itemTag, indexTag) =>
+                                                {currentProduct.tags?.sort().map((itemTag, indexTag) =>
                                                     <Tooltip key={indexTag} title={`Add ${itemTag} to searchbar`} placement="top" arrow={true}> 
                                                         <div 
-                                                            className="bg-dokuso-black text-dokuso-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange "
-                                                            onClick={()=>{handleAddTag(itemTag)}}>
+                                                            className="bg-dokuso-black text-dokuso-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue"
+                                                            onClick={()=>{handleAddTag( dispatch , currentSearch , itemTag)}}>
                                                             {enhanceText(itemTag)}
                                                         </div>
                                                     </Tooltip>
