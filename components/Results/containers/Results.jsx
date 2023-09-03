@@ -44,6 +44,7 @@ const Results = () => {
     const [filteredBrand , setFilteredBrand] = useState('');
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
+    const [currentFilters, setCurrentFilters] = useState({});
     // Sorting
     const [sortingModal , setSortingModal] = useState(false); // modal controller
     // device size
@@ -64,7 +65,6 @@ const Results = () => {
             setTotalResults(0);
             const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`
             const rsp = (await axios.get(requestURI)).data; // get data
-            // console.log('response: ', rsp)
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
             setFilteredBrand(router.query.brands ? router.query.brands : '')
@@ -73,11 +73,13 @@ const Results = () => {
             setTotalResults(rsp?.total_results);
             setCurrentPage(router.query.page ? parseInt(router.query.page) : 1)
             setLastPage(rsp?.total_pages);
-            setAvailableBrands(rsp?.metadata?.brands); // sets available brands if its a base request
-            setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]); // sets available prices if its a base request
-            // logEvent(analytics, 'page_view', {
-            //     page_title: 'results',
-            // });         
+            setAvailableBrands(rsp?.metadata?.brands || []); // sets available brands if its a base request
+            if (filters.maxPrice === '' && filters.minPrice === '') {
+                setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]); // sets available prices if its a base request
+            }
+            logEvent(analytics, 'page_view', {
+                page_title: 'results',
+            });         
             setLoadingFlag(false);    
         } catch(err) {
             console.error(err);
@@ -85,7 +87,6 @@ const Results = () => {
             setFailedSearch(true);
         }
     };
-
     useEffect(() => {
         if (router.isReady) {
             const { lan } = router.query;
@@ -97,12 +98,13 @@ const Results = () => {
                     page: router.query.page ? `&page=${router.query.page}` : '&page=1',
                     limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
                     query: router.query.query ? `&query=${router.query.query}` : '',
+                    brands: router.query.brands ? `&brands=${router.query.brands}` : '', // list of brands
                     category: router.query.category ? `&category=${router.query.category}` : '',
                     minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
                     maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
                     onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '', // si no quiero lo tengo que sacar
-                    brands: router.query.brands ? `&brands=${router.query.brands}` : '', // list of brands
                 }
+                setCurrentFilters(filters); // set the current filters
                 const sortings = {
                     sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '', // price, category
                     ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '', // default false

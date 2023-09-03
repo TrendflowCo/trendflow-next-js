@@ -50,10 +50,8 @@ const Explore = () => {
             try {
                 const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${currentId}${languageQuery}`)).data;
                 setCurrentProduct(currentIdProduct.result)
-                console.log('results from dedicated product: ', currentIdProduct.result)
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
-                console.log('similars: ', similars)
                 setSimilarProducts(similars.results);
                 dispatch(setLanguage(currentLanguage)); // write redux variable - avoid refresh
                 localStorage.setItem('language',currentLanguage.toLowerCase());
@@ -198,7 +196,7 @@ const Explore = () => {
                                                 {currentProduct.tags?.sort().map((itemTag, indexTag) =>
                                                     <Tooltip key={indexTag} title={`Add ${itemTag} to searchbar`} placement="top" arrow={true}> 
                                                         <div 
-                                                            className="bg-dokuso-black text-dokuso-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange "
+                                                            className="bg-dokuso-black text-dokuso-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue"
                                                             onClick={()=>{handleAddTag( dispatch , currentSearch , itemTag)}}>
                                                             {enhanceText(itemTag)}
                                                         </div>
