@@ -28,5 +28,7 @@ export const logos = {
     'ysl':'https://upload.wikimedia.org/wikipedia/commons/2/29/Yves_Saint_Laurent_Logo.svg',
     'parfois': 'https://upload.wikimedia.org/wikipedia/commons/2/2b/ParfoisLogo.jpg',
     'hugo boss': 'https://upload.wikimedia.org/wikipedia/commons/7/73/Hugo-Boss-Logo.svg',
-    'hyein seo':'https://www.ink-clothing.com/category/XrVGHs4cbTcWxgor.jpg'
+    'hyein seo':'https://www.ink-clothing.com/category/XrVGHs4cbTcWxgor.jpg',
+    'jaded london': 'https://cdn.shopify.com/s/files/1/0022/9824/9267/files/jaded-london-logo.jpg?height=628&pad_color=ffffff&v=1663689581&width=1200',
+    'the reformation': 'https://ww1.freelogovectors.net/wp-content/uploads/2023/02/reformation-logo-freelogovectors.net_.png'
   };
