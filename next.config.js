@@ -14,6 +14,14 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'ww1.freelogovectors.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com'
+      },
+      {
+        protocol: 'https',
         hostname: 'seeklogo.com'
       },
       {
