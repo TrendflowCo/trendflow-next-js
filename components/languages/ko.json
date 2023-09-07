@@ -79,56 +79,57 @@
         "line_4": "또한 패션 산업에서의 지속 가능성과 윤리적인 관행의 중요성을 믿습니다. 이를 위해 우리는 지속 가능성과 윤리적인 생산 방법을 우선시하는 브랜드와 파트너십을 맺기로 했습니다.",
         "line_5": "저희와 함께 쇼핑을 선택해 주셔서 감사합니다. 완벽한 의상을 찾는 데 도움을 드릴 수 있기를 기대합니다!"
         },
-        "prompts": {
-            "Barbie": "Barbie",
-            "Merlina Addams": "멀리나 아담스",
-            "Wes Anderson": "웨스 앤더슨",
-            "Preppy Girl": "프레피 소녀",
-            "Boho chic": "보호 시크",
-            "Parisian chic": "파리식 시크",
-            "Safari Glam": "사파리 글램",
-            "Bold prints": "대담한 프린트",
-            "Office attire": "사무복",
-            "Floral Dresses": "꽃 무늬 드레스",
-            "striped pastel colored": "파스텔 컬러의 줄무늬",
-            "Coral Silk Blouse": "코랄 실크 블라우스",
-            "Raffia bags": "라피아 가방",
-            "Denim Shirts": "데님 셔츠",
-            "Glamorous evening gowns": "글래머러스 한 저녁 드레스",
-            "Tailored suits for women": "여성용 맞춤 정장"
+    "not_sure": "무엇을 찾아야 할지 모르겠나요? 무작위로 시작해보세요!",
+    "prompts": {
+        "Barbie": "Barbie",
+        "Merlina Addams": "멀리나 아담스",
+        "Wes Anderson": "웨스 앤더슨",
+        "Preppy Girl": "프레피 소녀",
+        "Boho chic": "보호 시크",
+        "Parisian chic": "파리식 시크",
+        "Safari Glam": "사파리 글램",
+        "Bold prints": "대담한 프린트",
+        "Office attire": "사무복",
+        "Floral Dresses": "꽃 무늬 드레스",
+        "striped pastel colored": "파스텔 컬러의 줄무늬",
+        "Coral Silk Blouse": "코랄 실크 블라우스",
+        "Raffia bags": "라피아 가방",
+        "Denim Shirts": "데님 셔츠",
+        "Glamorous evening gowns": "글래머러스 한 저녁 드레스",
+        "Tailored suits for women": "여성용 맞춤 정장"
+    },
+    "wishlist": {
+        "title": "위시리스트"
         },
-        "wishlist": {
-            "title": "위시리스트"
-          },
-          "userMenu": {
-            "account": "계정",
-            "profile": "프로필",
-            "dashboard": "대시보드",
-            "wishlist": "위시리스트",
-            "logout": "로그아웃"
-        },
-        "results": {
-            "on_sale" : "할인 중",
-            "no_price": "가격 없음",
-            "copy_to_clipboard": "클립보드에 복사",
-            "visit_site": "사이트 방문",
-            "filters": "필터",
-            "sorts": "정렬",
-            "on_sale_products": "할인 상품",
-            "section": "섹션",
-            "brands": "브랜드",
-            "price_range": "가격 범위",
-            "sort_by": "정렬 기준",
-            "apply_sorting": "정렬 적용",
-            "delete_sorting": "정렬 삭제",
-            "add_to_wishlist": "위시리스트에 추가",
-            "share_item": "상품 공유",
-            "apply_filters": "필터 적용",
-            "delete_filters": "필터 삭제",
-            "select_section": "섹션 선택",
-            "select_brands": "브랜드 선택",
-            "brand": "브랜드",
-            "price": "가격",
-            "select_filter": "필터 선택"
-        }
+        "userMenu": {
+        "account": "계정",
+        "profile": "프로필",
+        "dashboard": "대시보드",
+        "wishlist": "위시리스트",
+        "logout": "로그아웃"
+    },
+    "results": {
+        "on_sale" : "할인 중",
+        "no_price": "가격 없음",
+        "copy_to_clipboard": "클립보드에 복사",
+        "visit_site": "사이트 방문",
+        "filters": "필터",
+        "sorts": "정렬",
+        "on_sale_products": "할인 상품",
+        "section": "섹션",
+        "brands": "브랜드",
+        "price_range": "가격 범위",
+        "sort_by": "정렬 기준",
+        "apply_sorting": "정렬 적용",
+        "delete_sorting": "정렬 삭제",
+        "add_to_wishlist": "위시리스트에 추가",
+        "share_item": "상품 공유",
+        "apply_filters": "필터 적용",
+        "delete_filters": "필터 삭제",
+        "select_section": "섹션 선택",
+        "select_brands": "브랜드 선택",
+        "brand": "브랜드",
+        "price": "가격",
+        "select_filter": "필터 선택"
+    }
 }

@@ -79,24 +79,25 @@
         "line_4": "また、ファッション業界での持続可能性と倫理的な取り組みの重要性も信じています。そのため、持続可能性と倫理的な生産方法を重視するブランドと提携することにコミットしています。",
         "line_5": "当社を選んでいただきありがとうございます。お客様がパーフェクトなコーディネートを見つけるお手伝いができることを楽しみにしています！"
         },
-        "prompts": {
-            "Barbie": "Barbie",
-            "Merlina Addams": "メリーナアダムス",
-            "Wes Anderson": "ウェス・アンダーソン",
-            "Preppy Girl": "プレッピーガール",
-            "Boho chic": "ボヘミアンシック",
-            "Parisian chic": "パリジャンシック",
-            "Safari Glam": "サファリグラム",
-            "Bold prints": "大胆なプリント",
-            "Office attire": "オフィス服",
-            "Floral Dresses": "花柄ドレス",
-            "striped pastel colored": "パステルカラーのストライプ",
-            "Coral Silk Blouse": "コーラルシルクブラウス",
-            "Raffia bags": "ラフィアバッグ",
-            "Denim Shirts": "デニムシャツ",
-            "Glamorous evening gowns": "グラマラスなイブニングガウン",
-            "Tailored suits for women": "女性用のテーラーメイドスーツ"
-        },
+    "not_sure": "何を検索すべきかわからない？何かランダムに始めてみましょう！",
+    "prompts": {
+        "Barbie": "Barbie",
+        "Merlina Addams": "メリーナアダムス",
+        "Wes Anderson": "ウェス・アンダーソン",
+        "Preppy Girl": "プレッピーガール",
+        "Boho chic": "ボヘミアンシック",
+        "Parisian chic": "パリジャンシック",
+        "Safari Glam": "サファリグラム",
+        "Bold prints": "大胆なプリント",
+        "Office attire": "オフィス服",
+        "Floral Dresses": "花柄ドレス",
+        "striped pastel colored": "パステルカラーのストライプ",
+        "Coral Silk Blouse": "コーラルシルクブラウス",
+        "Raffia bags": "ラフィアバッグ",
+        "Denim Shirts": "デニムシャツ",
+        "Glamorous evening gowns": "グラマラスなイブニングガウン",
+        "Tailored suits for women": "女性用のテーラーメイドスーツ"
+    },
     "wishlist": {
         "title": "ほしい物リスト"
       },

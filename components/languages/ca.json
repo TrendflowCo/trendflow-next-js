@@ -78,56 +78,57 @@
         "line_4": "També creiem en la importància de la sostenibilitat i les pràctiques ètiques en la indústria de la moda. Per això, ens comprometem a establir col·laboracions amb marques que prioritzen la sostenibilitat i els mètodes de producció ètics.",
         "line_5": "Gràcies per escollir comprar amb nosaltres. Esperem poder ajudar-te a trobar l'equipament perfecte!"
         },
-        "prompts": {
-            "Barbie": "Barbie",
-            "Merlina Addams": "Merlí Addams",
-            "Wes Anderson": "Wes Anderson",
-            "Preppy Girl": "Noia preppy",
-            "Boho chic": "Boho chic",
-            "Parisian chic": "Elegància parisina",
-            "Safari Glam": "Glamur de safari",
-            "Bold prints": "Estampats atrevits",
-            "Office attire": "Vestimenta d'oficina",
-            "Floral Dresses": "Vestits florals",
-            "striped pastel colored": "A ratlles en colors pastel",
-            "Coral Silk Blouse": "Blusa de seda coral",
-            "Raffia bags": "Begudes de ràfia",
-            "Denim Shirts": "Camises de ganga",
-            "Glamorous evening gowns": "Vestits de nit glamorosos",
-            "Tailored suits for women": "Vestits a mida per a dones"
+    "not_sure": "No estàs segur del què buscar? Comença amb alguna cosa aleatòria!",
+    "prompts": {
+        "Barbie": "Barbie",
+        "Merlina Addams": "Merlí Addams",
+        "Wes Anderson": "Wes Anderson",
+        "Preppy Girl": "Noia preppy",
+        "Boho chic": "Boho chic",
+        "Parisian chic": "Elegància parisina",
+        "Safari Glam": "Glamur de safari",
+        "Bold prints": "Estampats atrevits",
+        "Office attire": "Vestimenta d'oficina",
+        "Floral Dresses": "Vestits florals",
+        "striped pastel colored": "A ratlles en colors pastel",
+        "Coral Silk Blouse": "Blusa de seda coral",
+        "Raffia bags": "Begudes de ràfia",
+        "Denim Shirts": "Camises de ganga",
+        "Glamorous evening gowns": "Vestits de nit glamorosos",
+        "Tailored suits for women": "Vestits a mida per a dones"
+    },
+    "wishlist": {
+        "title": "llista de desitjos"
         },
-        "wishlist": {
-            "title": "llista de desitjos"
-          },
-          "userMenu": {
-            "account": "compte",
-            "profile": "perfil",
-            "dashboard": "panell de control",
-            "wishlist": "llista de desitjos",
-            "logout": "tancar sessió"
-        },
-        "results": {
-            "on_sale" : "en venda",
-            "no_price": "sense preu",
-            "copy_to_clipboard": "copiar al portapapers",
-            "visit_site": "visitar lloc",
-            "filters": "filtres",
-            "sorts": "classificacions",
-            "on_sale_products": "productes en venda",
-            "section": "secció",
-            "brands": "marques",
-            "price_range": "rang de preus",
-            "sort_by": "ordenar per",
-            "apply_sorting": "aplicar classificació",
-            "delete_sorting": "eliminar classificació",
-            "add_to_wishlist": "afegir a la llista de desitjos",
-            "share_item": "compartir article",
-            "apply_filters": "aplicar filtres",
-            "delete_filters": "eliminar filtres",
-            "select_section": "seleccionar secció",
-            "select_brands": "seleccionar marques",
-            "brand": "marca",
-            "price": "preu",
-            "select_filter": "seleccionar filtre"
-        }
+        "userMenu": {
+        "account": "compte",
+        "profile": "perfil",
+        "dashboard": "panell de control",
+        "wishlist": "llista de desitjos",
+        "logout": "tancar sessió"
+    },
+    "results": {
+        "on_sale" : "en venda",
+        "no_price": "sense preu",
+        "copy_to_clipboard": "copiar al portapapers",
+        "visit_site": "visitar lloc",
+        "filters": "filtres",
+        "sorts": "classificacions",
+        "on_sale_products": "productes en venda",
+        "section": "secció",
+        "brands": "marques",
+        "price_range": "rang de preus",
+        "sort_by": "ordenar per",
+        "apply_sorting": "aplicar classificació",
+        "delete_sorting": "eliminar classificació",
+        "add_to_wishlist": "afegir a la llista de desitjos",
+        "share_item": "compartir article",
+        "apply_filters": "aplicar filtres",
+        "delete_filters": "eliminar filtres",
+        "select_section": "seleccionar secció",
+        "select_brands": "seleccionar marques",
+        "brand": "marca",
+        "price": "preu",
+        "select_filter": "seleccionar filtre"
+    }
 }
