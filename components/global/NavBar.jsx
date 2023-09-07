@@ -202,7 +202,8 @@ const Navbar = ({ logOut , user , loading }) => {
               <input 
                 className="bg-dokuso-black outline-none bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
                 type="text"
-                placeholder={currentSearch.split('-').join(' ') || "Tell me what you like"}
+                // placeholder={currentSearch.split('-').join(' ') || "Tell me what you like"}
+                placeholder={translations?.search?.placeholder}
                 value={currentSearch.split('-').join(' ')}
                 onChange={(e) => {handleSearchPhrase(e)}}
                 onKeyDown={handleEnterSearch}
