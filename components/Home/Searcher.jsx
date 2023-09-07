@@ -69,9 +69,10 @@ const Searcher = () => {
                     <div className="flex-wrap flex flex-col justify-start">
                         <p className="px-6 py-3 text-dokuso-black font-semibold text-base leading-tight hover:bg-dokuso-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
                         onClick={() => handleSearchRandom()}>
-                            {`Don't know what to search? Let the random start!`}
+                            {/* {`Not sure what to search? Start with something random!`} */}
+                            {translations?.not_sure}
                         </p>
-                        {translations?.prompts && Object.values(translations?.prompts).sort().map((prompt) => (
+                        {translations?.prompts && Object.entries(translations?.prompts).sort().map(([key, prompt]) => (
                             <p 
                                 key={prompt}
                                 type="button"  
@@ -79,7 +80,8 @@ const Searcher = () => {
                                 value={prompt} 
                                 className="px-6 py-3 text-dokuso-blue font-semibold text-base leading-tight hover:bg-dokuso-pink hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer"
                             >
-                                {prompt}
+                                {/* {prompt} */}
+                                {(key === 'Barbie' || key === 'Office attire') ? `${prompt} 🔥` : prompt}
                             </p>
                             ))
                         }
