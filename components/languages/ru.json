@@ -77,56 +77,57 @@
         "line_4": "Мы также верим в важность устойчивости и этичных практик в модной индустрии. Поэтому мы стремимся сотрудничать с брендами, которые приоритетно уделяют внимание устойчивости и этичным методам производства.",
         "line_5": "Благодарим вас за выбор нашего магазина. Мы с нетерпением ждем возможности помочь вам найти идеальный наряд!"
         },
-        "prompts": {
-            "Barbie": "Барби",
-            "Merlina Addams": "Мортиция Аддамс",
-            "Wes Anderson": "Вэс Андерсон",
-            "Preppy Girl": "Девушка в стиле преппи",
-            "Boho chic": "Бохо-шик",
-            "Parisian chic": "Парижский шик",
-            "Safari Glam": "Гламурный сафари",
-            "Bold prints": "Яркие принты",
-            "Office attire": "Офисная одежда",
-            "Floral Dresses": "Платья с цветочным принтом",
-            "striped pastel colored": "В полоску в пастельных тонах",
-            "Coral Silk Blouse": "Шелковый коралловый блуз",
-            "Raffia bags": "Сумки из рафии",
-            "Denim Shirts": "Джинсовые рубашки",
-            "Glamorous evening gowns": "Гламурные вечерние платья",
-            "Tailored suits for women": "Женские костюмы на заказ"
+    "not_sure": "Не знаете, что искать? Начните с чего-то случайного!",
+    "prompts": {
+        "Barbie": "Барби",
+        "Merlina Addams": "Мортиция Аддамс",
+        "Wes Anderson": "Вэс Андерсон",
+        "Preppy Girl": "Девушка в стиле преппи",
+        "Boho chic": "Бохо-шик",
+        "Parisian chic": "Парижский шик",
+        "Safari Glam": "Гламурный сафари",
+        "Bold prints": "Яркие принты",
+        "Office attire": "Офисная одежда",
+        "Floral Dresses": "Платья с цветочным принтом",
+        "striped pastel colored": "В полоску в пастельных тонах",
+        "Coral Silk Blouse": "Шелковый коралловый блуз",
+        "Raffia bags": "Сумки из рафии",
+        "Denim Shirts": "Джинсовые рубашки",
+        "Glamorous evening gowns": "Гламурные вечерние платья",
+        "Tailored suits for women": "Женские костюмы на заказ"
+    },
+    "wishlist": {
+        "title": "список желаний"
         },
-        "wishlist": {
-            "title": "список желаний"
-          },
-          "userMenu": {
-            "account": "аккаунт",
-            "profile": "профиль",
-            "dashboard": "панель управления",
-            "wishlist": "список желаний",
-            "logout": "выйти"
-        },
-        "results": {
-            "on_sale" : "распродажа",
-            "no_price": "нет цены",
-            "copy_to_clipboard": "копировать в буфер обмена",
-            "visit_site": "посетить сайт",
-            "filters": "фильтры",
-            "sorts": "сортировки",
-            "on_sale_products": "товары со скидкой",
-            "section": "раздел",
-            "brands": "бренды",
-            "price_range": "диапазон цен",
-            "sort_by": "сортировать по",
-            "apply_sorting": "применить сортировку",
-            "delete_sorting": "удалить сортировку",
-            "add_to_wishlist": "добавить в список желаний",
-            "share_item": "поделиться товаром",
-            "apply_filters": "применить фильтры",
-            "delete_filters": "удалить фильтры",
-            "select_section": "выбрать раздел",
-            "select_brands": "выбрать бренды",
-            "brand": "бренд",
-            "price": "цена",
-            "select_filter": "выбрать фильтр"
-        }
+        "userMenu": {
+        "account": "аккаунт",
+        "profile": "профиль",
+        "dashboard": "панель управления",
+        "wishlist": "список желаний",
+        "logout": "выйти"
+    },
+    "results": {
+        "on_sale" : "распродажа",
+        "no_price": "нет цены",
+        "copy_to_clipboard": "копировать в буфер обмена",
+        "visit_site": "посетить сайт",
+        "filters": "фильтры",
+        "sorts": "сортировки",
+        "on_sale_products": "товары со скидкой",
+        "section": "раздел",
+        "brands": "бренды",
+        "price_range": "диапазон цен",
+        "sort_by": "сортировать по",
+        "apply_sorting": "применить сортировку",
+        "delete_sorting": "удалить сортировку",
+        "add_to_wishlist": "добавить в список желаний",
+        "share_item": "поделиться товаром",
+        "apply_filters": "применить фильтры",
+        "delete_filters": "удалить фильтры",
+        "select_section": "выбрать раздел",
+        "select_brands": "выбрать бренды",
+        "brand": "бренд",
+        "price": "цена",
+        "select_filter": "выбрать фильтр"
+    }
 }
