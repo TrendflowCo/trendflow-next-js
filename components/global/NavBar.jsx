@@ -286,7 +286,8 @@ const Navbar = ({ logOut , user , loading }) => {
             // Language selector
             <Tooltip title="Select language" className='cursor-pointer'>
               <Button color="inherit" onClick={handleLanguageMenuOpen} sx={{width: 48 , height: 48, borderRadius: 24, ml: 0.5}}>
-              {`${(languages?.find(lan => lan?.name?.toLowerCase() === language?.toLowerCase()) || {}).flag}`}
+              {/* {`${(languages?.find(lan => lan?.name?.toLowerCase() === language?.toLowerCase()) || {}).flag}`} */}
+              {language}
               </Button>
             </Tooltip>
           }
