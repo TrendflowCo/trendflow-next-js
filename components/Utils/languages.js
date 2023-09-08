@@ -4,7 +4,7 @@ export const languages = [
     { name: 'IT', flag: '🇮🇹' },
     { name: 'DU', flag: '🇳🇱' },
     { name: 'FR', flag: '🇫🇷' },
-    { name: 'PT', flag: '🇵🇹' },
+    { name: 'PT', flag: '🇧🇷' },
     { name: 'DE', flag: '🇩🇪' },
     { name: 'DA', flag: '🇩🇰' },
     { name: 'RU', flag: '🇷🇺' },
