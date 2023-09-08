@@ -11,7 +11,13 @@ const Searcher = () => {
     const dispatch = useAppDispatch();
     const { currentSearch } = useAppSelector(state => state.search);
     const { translations , language } = useAppSelector(state => state.language);
-    const hotList  = ['Barbie', 'Office attire', 'Art-inspired prints', 'Floral embroidery', 'Menswear-inspired tailoring', 'Statement accessories']
+    const hotList  = ['Barbie', 
+                    'Office attire', 
+                    'Art-inspired prints', 
+                    'Floral embroidery', 
+                    'Menswear-inspired tailoring', 
+                    'Statement accessories',
+                    'Halloween']
     const router = useRouter();
     const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
         dispatch(setCurrentSearch(e.target.value));
