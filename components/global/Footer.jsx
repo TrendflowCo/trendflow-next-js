@@ -67,7 +67,7 @@ const Footer = () => {
                     )})}
                 </ThemeProvider>
             </div>
-            <div className="mt-4">
+            {/* <div className="mt-4">
                 <Link 
                     href="https://www.producthunt.com/posts/dokuso?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-dokuso"
                     target="_blank"
@@ -79,7 +79,7 @@ const Footer = () => {
                     alt={`Dokuso - AI&#0045;powered&#0032;search&#0032;engine&#0032;revolutionizing&#0032;fashion&#0032;industry&#0046; | Product Hunt`}
                 />
                 </Link>
-            </div>
+            </div> */}
             <div className='text-center text-dokuso-black py-4'>
                 <Typography variant="body2" color="text.secondary">
                 {'Copyright © '}
