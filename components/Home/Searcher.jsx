@@ -11,6 +11,7 @@ const Searcher = () => {
     const dispatch = useAppDispatch();
     const { currentSearch } = useAppSelector(state => state.search);
     const { translations , language } = useAppSelector(state => state.language);
+    const hotList  = ['Barbie', 'Office attire', 'Art-inspired prints', 'Floral embroidery', 'Menswear-inspired tailoring', 'Statement accessories']
     const router = useRouter();
     const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
         dispatch(setCurrentSearch(e.target.value));
@@ -81,7 +82,7 @@ const Searcher = () => {
                                 className="px-6 py-3 text-dokuso-blue font-semibold text-base leading-tight hover:bg-dokuso-pink hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer"
                             >
                                 {/* {prompt} */}
-                                {(key === 'Barbie' || key === 'Office attire') ? `${prompt} 🔥` : prompt}
+                                {hotList.includes(key) ? `${prompt} 🔥` : prompt}
                             </p>
                             ))
                         }
