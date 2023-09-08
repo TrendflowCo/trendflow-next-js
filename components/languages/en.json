@@ -79,6 +79,7 @@
     },
     "not_sure": "Not sure what to search? Start with something random!",
     "prompts": {
+        "Halloween": "Halloween",
         "Barbie": "Barbie",
         "Merlina Addams": "Merlina Addams",
         "Wes Anderson": "Wes Anderson",
