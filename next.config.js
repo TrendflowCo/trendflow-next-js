@@ -87,6 +87,18 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'modemischiefstudios.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'nodress67.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'vanessamooney.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'withjean.com'
       }
     ]
   }
