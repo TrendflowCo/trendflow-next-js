@@ -60,8 +60,35 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'www.ink-clothing.com'
       },
+      {
+        protocol: 'https',
+        hostname: 'adanola.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'danielleguiziony.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'geel.us'
+      },
+      {
+        protocol: 'https',
+        hostname: 'gimaguas.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'kitteny.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.licdn.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'modemischiefstudios.com'
+      }
     ]
   }
 }
-
 module.exports = nextConfig
