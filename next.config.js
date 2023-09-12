@@ -99,6 +99,30 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'withjean.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'troisthelabel.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'shop.amlul.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'maisxfrida.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.getinspired.no'
+      },
+      {
+        protocol: 'https',
+        hostname: 'storets.no'
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pinimg.com'
       }
     ]
   }
