@@ -123,6 +123,18 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'i.pinimg.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.disturbia.co.uk'
+      },
+      {
+        protocol: 'https',
+        hostname: '2.bp.blogspot.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.crunchbase.com'
       }
     ]
   }
