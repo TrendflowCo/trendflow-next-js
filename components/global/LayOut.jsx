@@ -39,33 +39,33 @@ const Layout = ({ children }) => {
     logOutExternal(auth)
   };
 
-  useEffect(() => {
-    if(logged !== null) {
-      setTimeout(() =>{
-        setReady(true)
-      },90000)
-    }
-  },[logged]);
-  useEffect(() => {
-    if (ready === true) {
-      if (logged === false) {
-        dispatch(setLogInFlag(true))
-      }
-    }
-  },[ready]);  // eslint-disable-line
-  useEffect(() => {
-    if (logged === null) {
-      setLogged(false)
-    } else if (logged === false) {
-      setLogged(true) 
-    } else {
-      setLogged(false)
-    }
-    dispatch(setUser(user)); // set the user for every change
-    if(user) {
-      setUserId(analytics, user.uid); // set user.uid for analytics
-    }
-  },[user]) // eslint-disable-line
+  // useEffect(() => {
+  //   if(logged !== null) {
+  //     setTimeout(() =>{
+  //       setReady(true)
+  //     },90000)
+  //   }
+  // },[logged]);
+  // useEffect(() => {
+  //   if (ready === true) {
+  //     if (logged === false) {
+  //       dispatch(setLogInFlag(true))
+  //     }
+  //   }
+  // },[ready]);  // eslint-disable-line
+  // useEffect(() => {
+  //   if (logged === null) {
+  //     setLogged(false)
+  //   } else if (logged === false) {
+  //     setLogged(true) 
+  //   } else {
+  //     setLogged(false)
+  //   }
+  //   dispatch(setUser(user)); // set the user for every change
+  //   if(user) {
+  //     setUserId(analytics, user.uid); // set user.uid for analytics
+  //   }
+  // },[user]) // eslint-disable-line
   useEffect(() => {
     switch(language) {
       case "en":
