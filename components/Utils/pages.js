@@ -3,6 +3,10 @@ export const pages = [
         name: "home",
         src: "/"
     },
+    {
+        name: "blog",
+        src: "/blog"
+    },
     // {
     //     name: "About",
     //     src: "/manifesto"
