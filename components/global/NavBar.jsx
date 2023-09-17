@@ -16,9 +16,9 @@ import { setLogInFlag } from '../../redux/features/actions/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { setCurrentSearch } from '../../redux/features/actions/search';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { pages } from '../Utils/pages';
-import { setLanguage } from '../../redux/features/actions/language';
+// import { setLanguage } from '../../redux/features/actions/language';
 import { settings_account } from '../Utils/settingsAccount';
 import { languages } from "../Utils/languages";
 import { enhanceText } from "../Utils/enhanceText";
@@ -46,6 +46,8 @@ const Navbar = ({ logOut , user , loading }) => {
   const handleSelectPage = (sel) => {
     if(sel === 'home') {
       router.push('/')
+    } else if (sel === 'blog'){
+      router.push(`/${language}/blog`)
     }
   };
   const handleOpenUserMenu = (event) => { // open user menu
@@ -89,7 +91,7 @@ const Navbar = ({ logOut , user , loading }) => {
   const handleClickLanguage = (selectedLanguage) => {
     const clickedLanguage = selectedLanguage.toLowerCase();
     const { pathname, query } = router;
-    const params = new URLSearchParams(query);
+    // const params = new URLSearchParams(query);
     router.replace(
       { pathname, query: {...query,lan: clickedLanguage} }, undefined, { shallow: true }
     );
@@ -125,7 +127,7 @@ const Navbar = ({ logOut , user , loading }) => {
               sx={{ my: 2 , color:'inherit' }}
               // href={`/${language}/${page.name.toLowerCase()}`}
             >
-              {translations?.[page.name]}
+              {translations?.[page.name] || page.name}
             </Button>
           ))}
         </Box>
