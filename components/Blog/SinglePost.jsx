@@ -1,30 +1,26 @@
 import { CardMedia } from "@mui/material";
-import Image from "next/image";
 import React from "react";
 
 const SinglePost = ({post}) => {
     console.log('post: ', post)
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const date = new Date(dateString).toLocaleDateString('en-US', options);
-        return date;
-      };
+    function formatDateFromTimestamp(timestampInMilliseconds, locale = 'en-US', options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }) {
+        const date = new Date(timestampInMilliseconds);
+        return date.toLocaleDateString(locale, options);
+      }
     return (
-        <div className="bg-dokuso-white text-dokuso-black rounded-lg overflow-hidden shadow-lg w-[95%] mx-auto mt-8">
-            {/* <div className="relative w-full h-56">
-                <CardMedia
-                    component="img"
-                    image={post.cover_img}
-                    alt={'postImage'}
-                /> 
-            </div> */}
-            <div className="p-4">
+        <div className="bg-dokuso-white text-dokuso-black rounded-[12px] overflow-hidden flex flex-row shadow-lg w-[95%] mx-auto mt-4 mb-4">
+            <div className="p-4 w-fit">
                 <div className="text-dokuso-pink font-semibold text-sm mb-2">
-                    {formatDate(post.date.seconds)}
+                    {formatDateFromTimestamp(post.date.seconds*1000)}
                 </div>
                 <h1 className="text-2xl font-semibold mb-2">{post.title}</h1>
                 <h3 className="text-lg font-normal mb-2">{post.subTitle}</h3>
-                <p className="text-sm text-dokuso-black mb-4">{post.text}</p>
+                <section className="text-sm text-dokuso-black mb-4 whitespace-pre-wrap">{post.text}</section>
+
                 <div className="text-dokuso-black font-medium text-sm">
                 By {post.author}
                 </div>
@@ -38,6 +34,14 @@ const SinglePost = ({post}) => {
                         </span>
                     ))}
                 </div>
+            </div>
+            <div className="flex flex-col h-full w-[40%] p-4 rounded-[24px]">
+                <CardMedia
+                    component="img"
+                    image={post.cover_img}
+                    alt={'postImage'}
+                    sx={{borderRadius: '8px'}}
+                /> 
             </div>
         </div>    
     )

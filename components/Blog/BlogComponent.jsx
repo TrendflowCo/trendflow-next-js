@@ -20,22 +20,20 @@ const BlogComponent = () => {
     const [allPosts , setAllPosts] = useState([]);
     useEffect(() =>{
         const fetchData = async () => {
-            if (user) {
-                try {
-                    setLoadingFlag(true);
-                    const queryLanguage = router.query.lan;
-                    dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
-                    const q = queryfb(collection(db, "blog"));
-                    const querySnapshot = await getDocs(q);
-                    const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-                    console.log('new data: ', newData);
+            try {
+                setLoadingFlag(true);
+                const queryLanguage = router.query.lan;
+                dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
+                const q = queryfb(collection(db, "blog"));
+                const querySnapshot = await getDocs(q);
+                const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+                console.log('new data: ', newData);
 
-                    setAllPosts(newData)
-                    setLoadingFlag(false);
-                } catch (err) {
-                    console.error(err);
-                    setLoadingFlag(false);
-                }
+                setAllPosts(newData)
+                setLoadingFlag(false);
+            } catch (err) {
+                console.error(err);
+                setLoadingFlag(false);
             }
         };
     fetchData();
