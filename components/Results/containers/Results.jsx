@@ -98,6 +98,7 @@ const Results = () => {
                     page: router.query.page ? `&page=${router.query.page}` : '&page=1',
                     limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
                     query: router.query.query ? `&query=${router.query.query}` : '',
+                    imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
                     brands: router.query.brands ? `&brands=${router.query.brands}` : '', // list of brands
                     category: router.query.category ? `&category=${router.query.category}` : '',
                     minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
