@@ -118,7 +118,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'storets.com'
+        hostname: 'www.storets.com'
       },
       {
         protocol: 'https',
