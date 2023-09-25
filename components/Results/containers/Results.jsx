@@ -124,7 +124,6 @@ const Results = () => {
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
-                console.log('user:',  user)
                 try {
                     const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
                     const querySnapshot = await getDocs(q);
