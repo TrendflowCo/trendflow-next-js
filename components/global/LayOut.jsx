@@ -33,8 +33,8 @@ const Layout = ({ children }) => {
   const { language } = useAppSelector(state => state.language);
   const auth = getAuth(); // instance of auth method
   const [user, loading] = useAuthState(auth); // user data
-  const [ logged , setLogged ] = useState(null);
-  const [ ready , setReady ] = useState(false);
+  // const [ logged , setLogged ] = useState(null);
+  // const [ ready , setReady ] = useState(false);
   const logOut = () => { // runs the external log out function
     logOutExternal(auth)
   };
