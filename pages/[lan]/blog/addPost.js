@@ -1,8 +1,7 @@
-import React from "react";
 import AddPost from "../../../components/Blog/AddPost";
 
-const Addpost = () => {
+const AddpostComp = () => {
     return <AddPost/>
 };
 
-export default Addpost;
+export default AddpostComp;

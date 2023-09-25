@@ -20,13 +20,18 @@ import { logEvent } from "firebase/analytics";
 import Head from "next/head";
 import { handleAddTag } from "../../functions/handleAddTag";
 import { countFilters } from "../../functions/countFilters";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from "firebase/auth";
 // import InfiniteScroll from 'react-infinite-scroll-component';
  
 const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.language);
-    const { user } = useAppSelector(state => state.auth);
+    // const { user } = useAppSelector(state => state.auth);
+    const auth = getAuth(app); // instance of auth method
+    const [user, loading] = useAuthState(auth); // user data
+
     const { currentSearch } = useAppSelector(state => state.search);
     const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
@@ -119,6 +124,7 @@ const Results = () => {
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
+                console.log('user:',  user)
                 try {
                     const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
                     const querySnapshot = await getDocs(q);
