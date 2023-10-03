@@ -16,3 +16,19 @@ export const swalWarning = {
     imageAlt: 'imageWarning',
     confirmButtonColor: '#00D89D',
 }
+export const swalConfigOnlySuccess = {
+    width: '250px',
+    icon: 'success',
+    text: 'Done!',
+    imageWidth: 100,
+    imageHeight: 100,
+    confirmButtonColor: '#00D89D',
+    confirmButtonText: 'Continue',
+};
+export const swalMissingInputs = {
+    icon: 'error',
+    text: 'Information is missing',
+    confirmButtonColor: '#00D89D',
+    width: '250px',
+};
+
