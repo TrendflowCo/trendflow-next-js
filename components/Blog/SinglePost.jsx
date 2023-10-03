@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import "react-multi-carousel/lib/styles.css";
 import Swal from "sweetalert2";
 
-const SinglePost = ({post , reload , setReload}) => {
+const SinglePost = ({post , reload , setReload , user}) => {
     const { language } = useAppSelector(state => state.language);
     const router = useRouter();
     const db = getFirestore(app);
@@ -114,22 +114,24 @@ const SinglePost = ({post , reload , setReload}) => {
             >
                 {post.cover_img?.map((item , index) => <CardMedia key={index} component="img" image={item} alt={`postImage${index}`} sx={{borderRadius: '8px'}}/>)}
             </Carousel>
-            <SpeedDial
-                ariaLabel="SpeedDial basic example"
-                sx={{ position: 'absolute', bottom: '24px' , right: '24px' }}
-                icon={<SpeedDialIcon sx={{color:'#262626'}}/>}
-            >
-                {actions.map((action) => (
-                <SpeedDialAction
-                    sx={{color:'#262626'}}
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={() => handleAction(action.name, post.id)}
-                />
-                ))}
-            </SpeedDial>
-
+            
+            {user && (user?.email === 'artuknees@gmail.com' || user?.email === 'julianlopezba@gmail.com' || user?.email ==='leolucianna@gmail.com') && 
+                <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ position: 'absolute', bottom: '24px' , right: '24px' }}
+                    icon={<SpeedDialIcon sx={{color:'#262626'}}/>}
+                >
+                    {actions.map((action) => (
+                    <SpeedDialAction
+                        sx={{color:'#262626'}}
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        onClick={() => handleAction(action.name, post.id)}
+                    />
+                    ))}
+                </SpeedDial>
+            }
             </div>
         </div>    
     )

@@ -62,7 +62,7 @@ const BlogComponent = () => {
                     </div>
                     <section>
                         {allPosts?.length > 0 && allPosts.map((post,indexPost) => {return (
-                            <SinglePost post={post} key={indexPost} reload={reload} setReload={setReload}/>
+                            <SinglePost post={post} key={indexPost} reload={reload} setReload={setReload} user={user}/>
                         )})}
                     </section>
                 </>
