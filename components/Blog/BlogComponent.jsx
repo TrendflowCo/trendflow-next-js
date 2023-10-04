@@ -15,6 +15,7 @@ const BlogComponent = () => {
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data
     const router = useRouter();
+    const [reload , setReload] = useState(true);
     const dispatch = useAppDispatch();
     const [loadingFlag, setLoadingFlag] = useState(false);
     const [allPosts , setAllPosts] = useState([]);
@@ -34,8 +35,8 @@ const BlogComponent = () => {
                 setLoadingFlag(false);
             }
         };
-    fetchData();
-    },[router.query.lan , user]); // eslint-disable-line
+        fetchData();
+    },[router.query.lan , user, reload]); // eslint-disable-line
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
             { loadingFlag ? 
@@ -50,7 +51,7 @@ const BlogComponent = () => {
                     </Head>
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25 mx-5'>
                             <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>Blog</h6>
-                        {(user?.email === 'artuknees@gmail.com' || user?.email === 'julianlopezba@gmail.com') && 
+                        {(user?.email === 'artuknees@gmail.com' || user?.email === 'julianlopezba@gmail.com' || user?.email ==='leolucianna@gmail.com') && 
                             <button 
                                 className="bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white rounded px-3 font-semibold shadow-lg hover:from-dokuso-blue hover:to-dokuso-green hover:text-dokuso-black"
                                 onClick={() => {router.push(`/${router.query.lan}/blog/addPost`)}}
@@ -61,7 +62,7 @@ const BlogComponent = () => {
                     </div>
                     <section>
                         {allPosts?.length > 0 && allPosts.map((post,indexPost) => {return (
-                            <SinglePost post={post} key={indexPost}/>
+                            <SinglePost post={post} key={indexPost} reload={reload} setReload={setReload} user={user}/>
                         )})}
                     </section>
                 </>
