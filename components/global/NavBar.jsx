@@ -27,7 +27,7 @@ import { analytics } from '../../services/firebase';
 import { CircularProgress } from '@mui/material';
 import { handleSearchQuery } from '../functions/handleSearchQuery';
 import SearchIcon from '@mui/icons-material/Search';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
@@ -80,23 +80,23 @@ const Navbar = ({ logOut , user , loading }) => {
     handleSearchQuery(language , val , 'clickOnPopularSearches' , router)
   };
 
-  const Legend = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-  color: #FAB332;
-  cursor: pointer;
-  transform: rotate(-20deg);
-  transition: color 0.3s;
+  //   const Legend = styled.div`
+  //   font-size: 24px;
+  //   font-weight: bold;
+  //   color: #FAB332;
+  //   cursor: pointer;
+  //   transform: rotate(-20deg);
+  //   transition: color 0.3s;
 
-  /* Apply the custom font here */
-  // font-family: 'YourCustomFont', sans-serif;
-`;
+  //   /* Apply the custom font here */
+  //   // font-family: 'YourCustomFont', sans-serif;
+  // `;
   const handleSearchRandom = () => {
-      const values = Object.values(translations?.prompts);
-      const currentLength = values.length - 1;
-      const random = Math.random();
-      const finalValue = parseInt(random*(currentLength));
-      handleQuickSearch(values[finalValue])
+    const values = Object.values(translations?.prompts);
+    const currentLength = values.length - 1;
+    const random = Math.random();
+    const finalValue = parseInt(random*(currentLength));
+    handleQuickSearch(values[finalValue])
   };
   const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
     dispatch(setCurrentSearch(e.target.value));
@@ -155,17 +155,24 @@ const Navbar = ({ logOut , user , loading }) => {
               {translations?.[page.name] || page.name}
             </Button>
           ))}
+            <Button
+              onClick={handleSearchRandom}
+              sx={{ my: 2 , color:'inherit' }}
+              className='bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange shadow-lg font-semibold'
+            >
+              Explore
+            </Button>
         </Box>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
         {/* <p className="px-6 py-3 text-dokuso-black font-semibold text-base leading-tight hover:bg-dokuso-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
                         onClick={() => handleSearchRandom()}>
                             {translations?.not_sure}
             </p> */}
-        <Legend 
+        {/* <Legend 
           onClick={handleSearchRandom} 
         >
           Explore
-        </Legend>
+        </Legend> */}
         </Box>
         {/* Menu bar for mobile display */}
         <Box sx={{ flexGrow: 0, mr: 2 ,  display: { xs: 'flex', md: 'none' } }}>
