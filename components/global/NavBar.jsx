@@ -103,9 +103,8 @@ const Navbar = ({ logOut , user , loading }) => {
   };
   const handleClickLanguage = (selectedLanguage) => {
     const clickedLanguage = selectedLanguage.toLowerCase();
-    console.log('selected: ', clickedLanguage)
     const { pathname, query } = router;
-    router.replace(
+    router.replace( // solo cambio el lenguaje en la URL
       { pathname, query: {...query,lan: clickedLanguage} }, undefined, { shallow: true }
     );
     handleLanguageMenuClose();

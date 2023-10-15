@@ -85,8 +85,7 @@ const Layout = ({ children }) => {
         break;
   
     }
-    localStorage.setItem('language',language)
-    console.log('setee idioma desde layout')
+    // localStorage.setItem('language',language)
   },[language]); // eslint-disable-line
 
   return (
