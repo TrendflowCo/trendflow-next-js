@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import TitleAndImage from '../TitleAndImage';
 import Searcher from '../Searcher';
-import PopularSearches from '../PopularSearches';
 import FashionForward from '../FashionForward';
 import FeatureImages from '../FeatureImages';
 import SecondaryLogin from '../SecondaryLogin';
