@@ -27,7 +27,6 @@ import { analytics } from '../../services/firebase';
 import { CircularProgress } from '@mui/material';
 import { handleSearchQuery } from '../functions/handleSearchQuery';
 import SearchIcon from '@mui/icons-material/Search';
-// import styled from 'styled-components';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
@@ -80,17 +79,6 @@ const Navbar = ({ logOut , user , loading }) => {
     handleSearchQuery(language , val , 'clickOnPopularSearches' , router)
   };
 
-  //   const Legend = styled.div`
-  //   font-size: 24px;
-  //   font-weight: bold;
-  //   color: #FAB332;
-  //   cursor: pointer;
-  //   transform: rotate(-20deg);
-  //   transition: color 0.3s;
-
-  //   /* Apply the custom font here */
-  //   // font-family: 'YourCustomFont', sans-serif;
-  // `;
   const handleSearchRandom = () => {
     const values = Object.values(translations?.prompts);
     const currentLength = values.length - 1;
@@ -116,7 +104,6 @@ const Navbar = ({ logOut , user , loading }) => {
   const handleClickLanguage = (selectedLanguage) => {
     const clickedLanguage = selectedLanguage.toLowerCase();
     const { pathname, query } = router;
-    // const params = new URLSearchParams(query);
     router.replace(
       { pathname, query: {...query,lan: clickedLanguage} }, undefined, { shallow: true }
     );
@@ -243,7 +230,6 @@ const Navbar = ({ logOut , user , loading }) => {
           { router.pathname.includes('results') &&
             // Searching section
             <div className="flex flex-row items-center outline-none justify-center items-center w-full h-full relative mr-4">
-              {/* <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> */}
               <input 
                 className="bg-dokuso-black outline-none bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
                 type="text"
@@ -295,13 +281,11 @@ const Navbar = ({ logOut , user , loading }) => {
           :
             <Button 
               onClick={() => dispatch(setLogInFlag(true))}
-              className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-green to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
-              color="dokusoBlack"
+              className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-pink to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
               sx={{fontWeight: 'bold' , flex: 'none'}}
               >
               {translations?.login?.log_in}
             </Button>
-          
           }
           {/* Menu toggle for the logged user */}
           <Menu

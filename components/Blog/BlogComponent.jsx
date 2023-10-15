@@ -9,6 +9,7 @@ import { app } from "../../services/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import SinglePost from "./SinglePost";
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 
 const BlogComponent = () => {
     const db = getFirestore(app);
@@ -18,7 +19,7 @@ const BlogComponent = () => {
     const [reload , setReload] = useState(true);
     const dispatch = useAppDispatch();
     const [loadingFlag, setLoadingFlag] = useState(false);
-    const [allPosts , setAllPosts] = useState([]);
+    const [allPosts , setAllPosts] = useState(null);
     useEffect(() =>{
         const fetchData = async () => {
             try {
@@ -60,10 +61,17 @@ const BlogComponent = () => {
                             </button>
                         }
                     </div>
-                    <section>
-                        {allPosts?.length > 0 && allPosts.map((post,indexPost) => {return (
-                            <SinglePost post={post} key={indexPost} reload={reload} setReload={setReload} user={user}/>
-                        )})}
+                    <section className="w-full flex flex-auto">
+                        {(allPosts && allPosts?.length > 0) ? 
+                            allPosts.map((post,indexPost) => {return (
+                                <SinglePost post={post} key={indexPost} reload={reload} setReload={setReload} user={user}/>
+                            )})
+                        :
+                        <section className="w-full h-full flex flex-col items-center justify-center">
+                            <HighlightOffRoundedIcon fontSize="large"/>
+                            <span className="text-xl mt-2">Empty section</span>
+                        </section>
+                        }
                     </section>
                 </>
             }

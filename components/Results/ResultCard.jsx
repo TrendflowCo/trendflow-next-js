@@ -70,11 +70,15 @@ const ResultCard = ({productItem }) => {
     }
   };
   const handleVisitSite = () => {
+    let finalURI = productItem.shop_link;
+    if(!productItem.shop_link.includes('http://') && !productItem.shop_link.includes('https://')) {
+      finalURI = `https://${productItem.shop_link}`
+    }
     logEvent(analytics, 'select_content', {
       content_type: 'product',
-      content_id: productItem.shop_link
+      content_id: finalURI
     });
-    window.open(productItem.shop_link, '_blank');
+    window.open(finalURI, '_blank').focus();
   };
   const handleCopyToClipboard = () => {
     logEvent(analytics, 'select_content', {
@@ -175,9 +179,8 @@ const ResultCard = ({productItem }) => {
             title={enhanceText(translations?.results?.visit_site)}  
             placement="bottom" 
             arrow={true}  
-            onClick={handleVisitSite}
           >
-            <IconButton>
+            <IconButton onClick={handleVisitSite}>
             <StorefrontIcon/>
             </IconButton>
           </Tooltip>
