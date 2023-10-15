@@ -43,12 +43,13 @@ const Navbar = ({ logOut , user , loading }) => {
   const handleCloseNavMenu = () => { // close nav menu on mobile
     setAnchorElNav(null);
   };
-  
   const handleSelectPage = (sel) => {
     if(sel === 'home') {
       router.push('/')
     } else if (sel === 'blog'){
       router.push(`/${language}/blog`)
+    } else if (sel === 'brands') {
+      router.push(`/${language}/brands`)
     }
   };
   const handleOpenUserMenu = (event) => { // open user menu
@@ -78,7 +79,6 @@ const Navbar = ({ logOut , user , loading }) => {
     dispatch(setCurrentSearch(val))
     handleSearchQuery(language , val , 'clickOnPopularSearches' , router)
   };
-
   const handleSearchRandom = () => {
     const values = Object.values(translations?.prompts);
     const currentLength = values.length - 1;
@@ -103,6 +103,7 @@ const Navbar = ({ logOut , user , loading }) => {
   };
   const handleClickLanguage = (selectedLanguage) => {
     const clickedLanguage = selectedLanguage.toLowerCase();
+    console.log('selected: ', clickedLanguage)
     const { pathname, query } = router;
     router.replace(
       { pathname, query: {...query,lan: clickedLanguage} }, undefined, { shallow: true }

@@ -4,23 +4,11 @@ export const pages = [
         src: "/"
     },
     {
+        name: "brands",
+        src: "/brands"
+    },
+    {
         name: "blog",
         src: "/blog"
     },
-    // {
-    //     name: "About",
-    //     src: "/manifesto"
-    // },
-    // {
-    //     name: "Brands",
-    //     src: "/brands"
-    // },
-    // {
-    //     name: "Blog",
-    //     src: "https://medium.com/@dokuso.app/"
-    // },
-    // {
-    //     name: "Api",
-    //     src: "/"
-    // },
 ];

@@ -22,6 +22,7 @@ import { handleAddTag } from "../../functions/handleAddTag";
 import { countFilters } from "../../functions/countFilters";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
+import GlobalLoader from "../../Common/Loaders/GlobalLoader";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -159,9 +160,7 @@ const Results = () => {
                 deviceWidth={dimensions.width}
             />
             { loadingFlag ? 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress size={72} thickness={4} />
-                </Box>
+                <GlobalLoader/>
             :
                 <>
                     {failedSearch ? 

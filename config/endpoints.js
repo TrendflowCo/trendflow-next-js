@@ -6,7 +6,8 @@ export const endpoints = (name) => {
         results: `${CLIP_API}search?`,
         byIds:  `${CLIP_API}search?ids=`,
         similarProducts: `${CLIP_API}most_similar_items?top_k=20&id=`,
-        dedicatedProduct: `${CLIP_API}product?id=`
+        dedicatedProduct: `${CLIP_API}product?id=`,
+        brands: `${CLIP_API}brands_list`,
     }
     return endpoints[name];
 }
