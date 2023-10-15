@@ -15,7 +15,6 @@ const PopularSearches = () => {
         });      
         dispatch(setCurrentSearch(val))
         router.push(`${language}/results?query=${val.split(' ').join('-').toLowerCase()}`)
-        // router.push(`${language}/results?query=${val}`)
     };
     
     return (

@@ -1,16 +1,13 @@
 import Head from 'next/head';
 import NavBar from './NavBar';
-import React, { useEffect , useState } from 'react';
+import React, { useEffect } from 'react';
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { logOutExternal } from '../Auth/logOutExternal';
 import LogInModal from '../Auth/LogInModal';
 import { useAppSelector , useAppDispatch } from '../../redux/hooks';
-import { setLogInFlag , setUser } from '../../redux/features/actions/auth';
 import { setTranslations } from '../../redux/features/actions/language';
-import { setUserId } from "firebase/analytics";
-import { analytics } from '../../services/firebase';
-import { Toaster, toast } from 'sonner';
+import { Toaster } from 'sonner';
 import enTranslation from '../languages/en.json';
 import esTranslation from '../languages/es.json';
 import itTranslation from '../languages/it.json';
@@ -39,33 +36,6 @@ const Layout = ({ children }) => {
     logOutExternal(auth)
   };
 
-  // useEffect(() => {
-  //   if(logged !== null) {
-  //     setTimeout(() =>{
-  //       setReady(true)
-  //     },90000)
-  //   }
-  // },[logged]);
-  // useEffect(() => {
-  //   if (ready === true) {
-  //     if (logged === false) {
-  //       dispatch(setLogInFlag(true))
-  //     }
-  //   }
-  // },[ready]);  // eslint-disable-line
-  // useEffect(() => {
-  //   if (logged === null) {
-  //     setLogged(false)
-  //   } else if (logged === false) {
-  //     setLogged(true) 
-  //   } else {
-  //     setLogged(false)
-  //   }
-  //   dispatch(setUser(user)); // set the user for every change
-  //   if(user) {
-  //     setUserId(analytics, user.uid); // set user.uid for analytics
-  //   }
-  // },[user]) // eslint-disable-line
   useEffect(() => {
     switch(language) {
       case "en":
@@ -115,6 +85,8 @@ const Layout = ({ children }) => {
         break;
   
     }
+    localStorage.setItem('language',language)
+    console.log('setee idioma desde layout')
   },[language]); // eslint-disable-line
 
   return (

@@ -12,12 +12,13 @@ const Searcher = () => {
     const { currentSearch } = useAppSelector(state => state.search);
     const { translations , language } = useAppSelector(state => state.language);
     const hotList  = ['Barbie', 
-                    'Office attire', 
-                    'Art-inspired prints', 
-                    'Floral embroidery', 
-                    'Menswear-inspired tailoring', 
-                    'Statement accessories',
-                    'Halloween']
+        'Office attire', 
+        'Art-inspired prints', 
+        'Floral embroidery', 
+        'Menswear-inspired tailoring', 
+        'Statement accessories',
+        'Halloween'
+    ];
     const router = useRouter();
     const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
         dispatch(setCurrentSearch(e.target.value));
@@ -81,7 +82,7 @@ const Searcher = () => {
                         </p>
                         {translations?.prompts && Object.entries(translations?.prompts).sort().map(([key, prompt]) => (
                             <p 
-                                key={prompt}
+                                key={`${prompt}${key}`}
                                 type="button"  
                                 onClick={() => {handleQuickSearch(prompt)}} 
                                 value={prompt} 
