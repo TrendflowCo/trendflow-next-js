@@ -6,11 +6,5 @@ export const handleSearchQuery = ( language , val , event , router ) => {
     logEvent(analytics, event, {
         search_term: val
     });
-    if(router.pathname === '/[lan]/results') {
-        let newQuery = {...router.query};
-        newQuery = {...newQuery, query: val};
-        router.push({ href: "./", query: newQuery })
-    } else {
-        router.push(`/${language}/results?query=${encodeURIComponent(val)}`);
-    }
+    router.push(`/${language}/results?query=${encodeURIComponent(val)}`); // no mantengo ningun filtro. Busco de nuevo a pagina 1 y sin filtros
 };

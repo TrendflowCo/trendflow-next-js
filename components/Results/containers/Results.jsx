@@ -22,7 +22,6 @@ import { handleAddTag } from "../../functions/handleAddTag";
 import { countFilters } from "../../functions/countFilters";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
-// import InfiniteScroll from 'react-infinite-scroll-component';
  
 const Results = () => {
     const db = getFirestore(app);
@@ -68,7 +67,7 @@ const Results = () => {
             setFailedSearch(false);
             setLoadingFlag(true);
             setTotalResults(0);
-            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`;
             const rsp = (await axios.get(requestURI)).data; // get data
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
@@ -102,9 +101,9 @@ const Results = () => {
                     language: `language=${lan}`,
                     page: router.query.page ? `&page=${router.query.page}` : '&page=1',
                     limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
-                    query: router.query.query ? `&query=${router.query.query}` : '',
+                    query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
                     imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
-                    brands: router.query.brands ? `&brands=${router.query.brands}` : '', // list of brands
+                    brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '', // list of brands
                     category: router.query.category ? `&category=${router.query.category}` : '',
                     minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
                     maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
