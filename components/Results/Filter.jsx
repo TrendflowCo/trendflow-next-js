@@ -17,7 +17,6 @@ import { analytics } from "../../services/firebase";
 
 const Filter = (props) => {
     const router = useRouter();
-    const dispatch = useAppDispatch();
     const { translations } = useAppSelector(state => state.language);
     const { 
         setFilterModal , 
@@ -116,11 +115,7 @@ const Filter = (props) => {
         params.delete('minPrice');
         params.delete('maxPrice');
         params.delete('page');
-        router.replace(
-            { pathname, query: params.toString() },
-            undefined, 
-            { shallow: true }
-        );
+        router.push(`/${query.lan}/results?query=${encodeURIComponent(query.query)}`)
         setOnSaleChecked(false);
         setCategoryFilter('');
         setSelectedBrands([]);

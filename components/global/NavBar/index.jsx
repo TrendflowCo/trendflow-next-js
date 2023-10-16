@@ -10,22 +10,20 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider} from '@mui/material/styles';
-import { muiColors } from '../Utils/muiTheme';
-import { useAppSelector , useAppDispatch } from '../../redux/hooks';
-import { setLogInFlag } from '../../redux/features/actions/auth';
+import { muiColors } from '../../Utils/muiTheme';
+import { useAppSelector , useAppDispatch } from '../../../redux/hooks';
+import { setLogInFlag } from '../../../redux/features/actions/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { setCurrentSearch } from '../../redux/features/actions/search';
-// import Swal from 'sweetalert2';
-import { pages } from '../Utils/pages';
-// import { setLanguage } from '../../redux/features/actions/language';
-import { settings_account } from '../Utils/settingsAccount';
-import { languages } from "../Utils/languages";
-import { enhanceText } from "../Utils/enhanceText";
+import { setCurrentSearch } from '../../../redux/features/actions/search';
+import { pages } from '../../Utils/pages';
+import { settings_account } from '../../Utils/settingsAccount';
+import { languages } from "../../Utils/languages";
+import { enhanceText } from "../../Utils/enhanceText";
 import { logEvent } from 'firebase/analytics';
-import { analytics } from '../../services/firebase';
+import { analytics } from '../../../services/firebase';
 import { CircularProgress } from '@mui/material';
-import { handleSearchQuery } from '../functions/handleSearchQuery';
+import { handleSearchQuery } from '../../functions/handleSearchQuery';
 import SearchIcon from '@mui/icons-material/Search';
 
 const Navbar = ({ logOut , user , loading }) => {
@@ -137,7 +135,6 @@ const Navbar = ({ logOut , user , loading }) => {
               key={page.name}
               onClick={() => {handleSelectPage(page.name)}}
               sx={{ my: 2 , color:'inherit' }}
-              // href={`/${language}/${page.name.toLowerCase()}`}
             >
               {translations?.[page.name] || page.name}
             </Button>
@@ -151,15 +148,6 @@ const Navbar = ({ logOut , user , loading }) => {
             </Button>
         </Box>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        {/* <p className="px-6 py-3 text-dokuso-black font-semibold text-base leading-tight hover:bg-dokuso-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
-                        onClick={() => handleSearchRandom()}>
-                            {translations?.not_sure}
-            </p> */}
-        {/* <Legend 
-          onClick={handleSearchRandom} 
-        >
-          Explore
-        </Legend> */}
         </Box>
         {/* Menu bar for mobile display */}
         <Box sx={{ flexGrow: 0, mr: 2 ,  display: { xs: 'flex', md: 'none' } }}>
@@ -191,14 +179,12 @@ const Navbar = ({ logOut , user , loading }) => {
               display: { xs: 'block', md: 'none' },
             }}
           >
+            {/* Acciones mobile */}
             {pages.map((page) => (
               <MenuItem 
-                component="a"
+                onClick={() => {handleSelectPage(page.name)}}
                 key={page.name} 
-                onClick={handleCloseNavMenu}
                 href={page.src}
-                // target="_blank" 
-                // rel="noopener noreferrer"
               >
                 <Typography textAlign="center">{enhanceText(page.name)}</Typography>
               </MenuItem>
