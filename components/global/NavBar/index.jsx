@@ -28,7 +28,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
-  const { language , translations } = useAppSelector(state => state.language);
+  const { language , translations } = useAppSelector(state => state.region);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [anchorElNav, setAnchorElNav] = useState(null);

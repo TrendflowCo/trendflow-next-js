@@ -1,20 +1,38 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react";
-import { useAppDispatch } from "../redux/hooks";
-import { setLanguage } from "../redux/features/actions/language";
+import { countriesAndLanguages } from "../components/Resources/countriesAndLanguages";
+import { distanceCalculator } from "../components/functions/distanceCalculator";
 
 const HomeRedirect = () => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   useEffect(() => { // this is made when someone enters to www.dokuso.app/
-    const defLanguage = localStorage.getItem("language"); // takes language from localStorage
-    if(!defLanguage) { // by complete default, define english as first language
-      dispatch(setLanguage("en")); // redux
-      localStorage.setItem("language","en"); // local storage
-      router.push(`/en`); // redirect to current language url
+    const defCountry = localStorage.getItem('country'); // pais por localStorage
+    const defLanguage = localStorage.getItem('language'); // idioma por localStorage
+    const isValidCountry = countriesAndLanguages.some((item) => item.aliasCountry === defCountry)
+    const isValidLanguage = countriesAndLanguages.some((item) => item.defaultLanguage === defLanguage)
+    if (!defCountry || !defLanguage || !isValidCountry || !isValidLanguage) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        const countriesDistances = countriesAndLanguages.map((item) => {
+          return {
+            country: item.country,
+            aliasCountry: item.aliasCountry,
+            defaultLanguage: item.defaultLanguage,
+            defaultCurrency: item.defaultCurrency,
+            distance: distanceCalculator(latitude , longitude , item.latitude , item.longitude)
+          }
+        })
+        const minimumDistance = countriesDistances.reduce((prev, curr) => prev.distance < curr.distance ? prev : curr);
+        localStorage.setItem("country",minimumDistance.aliasCountry); // local storage country
+        localStorage.setItem("language",minimumDistance.defaultLanguage); // local storage language
+        router.push(`/${minimumDistance.aliasCountry}/${minimumDistance.defaultLanguage}`)
+      }, (error) => {
+        localStorage.setItem("country",'us'); // local storage country
+        localStorage.setItem("language",'en'); // local storage language
+        router.push(`/${'us'}/${'en'}`)
+      });  
     } else {
-      dispatch(setLanguage(defLanguage)); // the language found is dispatched to redux
-      router.push(`/${defLanguage}`); // redirect to current language url
+      router.push(`/${defCountry}/${defLanguage}`)
     }
   },[]) // eslint-disable-line
 }
