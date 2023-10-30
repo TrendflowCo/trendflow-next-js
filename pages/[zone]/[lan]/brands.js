@@ -1,5 +1,5 @@
 import React from "react";
-import Brands from "../../components/Brands";
+import Brands from "../../../components/Brands";
 import Layout from "./layout";
 
 const brandsPage = () => {
