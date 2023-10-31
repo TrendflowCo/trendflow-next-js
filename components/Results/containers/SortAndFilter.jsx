@@ -11,7 +11,7 @@ import { analytics } from "../../../services/firebase";
 
 const SortAndFilter = (props) => {
     const { totalFilters } = useAppSelector ( state => state.search);
-    const { translations } = useAppSelector( state => state.language);
+    const { translations } = useAppSelector( state => state.region);
     const {
         setFilterModal,
         setSortingModal

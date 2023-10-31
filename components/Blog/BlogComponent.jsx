@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../../redux/hooks";
-import { setLanguage } from "../../redux/features/actions/language";
+import { setLanguage } from "../../redux/features/actions/region";
 import { collection , getDocs, query as queryfb , getFirestore } from "firebase/firestore";
 import { app } from "../../services/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
