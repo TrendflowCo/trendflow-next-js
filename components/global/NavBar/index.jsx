@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -16,7 +15,6 @@ import { setLogInFlag } from '../../../redux/features/actions/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { setCurrentSearch } from '../../../redux/features/actions/search';
-import { pages } from '../../Utils/pages';
 import { settings_account } from '../../Utils/settingsAccount';
 import { languages } from "../../Utils/languages";
 import { enhanceText } from "../../Utils/enhanceText";
@@ -25,31 +23,30 @@ import { analytics } from '../../../services/firebase';
 import { CircularProgress } from '@mui/material';
 import { handleSearchQuery } from '../../functions/handleSearchQuery';
 import SearchIcon from '@mui/icons-material/Search';
+import TitleDesktop from './Desktop/TitleDesktop';
+import PagesDesktop from './Desktop/PagesDesktop';
+import MenuMobile from './Mobile/MenuMobile';
+import TitleMobile from './Mobile/TitleMobile';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { currentSearch } = useAppSelector(state => state.search);
-  const { language , translations } = useAppSelector(state => state.region);
+  const { language , translations , country } = useAppSelector(state => state.region);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElLanguage , setAnchorElLanguage] = useState(null);
   
-  const handleOpenNavMenu = (event) => { // open nav menu on mobile
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => { // close nav menu on mobile
-    setAnchorElNav(null);
-  };
-  const handleSelectPage = (sel) => {
+  const handleSelectPage = (sel) => { // funcion para seleccionar paginas. Queda para los dos formatos
     if(sel === 'home') {
-      router.push('/')
+      router.push(`/${country}/${language}`)
     } else if (sel === 'blog'){
-      router.push(`/${language}/blog`)
+      router.push(`/${country}/${language}/blog`)
     } else if (sel === 'brands') {
-      router.push(`/${language}/brands`)
+      router.push(`/${country}/${language}/brands`)
     }
   };
+
+
   const handleOpenUserMenu = (event) => { // open user menu
     logEvent(analytics, 'clickOnUserMenu', {
       button: 'Main'
@@ -72,17 +69,6 @@ const Navbar = ({ logOut , user , loading }) => {
       router.push(`/${language}/user/wishlist`)
     }
     handleCloseUserMenu()
-  };
-  const handleQuickSearch = (val) => {
-    dispatch(setCurrentSearch(val))
-    handleSearchQuery(language , val , 'clickOnPopularSearches' , router)
-  };
-  const handleSearchRandom = () => {
-    const values = Object.values(translations?.prompts);
-    const currentLength = values.length - 1;
-    const random = Math.random();
-    const finalValue = parseInt(random*(currentLength));
-    handleQuickSearch(values[finalValue])
   };
   const handleSearchPhrase = (e) => { // function for setting the phrase. Stores into global state
     dispatch(setCurrentSearch(e.target.value));
@@ -112,105 +98,10 @@ const Navbar = ({ logOut , user , loading }) => {
   <ThemeProvider theme={muiColors}>
     <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[#D8D8D8]'>
       <Container maxWidth="xxl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
-        {/* Title for desktop display */}
-        <Box sx={{ mr: 2 , display: { xs: 'none', md: 'flex'}}}>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              fontWeight: 700,
-              color: 'dokusoBlack',
-              textDecoration: 'none',
-            }}
-          >
-            Dokusō
-          </Typography>
-        </Box>
-        {/* Pages for desktop display */}
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {pages.map((page) => (
-            <Button
-              key={page.name}
-              onClick={() => {handleSelectPage(page.name)}}
-              sx={{ my: 2 , color:'inherit' }}
-            >
-              {translations?.[page.name] || page.name}
-            </Button>
-          ))}
-            <Button
-              onClick={handleSearchRandom}
-              sx={{ my: 2 , color:'inherit' }}
-              className='bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange shadow-lg font-semibold'
-            >
-              Explore
-            </Button>
-        </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        </Box>
-        {/* Menu bar for mobile display */}
-        <Box sx={{ flexGrow: 0, mr: 2 ,  display: { xs: 'flex', md: 'none' } }}>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleOpenNavMenu}
-            color="dokusoBlack"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorElNav}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            open={Boolean(anchorElNav)}
-            onClose={handleCloseNavMenu}
-            sx={{
-              display: { xs: 'block', md: 'none' },
-            }}
-          >
-            {/* Acciones mobile */}
-            {pages.map((page) => (
-              <MenuItem 
-                onClick={() => {handleSelectPage(page.name)}}
-                key={page.name} 
-                href={page.src}
-              >
-                <Typography textAlign="center">{enhanceText(page.name)}</Typography>
-              </MenuItem>
-            
-            ))}
-          </Menu>
-        </Box>
-        {/* Title for mobile display */}
-        {!router.pathname.includes('results') && 
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Dokusō
-          </Typography>
-        }
+        <TitleDesktop/>
+        <PagesDesktop handleSelectPage={handleSelectPage}/>
+        <MenuMobile handleSelectPage={handleSelectPage}/>
+        <TitleMobile/>
         {/* Nav bar right section */}
         <Box sx={{ flexGrow: 1 , width:'fit', maxWidth:'500px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' , justifyContent:'end' }}>
           { router.pathname.includes('results') &&
@@ -219,7 +110,6 @@ const Navbar = ({ logOut , user , loading }) => {
               <input 
                 className="bg-dokuso-black outline-none bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
                 type="text"
-                // placeholder={currentSearch.split('-').join(' ') || "Tell me what you like"}
                 placeholder={translations?.search?.placeholder}
                 value={currentSearch.split('-').join(' ')}
                 onChange={(e) => {handleSearchPhrase(e)}}
@@ -235,7 +125,6 @@ const Navbar = ({ logOut , user , loading }) => {
                   </div>
                 </IconButton>
               </Tooltip>
-
             </div>
           }
           {/* Menu for a logged user */}
@@ -244,9 +133,7 @@ const Navbar = ({ logOut , user , loading }) => {
               <CircularProgress size={36} thickness={3} />
             </Box>
           : 
-
            user ?
-            //  Avatar icon for user
             <Tooltip title="Open settings">
               <IconButton 
                 onClick={handleOpenUserMenu} 
@@ -291,7 +178,6 @@ const Navbar = ({ logOut , user , loading }) => {
             onClose={handleCloseUserMenu}
           >
             {settings_account.map((setting) => (
-              // <MenuItem key={setting} onClick={handleCloseUserMenu}>
               <MenuItem key={setting} onClick={() => handleMenuOption(setting)}>
                 <Typography textAlign="center">{translations?.userMenu?.[setting] && enhanceText(translations?.userMenu?.[setting])}</Typography>
               </MenuItem>
@@ -301,7 +187,6 @@ const Navbar = ({ logOut , user , loading }) => {
             // Language selector
             <Tooltip title="Select language" className='cursor-pointer'>
               <Button color="inherit" onClick={handleLanguageMenuOpen} sx={{width: 48 , height: 48, borderRadius: 24, ml: 0.5}}>
-              {/* {`${(languages?.find(lan => lan?.name?.toLowerCase() === language?.toLowerCase()) || {}).flag}`} */}
               {language}
               </Button>
             </Tooltip>

@@ -9,7 +9,7 @@ import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
 import { setCurrentSearch , setTotalFilters, setWishlist } from "../../../redux/features/actions/search";
-import { setLanguage } from "../../../redux/features/actions/language";
+import { setLanguage } from "../../../redux/features/actions/region";
 import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
@@ -27,7 +27,7 @@ import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
-    const { language } = useAppSelector(state => state.language);
+    const { language } = useAppSelector(state => state.region);
     // const { user } = useAppSelector(state => state.auth);
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data

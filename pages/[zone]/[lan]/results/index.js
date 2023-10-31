@@ -1,4 +1,4 @@
-import Results from "../../../components/Results/containers/Results";
+import Results from "../../../../components/Results/containers/Results";
 import Layout from "../layout";
 
 const ProductResult = () => {

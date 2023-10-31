@@ -11,7 +11,7 @@ import { analytics } from "../../services/firebase";
 
 const Sort = ( props ) => {
     const router = useRouter();
-    const { translations } = useAppSelector(state =>state.language);
+    const { translations } = useAppSelector(state =>state.region);
     const { sortingModal , setSortingModal , deviceWidth } = props;
     const optionsList = [{
         text: translations?.results?.price,

@@ -17,7 +17,7 @@ import { analytics } from "../../services/firebase";
 
 const Filter = (props) => {
     const router = useRouter();
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     const { 
         setFilterModal , 
         filterModal , 

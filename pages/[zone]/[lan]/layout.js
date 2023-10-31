@@ -4,13 +4,10 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { setLanguage , setCountry, setTranslations } from '../../../redux/features/actions/region';
 import { countriesAndLanguages } from '../../../components/Resources/countriesAndLanguages';
 import { distanceCalculator } from "../../../components/functions/distanceCalculator"
-
 import enTranslation from '../../../components/languages/en.json'
 import esTranslation from '../../../components/languages/es.json'
 import frTranslation from '../../../components/languages/fr.json'
 import itTranslation from '../../../components/languages/it.json'
-
-
 
 const Layout = ({ children }) => {
     const dispatch = useAppDispatch();
@@ -23,7 +20,6 @@ const Layout = ({ children }) => {
         const isValidCountry = countriesAndLanguages.some((item) => item.aliasCountry === defCountry)
         const isValidLanguage = countriesAndLanguages.some((item) => item.defaultLanguage === defLanguage)
         if ( !defLanguage || !isValidCountry || !isValidLanguage) { // if something is not valid
-          console.log('parametros invalidos. redirecciono por cercania si puedo')
           navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
             const countriesDistances = countriesAndLanguages.map((item) => {
@@ -45,7 +41,6 @@ const Layout = ({ children }) => {
             router.push(`/${'us'}/${'en'}`)
           });  
         } else {
-          console.log('parametros validos')
           localStorage.setItem("country",defCountry); // local storage country
           localStorage.setItem("language",defLanguage); // local storage language
           dispatch(setCountry(defCountry))
