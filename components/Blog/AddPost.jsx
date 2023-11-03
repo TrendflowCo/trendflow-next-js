@@ -14,7 +14,7 @@ import { addDoc, collection, doc, getDoc,  getFirestore,  updateDoc } from "fire
 import { app } from "../../services/firebase";
 
 const AddPost = () => {
-  const {language} = useAppSelector(state => state.language)
+  const {language} = useAppSelector(state => state.region)
   const db = getFirestore(app);
   const router = useRouter()  
   const auth = getAuth(app); // instance of auth method

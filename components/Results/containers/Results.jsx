@@ -23,6 +23,7 @@ import { countFilters } from "../../functions/countFilters";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
+import Searcher from "../../Home/Searcher";
  
 const Results = () => {
     const db = getFirestore(app);
@@ -69,6 +70,7 @@ const Results = () => {
             setLoadingFlag(true);
             setTotalResults(0);
             const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`;
+            console.log('request to API: ', requestURI)
             const rsp = (await axios.get(requestURI)).data; // get data
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
@@ -94,12 +96,13 @@ const Results = () => {
     };
     useEffect(() => {
         if (router.isReady) {
-            const { lan } = router.query;
+            const { lan , zone } = router.query;
             if(lan) {
                 dispatch(setLanguage(lan)); // write redux variable - avoid refresh
                 localStorage.setItem('language',lan.toLowerCase());
                 const filters = {
                     language: `language=${lan}`,
+                    country: `&country=${zone}`,
                     page: router.query.page ? `&page=${router.query.page}` : '&page=1',
                     limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
                     query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
@@ -119,7 +122,7 @@ const Results = () => {
                 dispatch(setTotalFilters(countFilters(filters)));
             }
         }
-    },[user, router.isReady ,  router.query.lan , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
+    },[user, router.isReady ,  router.query.lan , router.query.zone , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
     
     useEffect(() => { // wishlist search
         const fetchData = async () => {
@@ -164,15 +167,18 @@ const Results = () => {
             :
                 <>
                     {failedSearch ? 
-                        <section className='flex flex-col lg:flex-row lg:justify-between mt-25'>
-                            <div className='mx-5'>
-                                <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{currentSearch ? enhanceText(currentSearch) : ''}</h6>
-                                <h6 className="text-sm mt-1">No results for this search</h6>
-                            </div>
-                            <SortAndFilter 
-                                setFilterModal={setFilterModal} 
-                                setSortingModal={setSortingModal}
-                            />
+                        <section className="flex flex-col w-full mt-25 mb-2">
+                            <section className='flex flex-col lg:flex-row lg:justify-between'>
+                                <div className='mx-5'>
+                                    <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{currentSearch ? enhanceText(currentSearch) : ''}</h6>
+                                    <h6 className="text-sm mt-1">No results for this search</h6>
+                                </div>
+                                <SortAndFilter 
+                                    setFilterModal={setFilterModal} 
+                                    setSortingModal={setSortingModal}
+                                    />
+                            </section>
+                            <Searcher/>
                         </section>
                     : 
                     <>
@@ -181,18 +187,20 @@ const Results = () => {
                             {lastSearch && <meta name="description" content={enhanceText(lastSearch)}/>}
                             {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
                         </Head>
-                        <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
-                            <div className='mx-5'>
-                                { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
-                                { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
-                                <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
+                        <section className="flex flex-col w-full mt-25 mb-2">
+                            <div className='flex flex-col lg:flex-row lg:justify-between '>
+                                <div className='mx-5'>
+                                    { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
+                                    { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
+                                    <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
+                                </div>
+                                <SortAndFilter 
+                                    setFilterModal={setFilterModal} 
+                                    setSortingModal={setSortingModal}
+                                    />
                             </div>
-                            {/* Buttons for filtering and sorting modal enabling */}
-                            <SortAndFilter 
-                                setFilterModal={setFilterModal} 
-                                setSortingModal={setSortingModal}
-                            />
-                        </div>
+                            <Searcher/>
+                        </section>
                         {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-2'>
                             <div className="flex flex-row h-fit flex-wrap w-full">
                             {searchTags.sort().map((tag,index) => <div 

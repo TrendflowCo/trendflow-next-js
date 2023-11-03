@@ -17,7 +17,7 @@ import { enhanceText } from "../../Utils/enhanceText";
 const Wishlist = () => {
     const dispatch = useAppDispatch();
     const { wishlist } = useAppSelector(state => state.search);
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     const db = getFirestore(app);
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data

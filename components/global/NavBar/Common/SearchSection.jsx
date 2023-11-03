@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../../redux/hooks";
 import { setCurrentSearch } from "../../../../redux/features/actions/search";
 import { handleSearchQuery } from "../../../functions/handleSearchQuery";
+import { IconButton, Tooltip } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchSection = () => {
     const router = useRouter();

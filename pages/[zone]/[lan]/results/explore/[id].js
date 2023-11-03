@@ -1,4 +1,4 @@
-import Explore from "../../../../components/Results/Explore/Explore";
+import Explore from "../../../../../components/Results/Explore/Explore";
 import Layout from "../../layout";
 
 const exploreItem = () => {

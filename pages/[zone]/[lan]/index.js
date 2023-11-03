@@ -4,8 +4,7 @@ import Layout from './layout';
 const Home = () => {
   return ( 
     <Layout> 
-      {/* <Main/> */}
-      <div>Main</div>
+      <Main/>
     </Layout>
   )
 }

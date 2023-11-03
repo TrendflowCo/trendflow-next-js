@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 const BrandCard = ({brand}) => {
     const router = useRouter();
-    const {language} = useAppSelector(state => state.language);
+    const {language} = useAppSelector(state => state.region);
     const handleSearchBrand = (brand) => {
         router.push(`/${language}/results?brands=${encodeURIComponent(brand)}`)
         // window.open(`/${language}/results?brands=${encodeURIComponent(brand)}`, '_ blank') 

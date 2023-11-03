@@ -12,13 +12,12 @@ import ShareIcon from '@mui/icons-material/Share';
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../../services/firebase";
 import { wishlistChange } from "./../functions/wishlistChange";
-import { setWishlist , setCurrentSearch } from "../../../redux/features/actions/search";
+import { setWishlist } from "../../../redux/features/actions/search";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from "../../Utils/swalConfig";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
-import { setLanguage } from "../../../redux/features/actions/language";
 import { languageAdapter } from "../functions/languageAdapter";
 import CarouselComp from "./CarouselComp";
 import Head from "next/head";
@@ -30,7 +29,7 @@ const Explore = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
-    const { translations , language } = useAppSelector(state => state.language);
+    const { translations , language } = useAppSelector(state => state.region);
     const { wishlist , currentSearch } = useAppSelector(state => state.search);
     const [loadingFav , setLoadingFav] = useState(false);
     const [currentProduct , setCurrentProduct] = useState({});
@@ -53,8 +52,6 @@ const Explore = () => {
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
                 setSimilarProducts(similars.results);
-                dispatch(setLanguage(currentLanguage)); // write redux variable - avoid refresh
-                localStorage.setItem('language',currentLanguage.toLowerCase());
                 setLoading(false);    
             } catch (err) {
                 setLoading(false);
@@ -109,16 +106,6 @@ const Explore = () => {
     const redirectToBrand = (brandName) => {
         window.open(`/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
     };
-    // const handleAddTag = (tag) => {
-    //     const prevSearch = currentSearch;
-    //     const newSearch = currentSearch.includes(tag) ? currentSearch : (currentSearch === '' ? tag : `${currentSearch} ${tag}`);
-    //     logEvent(analytics, 'clickAddTag', {
-    //         tag: tag,
-    //         prev_search: prevSearch,
-    //         new_search: newSearch
-    //       });
-    //     dispatch(setCurrentSearch(newSearch))
-    // };
     
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
