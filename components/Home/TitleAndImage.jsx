@@ -7,7 +7,7 @@ import { muiColors } from '../Utils/muiTheme';
 import { useAppSelector } from "../../redux/hooks";
 
 const TitleAndImage = () => {
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
   
     return (
         <ThemeProvider theme={muiColors}>

@@ -11,7 +11,7 @@ import { logEvent } from "firebase/analytics";
 
 const SimilarCard = ({productItem}) => {
   const router = useRouter();
-  const { translations } = useAppSelector(state => state.language);
+  const { translations } = useAppSelector(state => state.region);
   const handleShowSingleCard = () => {
     const firstEdition = productItem.name.toLowerCase().split(' ').join('-');
     const secondEdition = firstEdition.split('/').join('_');

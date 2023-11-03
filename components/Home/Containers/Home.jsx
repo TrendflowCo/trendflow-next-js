@@ -7,6 +7,7 @@ import SecondaryLogin from '../SecondaryLogin';
 import Footer from '../../global/Footer';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../../services/firebase';
+import RandomSearcher from '../RandomSearcher';
 
 const Home = () => {
   useEffect(() =>{
@@ -19,6 +20,7 @@ const Home = () => {
         <div className='px-4 sm:px-0'>
           <TitleAndImage/>
           <Searcher/>
+          <RandomSearcher/>
           <FashionForward/>
           <FeatureImages/>
           <SecondaryLogin/>

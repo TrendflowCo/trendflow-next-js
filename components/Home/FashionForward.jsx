@@ -2,7 +2,7 @@ import React from "react";
 import { useAppSelector } from "../../redux/hooks";
 
 const FashionForward = () => {
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     return (
         // <div className="flex flex-col items-center w-full pt-16 text-dokuso-black">
         //     <div className="flex flex-col max-w-xl w-full items-start">
