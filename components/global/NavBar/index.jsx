@@ -10,11 +10,9 @@ import TitleDesktop from './Desktop/TitleDesktop';
 import PagesDesktop from './Desktop/PagesDesktop';
 import MenuMobile from './Mobile/MenuMobile';
 import TitleMobile from './Mobile/TitleMobile';
-import SearchSection from './Common/SearchSection';
 import MenuForUser from './Common/MenuForUser';
 import MenuToggleUser from './Common/MenuToggleUser';
-import LanguageSelection from './Common/LanguageSelection';
-import CountrySelection from './Common/CountrySelection';
+import LanAndCountrySelection from './Common/LanAndCountrySelection';
 
 const Navbar = ({ logOut , user , loading }) => {
   const { language , country } = useAppSelector(state => state.region);
@@ -40,9 +38,7 @@ const Navbar = ({ logOut , user , loading }) => {
         <MenuMobile handleSelectPage={handleSelectPage}/>
         <TitleMobile/>
         <Box sx={{ flexGrow: 1 , width:'fit', maxWidth:'700px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' , justifyContent:'end' }}>
-          {/* <SearchSection/> */}
-          <CountrySelection/>
-          <LanguageSelection/>
+          <LanAndCountrySelection/>
           <MenuForUser loading={loading} user={user} setAnchorElUser={setAnchorElUser}/>
           <MenuToggleUser anchorElUser={anchorElUser} setAnchorElUser={setAnchorElUser} logOut={logOut}/>
         </Box>
