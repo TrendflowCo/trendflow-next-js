@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAppDispatch } from '../../../redux/hooks';
 import { setLanguage , setCountry, setTranslations } from '../../../redux/features/actions/region';
-import { countriesAndLanguages } from '../../../components/Resources/countriesAndLanguages';
+import { countriesAndLanguages } from '../../../components/Resources/countriesDefaultValues';
 import { distanceCalculator } from "../../../components/functions/distanceCalculator"
 import enTranslation from '../../../components/languages/en.json'
 import esTranslation from '../../../components/languages/es.json'

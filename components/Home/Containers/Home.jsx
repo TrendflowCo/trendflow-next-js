@@ -8,15 +8,18 @@ import Footer from '../../global/Footer';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../../services/firebase';
 import RandomSearcher from '../RandomSearcher';
+import ZoneModal from '../ZoneModal';
+import { useRouter } from 'next/router';
 
 const Home = () => {
+  const router = useRouter();
   useEffect(() =>{
     logEvent(analytics, 'page_view', {
       page_title: 'home',
     });
   },[])
     return (
-      <section>
+      <section className='relative'>
         <div className='px-4 sm:px-0'>
           <TitleAndImage/>
           <Searcher/>
@@ -26,6 +29,7 @@ const Home = () => {
           <SecondaryLogin/>
         </div>
         <Footer/>
+        {router?.query?.newUser === 'true' && <ZoneModal/>}
       </section>
     )
 };

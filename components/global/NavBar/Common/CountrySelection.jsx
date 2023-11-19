@@ -2,7 +2,7 @@ import { Button, Menu, MenuItem, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useRouter } from "next/router";
-import { countriesAndLanguages } from "../../../Resources/countriesAndLanguages";
+import { countriesAndLanguages } from "../../../Resources/countriesDefaultValues";
 
 const CountrySelection = () => {
     const [anchorElCountry , setAnchorElCountry] = useState(null);

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react";
-import { countriesAndLanguages } from "../components/Resources/countriesAndLanguages";
+import { countriesAndLanguages } from "../components/Resources/countriesDefaultValues";
 import { distanceCalculator } from "../components/functions/distanceCalculator";
 
 const HomeRedirect = () => {
@@ -25,11 +25,11 @@ const HomeRedirect = () => {
         const minimumDistance = countriesDistances.reduce((prev, curr) => prev.distance < curr.distance ? prev : curr);
         localStorage.setItem("country",minimumDistance.aliasCountry); // local storage country
         localStorage.setItem("language",minimumDistance.defaultLanguage); // local storage language
-        router.push(`/${minimumDistance.aliasCountry}/${minimumDistance.defaultLanguage}`)
+        router.push(`/${minimumDistance.aliasCountry}/${minimumDistance.defaultLanguage}?newUser=true`)
       }, (error) => {
         localStorage.setItem("country",'us'); // local storage country
         localStorage.setItem("language",'en'); // local storage language
-        router.push(`/${'us'}/${'en'}`)
+        router.push(`/${'us'}/${'en'}?newUser=true`)
       });  
     } else {
       router.push(`/${defCountry}/${defLanguage}`)
