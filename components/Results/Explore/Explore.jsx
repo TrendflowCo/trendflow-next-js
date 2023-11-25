@@ -24,6 +24,7 @@ import Head from "next/head";
 import ExploreCarousel from "./ExploreCarousel";
 import arrow from "../../../public/Arrow1.svg";
 import { handleAddTag } from "../../functions/handleAddTag";
+import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 
 const Explore = () => {
     const router = useRouter();
@@ -110,9 +111,7 @@ const Explore = () => {
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
             { loading ? 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress size={72} thickness={4} />
-                </Box>
+                <GlobalLoader/>
             :
                 <>
                     {!loading && currentProduct.id ? 
