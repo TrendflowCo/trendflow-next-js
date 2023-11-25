@@ -7,10 +7,9 @@ import { useRouter } from "next/router";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../../../services/firebase";
 
-
 const MenuToggleUser = ({anchorElUser , setAnchorElUser , logOut }) => {
     const router = useRouter();
-    const { translations } = useAppSelector(state => state.region)
+    const { translations , language , country } = useAppSelector(state => state.region)
     const handleCloseUserMenu = () => { // close user menu
         setAnchorElUser(null);
     };
@@ -24,7 +23,7 @@ const MenuToggleUser = ({anchorElUser , setAnchorElUser , logOut }) => {
           logEvent(analytics, 'clickOnUserMenu', {
             button: 'Wishlist'
           });  
-          router.push(`/${language}/user/wishlist`)
+          router.push(`/${country}/${language}/user/wishlist`)
         }
         handleCloseUserMenu()
     };

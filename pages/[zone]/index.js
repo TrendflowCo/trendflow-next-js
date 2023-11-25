@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { useEffect } from "react";
-import { countriesAndLanguages } from "../../components/Resources/countriesAndLanguages";
+import { countriesAndLanguages } from "../../components/Resources/countriesDefaultValues";
 import { distanceCalculator } from "../../components/functions/distanceCalculator";
 
 const LanguageRedirect = () => {

@@ -16,7 +16,7 @@ const ZoneModal = () => {
             const initialIndex = countriesAndLanguagesOptions.findIndex((item) => (item.country === currentCountry && item.language === currentLanguage))
             setSelectedOption(initialIndex)
         }
-    },[])
+    },[]) // eslint-disable-line
     const [selectedOption , setSelectedOption] = useState(-1);
     return (
         <section className="bg-dokuso-black bg-opacity-10 w-screen h-screen fixed top-0 right-0 flex flex-col items-center justify-center">
