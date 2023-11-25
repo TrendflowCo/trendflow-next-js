@@ -7,7 +7,7 @@ const EnglishTranslation = () => {
         items to fit
         <b className="text-dokuso-blue"> your </b>
         style.
-        Don't limit 
+        Don&apos;t limit 
         <b> yourself </b>
         to the same old searches.<br/>
         Try something 

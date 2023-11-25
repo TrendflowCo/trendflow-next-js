@@ -26,7 +26,7 @@ const MenuForUser = ({loading , user , setAnchorElUser}) => {
             </Box>
           : 
            user ?
-            <Tooltip title="Open settings">
+            <Tooltip title={translations?.openSettings}>
               <IconButton 
                 onClick={handleOpenUserMenu} 
                 sx={{ p: 0 , width: {sm: 48 , xs: 40} , height: '100%' }}

@@ -1,4 +1,4 @@
-import AddPost from "../../../components/Blog/AddPost";
+import AddPost from "../../../../components/Blog/AddPost";
 import Layout from "../layout";
 
 const AddpostComp = () => {

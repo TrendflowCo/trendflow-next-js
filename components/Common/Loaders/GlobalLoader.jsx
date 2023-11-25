@@ -12,7 +12,7 @@ const GlobalLoader = () => {
         }, 1400);
     
         return () => clearInterval(interval);
-      }, []);
+      }, []); // eslint-disable-line
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <CircularProgress size={80} thickness={2} sx={{color: colors[colorIndex]}}/>
