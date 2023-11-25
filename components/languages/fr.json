@@ -392,5 +392,9 @@
         "brand": "marque",
         "price": "prix",
         "select_filter": "sélectionner un filtre"
+    },
+    "firstVisit": {
+        "selectYourRegion": "Sélectionnez votre région",
+        "continue": "Continuer"
     }
 }
