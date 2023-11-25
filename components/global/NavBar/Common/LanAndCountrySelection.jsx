@@ -36,22 +36,24 @@ const LanAndCountrySelection = () => {
     return (
         <>
             { country !== '' && language !== '' && indexZone !== -1 &&
-                <Tooltip title={translations?.selectRegion} className='cursor-pointer'>
-                    <Button
-                        color="inherit"
-                        onClick={(event) => handleCountryMenuOpen(event)}
-                        sx={{
-                            borderRadius: 24,
-                            mr: 2,
-                            px: 1.5 ,
-                            textTransform: 'none',
-                            fontSize: '15px'
-                        }}
-                    >
-                        <LocationIcon/>
-                        <span className="ml-2">{`${countriesAndLanguagesOptions[indexZone].country.toUpperCase()} - ${enhanceText(countriesAndLanguagesOptions[indexZone].language)}`}</span>
-                    </Button>
-                </Tooltip>
+                <section className="w-[120px]">
+                    <Tooltip title={translations?.selectRegion} className='cursor-pointer'>
+                        <Button
+                            color="inherit"
+                            onClick={(event) => handleCountryMenuOpen(event)}
+                            sx={{
+                                borderRadius: 24,
+                                mr: 2,
+                                px: 1.5 ,
+                                textTransform: 'none',
+                                fontSize: '15px'
+                            }}
+                        >
+                            <LocationIcon/>
+                            <span className="ml-2">{`${countriesAndLanguagesOptions[indexZone].country.toUpperCase()} - ${enhanceText(countriesAndLanguagesOptions[indexZone].language)}`}</span>
+                        </Button>
+                    </Tooltip>
+                </section>
             }
             <Menu
                 anchorEl={anchorElCountry}
