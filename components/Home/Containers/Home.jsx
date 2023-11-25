@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import TitleAndImage from '../TitleAndImage';
 import Searcher from '../Searcher';
-import FashionForward from '../FashionForward';
-import FeatureImages from '../FeatureImages';
-import SecondaryLogin from '../SecondaryLogin';
 import Footer from '../../global/Footer';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../../services/firebase';
@@ -19,14 +16,11 @@ const Home = () => {
     });
   },[])
     return (
-      <section className='relative'>
-        <div className='px-4 sm:px-0'>
+      <section className='relative h-screen flex flex-col'>
+        <div className='px-4 sm:px-0 flex flex-col items-start justify-start flex-auto w-full'>
           <TitleAndImage/>
           <Searcher/>
           <RandomSearcher/>
-          <FashionForward/>
-          <FeatureImages/>
-          <SecondaryLogin/>
         </div>
         <Footer/>
         {router?.query?.newUser === 'true' && <ZoneModal/>}

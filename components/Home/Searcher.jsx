@@ -26,8 +26,8 @@ const Searcher = () => {
     };
 
     return (
-        <div className="flex flex-col flex-auto items-center w-full">
-            <div className="flex flex-row items-center justify-center flex-wrap items-center w-full lg:max-w-[50%] py-2">
+        <div className="flex flex-col items-center max-w-[80%] w-full mx-auto">
+            <div className="flex flex-row items-center justify-center flex-wrap items-center w-full py-2">
                 <section className="flex-auto w-full lg:w-fit px-4 md:px-0">
                     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
                     <input 
