@@ -1,11 +1,9 @@
 {
   "header": {
-    "title": "Mantente a la Vanguardia del Juego de la Moda"
+    "title1": "Mantente a la Vanguardia del ",
+    "title2": "Juego de la Moda"
   },
   "search": {
-    "title": "Descubre la moda con ",
-    "prcision": "precisión",
-    "text": "Nuestra barra de búsqueda es tu puerta de entrada para encontrar los artículos de moda perfectos para tu estilo. No te limites a las mismas búsquedas de siempre. Prueba algo nuevo, inesperado y verdaderamente tuyo.",
     "placeholder": "Desata tu creatividad..."
   },
   "features": {
