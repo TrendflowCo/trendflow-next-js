@@ -3,9 +3,19 @@
     "title1": "Mantente a la Vanguardia del ",
     "title2": "Juego de la Moda"
   },
+  "explore": "Explorar",
   "search": {
     "placeholder": "Desata tu creatividad..."
   },
+  "exploreSection": {
+    "description": "Descripción",
+    "category": "Categoría de producto",
+    "relatedTags": "Etiquetas relacionadas",
+    "relatedProducts": "Productos relacionados"
+  },
+  "noResults": "No hay resultados para esta búsqueda",
+  "loadingData": "Cargando datos",
+  "selectRegion": "Seleccionar región",
   "features": {
     "title": "Moda Avanzada Impulsada por IA",
     "feature1": {
@@ -38,14 +48,14 @@
     "log_in_and_stay_ahead_in_fashion": "Iniciar sesión y mantenerse al día en la moda",
     "continue_with_your_google_account": "Continuar con tu cuenta de Google"
   },
-"About": "Acerca de",
-  "Brands": "Marcas",
+  "About": "Acerca de",
+  "brands": "Marcas",
+  "brandsPlaceholder": "Busca tu marca",
   "Manifesto": "Manifiesto",
   "searchLabel": "Buscar",
   "favorites": "Favoritos",
   "filter": "Filtrar",
   "price": "Precio",
-  "brands": "Marcas",
   "try_me": "Pruébame (es gratis)",
   "shop_now": "Comprar Ahora",
   "popular_searches": "¿No estás seguro de qué buscar? ¡Prueba con estos!",

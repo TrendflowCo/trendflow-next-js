@@ -48,9 +48,8 @@ const Searcher = () => {
                             onKeyDown={(e) => {handleEnterSearch(e)}}
                             sx={{fontWeight: 'bold', height: '56px'}}
                             color="dokusoWhite"
-                            style={{width:'92px'}}
                         >
-                            Search
+                            {translations?.searchLabel}
                         </Button>
                     </ThemeProvider>
                 </section>

@@ -13,7 +13,7 @@ const PagesDesktop = ({handleSelectPage}) => {
               onClick={() => {handleSelectPage(page.name)}}
               className="cursor-pointer first:ml-0 last:mr-0 mx-2.5 font-semibold hover:underline"
             >
-              {translations?.[page.name]?.toUpperCase() || page.name?.toUpperCase()}
+              {translations?.[page?.name]?.toUpperCase() || page.name?.toUpperCase()}
             </span>
           ))}
 

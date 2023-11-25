@@ -3,9 +3,19 @@
         "title1": "Stay Ahead of the ",
         "title2": "Fashion Game"
     },
+    "explore": "Explore",
     "search": {
         "placeholder": "Unleash your creativity..."
     },
+    "exploreSection": {
+        "description": "Description",
+        "category": "Product category",
+        "relatedTags": "Related tags",
+        "relatedProducts": "Related products"
+    },
+    "noResults": "No results for this search",
+    "loadingData": "Loading data",
+    "selectRegion": "Select region",
     "features": {
     "title": "Fashion Forward, AI Driven",
     "feature1": {
@@ -38,7 +48,8 @@
         "continue_with_your_google_account": "Continue with your Google account"
     },
     "About": "About",
-    "Brands": "Brands",
+    "brands": "Brands",
+    "brandsPlaceholder": "Search for your brand",
     "Manifesto": "Manifesto",
     "searchLabel": "Search",
     "favorites": "Favorites",

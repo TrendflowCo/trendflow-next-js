@@ -31,7 +31,7 @@ const PagesDesktop = () => {
               sx={{ my: 2 , color:'inherit' }}
               className='bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange shadow-lg font-semibold'
             >
-              Explore
+              {translations?.explore}
             </Button>
         </Box>
     )
