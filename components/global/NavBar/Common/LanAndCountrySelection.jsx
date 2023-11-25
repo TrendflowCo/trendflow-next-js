@@ -9,7 +9,7 @@ import { enhanceText } from "../../../Utils/enhanceText";
 const LanAndCountrySelection = () => {
     const [anchorElCountry , setAnchorElCountry] = useState(null);
     const router = useRouter();
-    const { country , language } = useAppSelector(state => state.region);
+    const { country , language , translations } = useAppSelector(state => state.region);
     const [indexZone , setIndexZone] = useState(-1)
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const LanAndCountrySelection = () => {
     return (
         <>
             { country !== '' && language !== '' && indexZone !== -1 &&
-                <Tooltip title="Select country" className='cursor-pointer'>
+                <Tooltip title={translations?.selectRegion} className='cursor-pointer'>
                     <Button
                         color="inherit"
                         onClick={(event) => handleCountryMenuOpen(event)}

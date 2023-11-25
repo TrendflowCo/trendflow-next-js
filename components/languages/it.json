@@ -3,9 +3,19 @@
         "title1": "Resta al Passo con il ",
         "title2": "Fioco della Moda"
     },
+    "explore": "Esplora",
     "search": {
         "placeholder": "Libera la tua creatività..."
     },
+    "exploreSection": {
+        "description": "Descrizione",
+        "category": "Categoria di prodotto",
+        "relatedTags": "Tag correlati",
+        "relatedProducts": "Prodotti correlati"
+    },
+    "noResults": "Nessun risultato per questa ricerca",
+    "loadingData": "Caricamento dati",
+    "selectRegion": "Seleziona la regione",
     "features": {
     "title": "Moda Avanzata Alimentata dall'IA",
     "feature1": {
@@ -39,13 +49,13 @@
         "continue_with_your_google_account": "Continua con il tuo account Google"
     },
     "About": "Informazioni su",
-    "Brands": "Marchi",
+    "brands": "Marche",
+    "brandsPlaceholder": "Cerca la tua marca",
     "Manifesto": "Manifesto",
     "searchLabel": "Cerca",
     "favorites": "Preferiti",
     "filter": "Filtra",
     "price": "Prezzo",
-    "brands": "Marchi",
     "try_me": "Provalo (è gratuito)",
     "shop_now": "Acquista Ora",
     "popular_searches": "Non sei sicuro di cosa cercare? Prova questi!",

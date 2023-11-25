@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import Image from 'next/image';
 import { enhanceText } from '../../Utils/enhanceText';
@@ -11,7 +11,7 @@ import { logEvent } from "firebase/analytics";
 
 const SimilarCard = ({productItem}) => {
   const router = useRouter();
-  const { translations } = useAppSelector(state => state.region);
+  const { translations , language , country } = useAppSelector(state => state.region);
   const handleShowSingleCard = () => {
     const firstEdition = productItem.name.toLowerCase().split(' ').join('-');
     const secondEdition = firstEdition.split('/').join('_');
@@ -19,13 +19,14 @@ const SimilarCard = ({productItem}) => {
     logEvent(analytics, 'clickSingleCard', {
       img_id: productItem.id
     });
-    router.push(`/${router.query.lan}/results/explore/${thirdEdition}%20${productItem.id}`);
+    router.push(`/${country}/${language}/results/explore/${thirdEdition}%20${productItem.id}`);
   }
 
   return (
     <section className='mt-4 mb-10'>
       <Card 
-        sx={{ height: '100%' , width: {xs: 160 , sm: 170 , md: 200 , lg: 280 , xl: 350}  , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1 }}
+        sx={{ height: '100%' , borderRadius: 4 , display: 'flex' , flexDirection: 'column' , mx: 1 }}
+
         className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
       >
         <section className='flex flex-col w-full h-full relative'>
@@ -42,7 +43,7 @@ const SimilarCard = ({productItem}) => {
             </div>
           }
         </section>
-        <section className='flex flex-row p-3 mt-1 w-full'>
+        <section className='flex flex-row p-3 mt-1 w-full h-[120px]'>
 
             <div className={`flex flex-col w-2/3 text-xs md:text-sm xl:text-base`}>
               <span className='pr-2 truncate'>{`${enhanceText(productItem.name)}`}</span>
@@ -64,7 +65,7 @@ const SimilarCard = ({productItem}) => {
                   height={0} 
                   width={0} 
                   sizes="100vw" 
-                  style={{height: 'auto' , width: '100%' , objectFit: 'contain', alignSelf:'start' }}
+                  style={{height: 'auto' , width: '100%' , objectFit: 'contain', alignSelf:'start'}}
                 />
               </div>
             </div>
