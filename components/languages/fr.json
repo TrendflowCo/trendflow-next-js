@@ -1,12 +1,10 @@
 {
     "header": {
-    "title": "Restez à la Pointe du Jeu de la Mode"
+        "title1": "Restez à la Pointe du ",
+        "title2": "Jeu de la Mode"
     },
     "search": {
-    "title": "Découvrez la mode avec ",
-    "precision": "précision",
-    "text": "Notre barre de recherche est votre porte d'entrée pour trouver les articles de mode parfaits pour votre style. Ne vous limitez pas aux mêmes recherches habituelles. Essayez quelque chose de nouveau, d'inattendu et vraiment à vous.",
-    "placeholder": "Libérez votre créativité..."
+        "placeholder": "Libérez votre créativité..."
     },
     "features": {
     "title": "Mode Avancée Alimentée par l'IA",

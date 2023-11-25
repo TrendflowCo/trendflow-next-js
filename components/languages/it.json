@@ -1,12 +1,10 @@
 {
     "header": {
-    "title": "Resta al Passo con il Fioco della Moda"
+        "title1": "Resta al Passo con il ",
+        "title2": "Fioco della Moda"
     },
     "search": {
-    "title": "Scopri la moda con ",
-    "precision": "precisione",
-    "text": "La nostra barra di ricerca è la tua porta d'accesso per trovare i capi di moda perfetti per il tuo stile. Non limitarti alle solite ricerche. Prova qualcosa di nuovo, inaspettato e veramente tuo.",
-    "placeholder": "Libera la tua creatività..."
+        "placeholder": "Libera la tua creatività..."
     },
     "features": {
     "title": "Moda Avanzata Alimentata dall'IA",

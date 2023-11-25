@@ -1,12 +1,10 @@
 {
     "header": {
-    "title": "Stay Ahead of the Fashion Game"
+        "title1": "Stay Ahead of the ",
+        "title2": "Fashion Game"
     },
     "search": {
-    "title": "Discover fashion with ",
-    "precision": "precision",
-    "text": " Our search bar is your gateway to finding the perfect fashion items to fit your style. Don't limit yourself to the same old searches. Try something new, unexpected, and uniquely you.",
-    "placeholder": "Unleash your creativity..."
+        "placeholder": "Unleash your creativity..."
     },
     "features": {
     "title": "Fashion Forward, AI Driven",
