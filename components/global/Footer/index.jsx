@@ -49,8 +49,8 @@ const Footer = () => {
             </div>
             <div className="flex flex-row w-full max-w-[80%] mx-auto mt-2">
                 {socialMedia.map((itemMedia , indexMedia) => {return (
-                    <div className="mx-1 first:ml-0 last:mr-0">
-                        <Tooltip key={indexMedia} placement="top" arrow title={itemMedia.name.charAt(0).toUpperCase() + itemMedia.name.slice(1)}>
+                    <div key={indexMedia} className="mx-1 first:ml-0 last:mr-0">
+                        <Tooltip placement="top" arrow title={itemMedia.name.charAt(0).toUpperCase() + itemMedia.name.slice(1)}>
                             <Link 
                                 href={itemMedia.ref} 
                                 target="_blank"

@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import { enhanceText } from "../Utils/enhanceText";
-import { useAppDispatch , useAppSelector } from "../../redux/hooks";
+import { useAppSelector } from "../../redux/hooks";
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Slider from '@mui/material/Slider';
@@ -17,7 +17,7 @@ import { analytics } from "../../services/firebase";
 
 const Filter = (props) => {
     const router = useRouter();
-    const { translations } = useAppSelector(state => state.region);
+    const { translations , language , country } = useAppSelector(state => state.region);
     const { 
         setFilterModal , 
         filterModal , 
@@ -108,6 +108,7 @@ const Filter = (props) => {
     const ref = useRef(null);
     const deleteFilter = () => {
         const { pathname, query } = router;
+        console.log(router)
         const params = new URLSearchParams(query);
         params.delete('onSale');
         params.delete('category');
@@ -115,7 +116,7 @@ const Filter = (props) => {
         params.delete('minPrice');
         params.delete('maxPrice');
         params.delete('page');
-        router.push(`/${query.lan}/results?query=${encodeURIComponent(query.query)}`)
+        router.push(`/${country}/${language}/results?query=${encodeURIComponent(query.query)}`)
         setOnSaleChecked(false);
         setCategoryFilter('');
         setSelectedBrands([]);

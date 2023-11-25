@@ -13,7 +13,7 @@ const GlobalLoader = () => {
       }, []);
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <CircularProgress size={72} thickness={4} sx={{color: colors[colorIndex]}}/>
+            <CircularProgress size={80} thickness={2} sx={{color: colors[colorIndex]}}/>
             <span className="mt-4 text-start">Loading data</span>
         </Box>
     )
