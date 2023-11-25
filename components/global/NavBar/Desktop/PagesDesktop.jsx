@@ -25,15 +25,14 @@ const PagesDesktop = () => {
     };
     
     return (
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              onClick={handleSearchRandom}
-              sx={{ my: 2 , color:'inherit' }}
-              className='bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange shadow-lg font-semibold'
+        <section className="hidden md:flex w-full">
+            <button
+            onClick={handleSearchRandom}
+            className='p-2 rounded bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange hover:text-dokuso-black shadow-lg font-semibold'
             >
-              {translations?.explore}
-            </Button>
-        </Box>
+                {translations?.explore}
+            </button>
+        </section>
     )
 };
 
