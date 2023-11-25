@@ -21,7 +21,7 @@ const MenuForUser = ({loading , user , setAnchorElUser}) => {
     return (
         <>
           {loading ?
-            <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex' , flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
               <CircularProgress size={36} thickness={3} />
             </Box>
           : 
