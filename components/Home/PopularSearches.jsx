@@ -7,14 +7,14 @@ import { analytics } from "../../services/firebase";
 
 const PopularSearches = () => {
     const router = useRouter();
-    const { translations , language } = useAppSelector(state => state.language);
+    const { translations , language , country } = useAppSelector(state => state.region);
     const dispatch = useAppDispatch();
     const handleQuickSearch = (val) => {
         logEvent(analytics, 'clickOnPopularSearches', {
             search_term: val
         });      
         dispatch(setCurrentSearch(val))
-        router.push(`${language}/results?query=${val.split(' ').join('-').toLowerCase()}`)
+        router.push(`${country}/${language}/results?query=${val.split(' ').join('-').toLowerCase()}`)
     };
     
     return (

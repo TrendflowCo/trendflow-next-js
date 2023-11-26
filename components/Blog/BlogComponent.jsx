@@ -1,17 +1,19 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useAppDispatch } from "../../redux/hooks";
-import { setLanguage } from "../../redux/features/actions/language";
+import { useAppDispatch , useAppSelector } from "../../redux/hooks";
+import { setLanguage } from "../../redux/features/actions/region";
 import { collection , getDocs, query as queryfb , getFirestore } from "firebase/firestore";
 import { app } from "../../services/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import SinglePost from "./SinglePost";
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import GlobalLoader from "../Common/Loaders/GlobalLoader"
 
 const BlogComponent = () => {
+    const { translations } = useAppSelector(state => state.region)
     const db = getFirestore(app);
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data
@@ -41,9 +43,7 @@ const BlogComponent = () => {
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
             { loadingFlag ? 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress size={72} thickness={4} />
-                </Box>
+                <GlobalLoader/>
             :
                 <>
                     <Head>
@@ -69,7 +69,7 @@ const BlogComponent = () => {
                         :
                         <section className="w-full h-full flex flex-col items-center justify-center">
                             <HighlightOffRoundedIcon fontSize="large"/>
-                            <span className="text-xl mt-2">Empty section</span>
+                            <span className="text-xl mt-2">{translations?.noResults}</span>
                         </section>
                         }
                     </section>

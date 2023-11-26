@@ -1,13 +1,22 @@
 {
     "header": {
-    "title": "Restez à la Pointe du Jeu de la Mode"
+        "title1": "Restez à la Pointe du ",
+        "title2": "Jeu de la Mode"
     },
+    "explore": "Explorer",
     "search": {
-    "title": "Découvrez la mode avec ",
-    "precision": "précision",
-    "text": "Notre barre de recherche est votre porte d'entrée pour trouver les articles de mode parfaits pour votre style. Ne vous limitez pas aux mêmes recherches habituelles. Essayez quelque chose de nouveau, d'inattendu et vraiment à vous.",
-    "placeholder": "Libérez votre créativité..."
+        "placeholder": "Libérez votre créativité..."
     },
+    "exploreSection": {
+        "description": "Description",
+        "category": "Catégorie de produit",
+        "relatedTags": "Étiquettes associées",
+        "relatedProducts": "Produits associés"
+    },
+    "openSettings": "Ouvrir les paramètres",
+    "noResults": "Aucun résultat pour cette recherche",
+    "loadingData": "Chargement des données",
+    "selectRegion": "Sélectionner la région",
     "features": {
     "title": "Mode Avancée Alimentée par l'IA",
     "feature1": {
@@ -41,13 +50,13 @@
         "continue_with_your_google_account": "Continuer avec votre compte Google"
     },
     "About": "À propos de",
-    "Brands": "Marques",
+    "brands": "Marques",
+    "brandsPlaceholder": "Recherchez votre marque",
     "Manifesto": "Manifeste",
     "searchLabel": "Rechercher",
     "favorites": "Favoris",
     "filter": "Filtrer",
     "price": "Prix",
-    "brands": "Marques",
     "try_me": "Essayez-moi (c'est gratuit)",
     "shop_now": "Acheter Maintenant",
     "popular_searches": "Vous ne savez pas quoi chercher ? Essayez ces options !",
@@ -392,5 +401,9 @@
         "brand": "marque",
         "price": "prix",
         "select_filter": "sélectionner un filtre"
+    },
+    "firstVisit": {
+        "selectYourRegion": "Sélectionnez votre région",
+        "continue": "Continuer"
     }
 }

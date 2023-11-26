@@ -1,13 +1,22 @@
 {
     "header": {
-    "title": "Resta al Passo con il Fioco della Moda"
+        "title1": "Resta al Passo con il ",
+        "title2": "Fioco della Moda"
     },
+    "explore": "Esplora",
     "search": {
-    "title": "Scopri la moda con ",
-    "precision": "precisione",
-    "text": "La nostra barra di ricerca è la tua porta d'accesso per trovare i capi di moda perfetti per il tuo stile. Non limitarti alle solite ricerche. Prova qualcosa di nuovo, inaspettato e veramente tuo.",
-    "placeholder": "Libera la tua creatività..."
+        "placeholder": "Libera la tua creatività..."
     },
+    "exploreSection": {
+        "description": "Descrizione",
+        "category": "Categoria di prodotto",
+        "relatedTags": "Tag correlati",
+        "relatedProducts": "Prodotti correlati"
+    },
+    "openSettings": "Apri impostazioni",
+    "noResults": "Nessun risultato per questa ricerca",
+    "loadingData": "Caricamento dati",
+    "selectRegion": "Seleziona la regione",
     "features": {
     "title": "Moda Avanzata Alimentata dall'IA",
     "feature1": {
@@ -41,13 +50,13 @@
         "continue_with_your_google_account": "Continua con il tuo account Google"
     },
     "About": "Informazioni su",
-    "Brands": "Marchi",
+    "brands": "Marche",
+    "brandsPlaceholder": "Cerca la tua marca",
     "Manifesto": "Manifesto",
     "searchLabel": "Cerca",
     "favorites": "Preferiti",
     "filter": "Filtra",
     "price": "Prezzo",
-    "brands": "Marchi",
     "try_me": "Provalo (è gratuito)",
     "shop_now": "Acquista Ora",
     "popular_searches": "Non sei sicuro di cosa cercare? Prova questi!",
@@ -391,5 +400,9 @@
         "brand": "marca",
         "price": "prezzo",
         "select_filter": "seleziona filtro"
+    },
+    "firstVisit": {
+        "selectYourRegion": "Seleziona la tua regione",
+        "continue": "Continua"
     }
 }

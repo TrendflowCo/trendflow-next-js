@@ -1,13 +1,22 @@
 {
   "header": {
-    "title": "Mantente a la Vanguardia del Juego de la Moda"
+    "title1": "Mantente a la Vanguardia del ",
+    "title2": "Juego de la Moda"
   },
+  "explore": "Explorar",
   "search": {
-    "title": "Descubre la moda con ",
-    "prcision": "precisión",
-    "text": "Nuestra barra de búsqueda es tu puerta de entrada para encontrar los artículos de moda perfectos para tu estilo. No te limites a las mismas búsquedas de siempre. Prueba algo nuevo, inesperado y verdaderamente tuyo.",
     "placeholder": "Desata tu creatividad..."
   },
+  "exploreSection": {
+    "description": "Descripción",
+    "category": "Categoría de producto",
+    "relatedTags": "Etiquetas relacionadas",
+    "relatedProducts": "Productos relacionados"
+  },
+  "openSettings": "Abrir configuración",
+  "noResults": "No hay resultados para esta búsqueda",
+  "loadingData": "Cargando datos",
+  "selectRegion": "Seleccionar región",
   "features": {
     "title": "Moda Avanzada Impulsada por IA",
     "feature1": {
@@ -40,14 +49,14 @@
     "log_in_and_stay_ahead_in_fashion": "Iniciar sesión y mantenerse al día en la moda",
     "continue_with_your_google_account": "Continuar con tu cuenta de Google"
   },
-"About": "Acerca de",
-  "Brands": "Marcas",
+  "About": "Acerca de",
+  "brands": "Marcas",
+  "brandsPlaceholder": "Busca tu marca",
   "Manifesto": "Manifiesto",
   "searchLabel": "Buscar",
   "favorites": "Favoritos",
   "filter": "Filtrar",
   "price": "Precio",
-  "brands": "Marcas",
   "try_me": "Pruébame (es gratis)",
   "shop_now": "Comprar Ahora",
   "popular_searches": "¿No estás seguro de qué buscar? ¡Prueba con estos!",
@@ -392,5 +401,9 @@
     "brand": "marca",
     "price": "precio",
     "select_filter": "seleccionar filtro"
+  },
+  "firstVisit": {
+    "selectYourRegion": "Selecciona tu región",
+    "continue": "Continuar"
   }
 }

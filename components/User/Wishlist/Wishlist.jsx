@@ -7,17 +7,16 @@ import { collection , getDocs, query as queryfb , where , getFirestore } from "f
 import axios from "axios";
 import { useAppDispatch , useAppSelector } from "../../../redux/hooks";
 import { setWishlist } from "../../../redux/features/actions/search";
-import { setLanguage } from "../../../redux/features/actions/language";
 import ResultCard from "../../Results/ResultCard";
 import { useRouter } from "next/router";
-import { Box, CircularProgress, Grid, Pagination, ThemeProvider } from "@mui/material";
+import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
 import { muiColors } from "../../Utils/muiTheme";
 import { enhanceText } from "../../Utils/enhanceText";
+import GlobalLoader from "../../Common/Loaders/GlobalLoader";
   
 const Wishlist = () => {
     const dispatch = useAppDispatch();
-    const { wishlist } = useAppSelector(state => state.search);
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     const db = getFirestore(app);
     const auth = getAuth(app); // instance of auth method
     const [user, loading] = useAuthState(auth); // user data
@@ -32,8 +31,6 @@ const Wishlist = () => {
             if (user) {
                 try {
                     setLoadingFlag(true);
-                    const queryLanguage = router.query.lan;
-                    dispatch(setLanguage(queryLanguage)); // write redux variable - avoid refresh
                     const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
                     const querySnapshot = await getDocs(q);
                     const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
@@ -80,9 +77,7 @@ const Wishlist = () => {
     return (
         <> 
             { loadingFlag ? 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress size={72} thickness={4} />
-                </Box>
+                <GlobalLoader/>
             : 
                 <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>

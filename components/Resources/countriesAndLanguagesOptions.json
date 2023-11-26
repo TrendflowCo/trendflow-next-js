@@ -1,0 +1,32 @@
+[
+    {
+        "country": "us",
+        "language": "en",
+        "completeCountry": "United States of America",
+        "completeLanguage": "English"
+    },
+    {
+        "country": "uk",
+        "language": "en",
+        "completeCountry": "United Kingdom",
+        "completeLanguage": "English"
+    },
+    {
+        "country": "es",
+        "language": "es",
+        "completeCountry": "España",
+        "completeLanguage": "Español"
+    },
+    {
+        "country": "fr",
+        "language": "fr",
+        "completeCountry": "France",
+        "completeLanguage": "Français"
+    },
+    {
+        "country": "it",
+        "language": "it",
+        "completeCountry": "Italia",
+        "completeLanguage": "Italiano"
+    }
+]
