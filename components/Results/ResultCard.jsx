@@ -29,7 +29,7 @@ const ResultCard = ({productItem }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
-  const { translations } = useAppSelector(state => state.language);
+  const { translations } = useAppSelector(state => state.region);
   const [loadingFav , setLoadingFav] = useState(false);
   const [isLoading , setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -39,7 +39,7 @@ const ResultCard = ({productItem }) => {
     logEvent(analytics, 'clickSingleCard', {
       img_id: productItem.id
     });
-    router.push(`/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id}`)
+    router.push(`/${router.query.zone}/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id}`)
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();

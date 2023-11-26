@@ -17,7 +17,7 @@ import { analytics } from "../../services/firebase";
 const LogInModal = () => {
     const dispatch = useAppDispatch();
     const { logInFlag } = useAppSelector (state => state.auth);
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     useEffect(() =>{
         logEvent(analytics, 'page_view', {
             page_title: 'login',

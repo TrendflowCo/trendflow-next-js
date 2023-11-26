@@ -6,7 +6,7 @@ import { setLogInFlag } from "../../redux/features/actions/auth";
 const SecondaryLogin = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     return (
         <div className="w-full flex flex-col items-center justify-center">
             {/* Show this only if no user is logged */}

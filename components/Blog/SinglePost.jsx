@@ -16,7 +16,7 @@ import "react-multi-carousel/lib/styles.css";
 import Swal from "sweetalert2";
 
 const SinglePost = ({post , reload , setReload , user}) => {
-    const { language } = useAppSelector(state => state.language);
+    const { language } = useAppSelector(state => state.region);
     const router = useRouter();
     const db = getFirestore(app);
 

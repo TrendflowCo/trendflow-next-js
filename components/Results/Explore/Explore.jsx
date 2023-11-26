@@ -12,25 +12,25 @@ import ShareIcon from '@mui/icons-material/Share';
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../../../services/firebase";
 import { wishlistChange } from "./../functions/wishlistChange";
-import { setWishlist , setCurrentSearch } from "../../../redux/features/actions/search";
+import { setWishlist } from "../../../redux/features/actions/search";
 import Swal from 'sweetalert2';
 import { swalNoInputs } from "../../Utils/swalConfig";
 import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
-import { setLanguage } from "../../../redux/features/actions/language";
 import { languageAdapter } from "../functions/languageAdapter";
 import CarouselComp from "./CarouselComp";
 import Head from "next/head";
 import ExploreCarousel from "./ExploreCarousel";
 import arrow from "../../../public/Arrow1.svg";
 import { handleAddTag } from "../../functions/handleAddTag";
+import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 
 const Explore = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
-    const { translations , language } = useAppSelector(state => state.language);
+    const { translations , language } = useAppSelector(state => state.region);
     const { wishlist , currentSearch } = useAppSelector(state => state.search);
     const [loadingFav , setLoadingFav] = useState(false);
     const [currentProduct , setCurrentProduct] = useState({});
@@ -53,8 +53,6 @@ const Explore = () => {
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
                 setSimilarProducts(similars.results);
-                dispatch(setLanguage(currentLanguage)); // write redux variable - avoid refresh
-                localStorage.setItem('language',currentLanguage.toLowerCase());
                 setLoading(false);    
             } catch (err) {
                 setLoading(false);
@@ -109,23 +107,11 @@ const Explore = () => {
     const redirectToBrand = (brandName) => {
         window.open(`/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
     };
-    // const handleAddTag = (tag) => {
-    //     const prevSearch = currentSearch;
-    //     const newSearch = currentSearch.includes(tag) ? currentSearch : (currentSearch === '' ? tag : `${currentSearch} ${tag}`);
-    //     logEvent(analytics, 'clickAddTag', {
-    //         tag: tag,
-    //         prev_search: prevSearch,
-    //         new_search: newSearch
-    //       });
-    //     dispatch(setCurrentSearch(newSearch))
-    // };
     
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
             { loading ? 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress size={72} thickness={4} />
-                </Box>
+                <GlobalLoader/>
             :
                 <>
                     {!loading && currentProduct.id ? 
@@ -141,7 +127,7 @@ const Explore = () => {
                                     <ExploreCarousel images={currentProduct.img_url}/>
                                 </div>
                                 <section className="lg:w-1/2 w-full h-full px-5 mt-8 lg:mt-0 flex flex-col items-start justify-start">
-                                    <span className='text-xl font-semibold mb-6'>{`${enhanceText(currentProduct.name)}`}</span>
+                                    <span className='text-xl font-semibold mb-6'>{`${enhanceText(currentProduct?.name)}`}</span>
                                     <div className="flex flex-row items-center justify-between w-full mb-6">
                                         <div className="max-w-[66%] w-fit h-full flex flex-col justify-center">
                                             <Image
@@ -155,7 +141,7 @@ const Explore = () => {
                                         </div>
                                         <div className="flex flex-row items-center justify-start hover:underline text-sm" onClick={() => redirectToBrand(currentProduct.brand)}>
                                             <span className="cursor-pointer mr-2 ml-3 text-end">
-                                                {`Search for `} <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-orange">{`${currentProduct?.brand} `}</span> {`brand`}
+                                                {translations?.explore} <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-orange">{`${currentProduct?.brand} `}</span>
                                             </span>
                                             <Image
                                                 src={arrow} 
@@ -178,20 +164,20 @@ const Explore = () => {
                                         : 
                                         <span className='font-semibold mb-6'>{currentProduct.price !== 0 ? `${currentProduct.currency} ${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
                                     }
-                                    {(currentProduct.desc_1 !== '' || currentProduct.desc_2 !== '') && <span className="text-lg font-semibold mb-2">Description</span>}
+                                    {(currentProduct.desc_1 !== '' || currentProduct.desc_2 !== '') && <span className="text-lg font-semibold mb-2">{translations?.exploreSection?.description}</span>}
                                     {currentProduct.desc_1 !== '' && 
                                         <div className="mb-6">{enhanceText(currentProduct.desc_1)}</div>
                                     }
                                     {currentProduct.desc_2 !== '' && 
                                         <div className="mb-6">{enhanceText(currentProduct.desc_2)}</div>
                                     }
-                                    {currentProduct.category !== '' && <span className="text-lg font-semibold mb-2">Product category</span>}
+                                    {currentProduct.category !== '' && <span className="text-lg font-semibold mb-2">{translations?.exploreSection?.category}</span>}
                                     {currentProduct.category !== '' && 
                                         <div className="mb-6">{enhanceText(currentProduct.category)}</div>
                                     }
                                     {currentProduct?.tags?.length > 0 && 
                                         <section className="h-fit w-full flex flex-row flex-wrap mb-5">
-                                            <span className="text-lg font-semibold mb-2">Related tags</span>
+                                            <span className="text-lg font-semibold mb-2">{translations?.exploreSection?.relatedTags}</span>
                                             <div className="h-fit w-full flex flex-row flex-wrap">
                                                 {currentProduct.tags?.sort().map((itemTag, indexTag) =>
                                                     <Tooltip key={indexTag} title={`Add ${itemTag} to searchbar`} placement="top" arrow={true}> 
@@ -247,13 +233,13 @@ const Explore = () => {
                             {
                                 similarProducts?.length > 0 &&
                                 <section className="w-full px-4 mt-10">
-                                    <h6 className='text-dokuso-black text-lg md:text-xl leading-10 font-semibold'>Related products</h6>
+                                    <h6 className='text-dokuso-black text-lg md:text-xl leading-10 font-semibold'>{translations?.exploreSection?.relatedProducts}</h6>
                                     <CarouselComp similarProducts={similarProducts}/>                                    
                                 </section>
                             }
                         </>
                     : 
-                        <section>No results for this search</section>
+                        <section>{translations?.noResults}</section>
                     }
                 </>
             }

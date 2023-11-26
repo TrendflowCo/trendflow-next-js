@@ -5,7 +5,7 @@ import { muiColors } from '../Utils/muiTheme';
 import { useAppSelector } from "../../redux/hooks";
 
 const FeatureImages = () => {
-    const { translations } = useAppSelector(state => state.language);
+    const { translations } = useAppSelector(state => state.region);
     muiColors.typography.h2 = {
       fontSize: '1.2rem',
       fontWeight: 'bold',
