@@ -21,36 +21,41 @@ const MenuForUser = ({loading , user , setAnchorElUser}) => {
     return (
         <>
           {loading ?
-            <Box sx={{ display: 'flex' , flexDirection: 'column', alignItems: 'end', justifyContent: 'center' }}>
-              <CircularProgress size={36} thickness={3} />
-            </Box>
+            <section className="flex flex-col items-end justify-center">
+              <CircularProgress size={44} thickness={3} />
+            </section>
           : 
-           user ?
-            <Tooltip title={translations?.openSettings}>
-              <IconButton 
-                onClick={handleOpenUserMenu} 
-                sx={{ p: 0 , width: {sm: 48 , xs: 40} , height: '100%' }}
-              >
-                <div className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'>
-                  <Image
-                    referrerPolicy='no-referrer'
-                    alt="avatar"
-                    src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
-                    width={48} 
-                    height={48} 
-                    className='w-10 h-10 md:w-12 md:h-12 rounded-[20px] md:rounded-[22px]'
-                  />
+            <section>
+              {user ?
+                <Tooltip title={translations?.openSettings}>
+                  <IconButton 
+                    onClick={handleOpenUserMenu} 
+                    sx={{ p: 0 , width: 44 , height: '100%' }}
+                  >
+                    <div className='w-11 h-11 rounded-[22px] '>
+                      <Image
+                        referrerPolicy='no-referrer'
+                        alt="avatar"
+                        src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
+                        width={44} 
+                        height={44} 
+                        className='w-11 h-11 rounded-[22px]'
+                      />
+                    </div>
+                  </IconButton>
+                </Tooltip>
+              :
+                <div className="bg-yellow-200 w-full">
+                  <Button 
+                    onClick={() => dispatch(setLogInFlag(true))}
+                    className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-pink to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
+                    sx={{fontWeight: 'bold' , flex: 'none'}}
+                    >
+                    {translations?.login?.log_in}
+                  </Button>
                 </div>
-              </IconButton>
-            </Tooltip>
-          :
-            <Button 
-              onClick={() => dispatch(setLogInFlag(true))}
-              className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-pink to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
-              sx={{fontWeight: 'bold' , flex: 'none'}}
-              >
-              {translations?.login?.log_in}
-            </Button>
+            }
+          </section>
           }
         </>
     )

@@ -7,10 +7,10 @@ const TitleMobile = () => {
     const router = useRouter();
     const { language , country } = useAppSelector(state => state.region);
     return (
-        <>
+        <section>
             {!router.pathname.includes('results') && 
                 <Typography
-                    variant="h5"
+                    variant="h6"
                     noWrap
                     component="a"
                     href={`/${country}/${language}`}
@@ -26,7 +26,7 @@ const TitleMobile = () => {
                     Dokusō
                 </Typography>
             }
-        </>
+        </section>
     )
 };
 

@@ -18,14 +18,16 @@ const Navbar = ({ logOut , user , loading }) => {
   <ThemeProvider theme={muiColors}>
     <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[#D8D8D8] h-[72px]'>
       <Container maxWidth="xxl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', height: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
-        <TitleDesktop/>
-        <PagesDesktop/>
-        <TitleMobile/>
-        <Box sx={{ width:'fit' , maxWidth:'700px' , display: 'flex', flexDirection: 'row' , alignItems: 'center' , justifyContent:'end' }}>
-          <LanAndCountrySelection/>
+        <section className='flex flex-row items-center'>
+          <TitleDesktop/>
+          <PagesDesktop/>
+          <TitleMobile/>
+        </section>
+        <section className='flex flex-row items-center justify-end'>
+          <LanAndCountrySelection loading={loading}/>
           <MenuForUser loading={loading} user={user} setAnchorElUser={setAnchorElUser}/>
           <MenuToggleUser anchorElUser={anchorElUser} setAnchorElUser={setAnchorElUser} logOut={logOut}/>
-        </Box>
+        </section>
       </Container>
     </AppBar>
   </ThemeProvider>
