@@ -1,6 +1,4 @@
-import { Box } from "@mui/material";
 import React from "react";
-import Button from '@mui/material/Button';
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../../redux/hooks";
 import { setCurrentSearch } from "../../../../redux/features/actions/search";
@@ -26,12 +24,12 @@ const PagesDesktop = () => {
     
     return (
         <section className="hidden md:flex w-full">
-            <button
+            {translations?.explore && <button
             onClick={handleSearchRandom}
             className='p-2 rounded bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange hover:text-dokuso-black shadow-lg font-semibold'
             >
                 {translations?.explore}
-            </button>
+            </button>}
         </section>
     )
 };

@@ -6,7 +6,7 @@ import countriesAndLanguagesOptions from "../../../Resources/countriesAndLanguag
 import LocationIcon from "../../../Common/Icons/LocationIcon";
 import { enhanceText } from "../../../Utils/enhanceText";
 
-const LanAndCountrySelection = () => {
+const LanAndCountrySelection = ({ loading }) => {
     const [anchorElCountry , setAnchorElCountry] = useState(null);
     const router = useRouter();
     const { country , language , translations } = useAppSelector(state => state.region);
@@ -35,8 +35,8 @@ const LanAndCountrySelection = () => {
     
     return (
         <>
-            { country !== '' && language !== '' && indexZone !== -1 &&
-                <section className="w-[120px]">
+            { country !== '' && language !== '' && indexZone !== -1 && !loading &&
+                <section>
                     <Tooltip title={translations?.selectRegion} className='cursor-pointer'>
                         <Button
                             color="inherit"
