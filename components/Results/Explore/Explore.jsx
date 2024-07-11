@@ -30,7 +30,7 @@ const Explore = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state.auth);
-    const { translations , language } = useAppSelector(state => state.region);
+    const { translations , country, language } = useAppSelector(state => state.region);
     const { wishlist , currentSearch } = useAppSelector(state => state.search);
     const [loadingFav , setLoadingFav] = useState(false);
     const [currentProduct , setCurrentProduct] = useState({});
@@ -68,7 +68,7 @@ const Explore = () => {
         event.stopPropagation();
         if (user) {
           setLoadingFav(true);
-          const response = await wishlistChange(currentProduct.id , user , wishlist);
+          const response = await wishlistChange(currentProduct.id_item , user , wishlist);
           if(response === 'added'){
             let newWishlist = [...wishlist];
             newWishlist.push(currentProduct.id);
@@ -76,7 +76,7 @@ const Explore = () => {
             setLoadingFav(false);
           } else if (response === 'deleted') {
             let newWishlist = [...wishlist];
-            const index = newWishlist.findIndex(item => item === currentProduct.id);
+            const index = newWishlist.findIndex(item => item === currentProduct.id_item);
             newWishlist.splice(index, 1); // 2nd parameter means remove one item only
             dispatch(setWishlist(newWishlist))
             setLoadingFav(false);
@@ -105,7 +105,7 @@ const Explore = () => {
         toast.success('Copied to clipboard')    
     };
     const redirectToBrand = (brandName) => {
-        window.open(`/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
+        window.open(`/${country}/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
     };
     
     return (
@@ -114,13 +114,13 @@ const Explore = () => {
                 <GlobalLoader/>
             :
                 <>
-                    {!loading && currentProduct.id ? 
+                    {!loading && currentProduct.id_item ? 
                         <>
                             <Head>
-                                {currentProduct?.name && <title>{`Dokusō - ${enhanceText(currentProduct.name)}`}</title>}
+                                {currentProduct?.name && <title>{`TrendFlow - ${enhanceText(currentProduct.name)}`}</title>}
                                 {currentProduct?.name && <meta name="description" content={enhanceText(currentProduct.name)}/>}
                                 {currentProduct?.brand && <meta name="brand" content={enhanceText(currentProduct.brand)}/>}
-                                {currentProduct?.category && <meta name="section" content={enhanceText(currentProduct.section)}/>}
+                                {currentProduct?.category && <meta name="section" content={enhanceText(currentProduct.category)}/>}
                             </Head>
                             <section className="flex lg:flex-row flex-col w-full items-center mt-4">
                                 <div className="lg:w-1/2 lg:px-5 w-full flex flex-col items-center justify-start">
@@ -139,9 +139,9 @@ const Explore = () => {
                                                 style={{height: '32px' , width: 'auto' , objectFit: 'contain', alignSelf:'start'}}
                                             />
                                         </div>
-                                        <div className="flex flex-row items-center justify-start hover:underline text-sm" onClick={() => redirectToBrand(currentProduct.brand)}>
+                                        {/* <div className="flex flex-row items-center justify-start hover:underline text-sm" onClick={() => redirectToBrand(currentProduct.brand)}>
                                             <span className="cursor-pointer mr-2 ml-3 text-end">
-                                                {translations?.explore} <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-orange">{`${currentProduct?.brand} `}</span>
+                                                {translations?.explore} <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-trendflow-pink to-trendflow-orange">{`${currentProduct?.brand} `}</span>
                                             </span>
                                             <Image
                                                 src={arrow} 
@@ -150,16 +150,16 @@ const Explore = () => {
                                                 width={0} 
                                                 style={{height: '8px' , width: 'auto' , objectFit: 'contain', rotate: '180deg' }}
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                     {
                                         currentProduct.sale ? 
                                         <div className='flex flex-col mb-6'>
                                             <div className="flex flex-row">
-                                                <span className='font-semibold text-dokuso-pink mr-1'>{`${currentProduct.currency} ${currentProduct.price}`}</span> 
+                                                <span className='font-semibold text-trendflow-pink mr-1'>{`${currentProduct.currency} ${currentProduct.price}`}</span> 
                                                 <span className='line-through text-xs self-center mr-6'>{`${currentProduct.currency} ${currentProduct.old_price}`}</span> 
                                             </div>
-                                            <span className="font-extrabold text-transparent text-xl bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-blue">{`${parseInt(currentProduct.discount_rate*100)}% OFF`}</span>
+                                            <span className="font-extrabold text-transparent text-xl bg-clip-text bg-gradient-to-r from-trendflow-pink to-trendflow-blue">{`${parseInt(currentProduct.discount_rate*100)}% OFF`}</span>
                                         </div>
                                         : 
                                         <span className='font-semibold mb-6'>{currentProduct.price !== 0 ? `${currentProduct.currency} ${currentProduct.price}` : `${enhanceText(translations?.results?.no_price)}`}</span> 
@@ -182,7 +182,7 @@ const Explore = () => {
                                                 {currentProduct.tags?.sort().map((itemTag, indexTag) =>
                                                     <Tooltip key={indexTag} title={`Add ${itemTag} to searchbar`} placement="top" arrow={true}> 
                                                         <div 
-                                                            className="bg-dokuso-black text-dokuso-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue"
+                                                            className="bg-trendflow-black text-trendflow-white py-2 px-3 flex flex-col items-center justify-center rounded-full mx-1 first:ml-0 last:mr-0 mb-2 cursor-pointer hover:bg-gradient-to-tl hover:from-trendflow-pink hover:to-trendflow-blue"
                                                             onClick={()=>{handleAddTag( dispatch , currentSearch , itemTag)}}>
                                                             {enhanceText(itemTag)}
                                                         </div>
@@ -200,7 +200,7 @@ const Explore = () => {
                                             { loadingFav ?
                                                 <CircularProgress style={{'color': "#FA39BE"}} size={24} thickness={4}/> 
                                             :
-                                                wishlist.includes(currentProduct.id) ? 
+                                                wishlist.includes(currentProduct.id_item) ? 
                                                 <FavoriteIcon style={{'color': "#FA39BE"}} /> : 
                                                 <FavoriteBorderOutlinedIcon/>
                                             }
@@ -233,7 +233,7 @@ const Explore = () => {
                             {
                                 similarProducts?.length > 0 &&
                                 <section className="w-full px-4 mt-10">
-                                    <h6 className='text-dokuso-black text-lg md:text-xl leading-10 font-semibold'>{translations?.exploreSection?.relatedProducts}</h6>
+                                    <h6 className='text-trendflow-black text-lg md:text-xl leading-10 font-semibold'>{translations?.exploreSection?.relatedProducts}</h6>
                                     <CarouselComp similarProducts={similarProducts}/>                                    
                                 </section>
                             }

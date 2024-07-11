@@ -26,7 +26,7 @@ const PagesDesktop = () => {
         <section className="hidden md:flex w-full">
             {translations?.explore && <button
             onClick={handleSearchRandom}
-            className='p-2 rounded bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white hover:bg-gradient-to-r hover:from-dokuso-pink hover:to-dokuso-orange hover:text-dokuso-black shadow-lg font-semibold'
+            className='p-2 rounded bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-trendflow-white hover:bg-gradient-to-r hover:from-trendflow-pink hover:to-trendflow-orange hover:text-trendflow-black shadow-lg font-semibold'
             >
                 {translations?.explore}
             </button>}

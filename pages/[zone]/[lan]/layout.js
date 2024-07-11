@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    useEffect(() => { // this is when someone enters to, i.e., www.dokuso.app/es
+    useEffect(() => { // this is when someone enters to, i.e., www.trendflow.app/es
       if(router.query.zone && router.query.lan) {
         const defCountry = router.query.zone; // pais por router
         const defLanguage = router.query.lan; // idioma por router

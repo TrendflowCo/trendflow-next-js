@@ -34,7 +34,7 @@ const RandomSearcher = () => {
         <div className="flex flex-col items-center w-full items-center justify-center flex-wrap max-w-[80%] mx-auto">
             <section className=" w-full h-[280px] overflow-y-hidden mt-2 hover:overflow-y-auto hover:scrollbar">
                 <div className="flex-wrap flex flex-col justify-start">
-                    <p className="px-6 py-3 text-dokuso-black font-semibold text-base leading-tight hover:bg-dokuso-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
+                    <p className="px-6 py-3 text-trendflow-black font-semibold text-base leading-tight hover:bg-trendflow-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
                     onClick={() => handleSearchRandom()}>
                         {translations?.not_sure}
                     </p>
@@ -44,7 +44,7 @@ const RandomSearcher = () => {
                             type="button"  
                             onClick={() => {handleQuickSearch(prompt)}} 
                             value={prompt} 
-                            className="px-6 py-3 text-dokuso-blue font-semibold text-base leading-tight hover:bg-dokuso-pink hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer"
+                            className="px-6 py-3 text-trendflow-blue font-semibold text-base leading-tight hover:bg-trendflow-pink hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer"
                         >
                             {hotList.includes(key) ? `${prompt} 🔥` : prompt}
                         </p>

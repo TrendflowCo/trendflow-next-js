@@ -6,7 +6,7 @@ const ItalianTranslation = () => {
         La nostra barra di ricerca è il tuo passaggio per trovare gli articoli di moda 
         <b> perfetti </b>
         per adattarsi al
-        <b className="text-dokuso-blue"> tuo </b>
+        <b className="text-trendflow-blue"> tuo </b>
         stile.
         Non 
         <b> limitarti </b>
@@ -14,7 +14,7 @@ const ItalianTranslation = () => {
         Prova qualcosa di  
         <b> nuovo, inaspettato, </b>
         e 
-        <b className="text-dokuso-pink"> unicamente </b>
+        <b className="text-trendflow-pink"> unicamente </b>
         tu.
     </>
 };

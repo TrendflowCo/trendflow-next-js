@@ -48,7 +48,7 @@ const MenuForUser = ({loading , user , setAnchorElUser}) => {
                 <div className="bg-yellow-200 w-full">
                   <Button 
                     onClick={() => dispatch(setLogInFlag(true))}
-                    className="hover:text-dokuso-white bg-gradient-to-r from-dokuso-pink to-dokuso-blue hover:from-dokuso-pink hover:to-dokuso-orange" variant="contained" 
+                    className="hover:text-trendflow-white bg-gradient-to-r from-trendflow-pink to-trendflow-blue hover:from-trendflow-pink hover:to-trendflow-orange" variant="contained" 
                     sx={{fontWeight: 'bold' , flex: 'none'}}
                     >
                     {translations?.login?.log_in}

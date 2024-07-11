@@ -25,25 +25,13 @@ const Footer = () => {
     
     const socialMedia = [
         {
-            name: "facebook",
-            ref: "https://www.facebook.com/Dokuso.App"
-        },
-        {
-            name: "x",
-            ref: "https://twitter.com/DokusoApp"
-        },
-        {
-            name: "instagram",
-            ref: "https://www.instagram.com/Dokuso.App"
-        },
-        {
             name: "linkedin",
-            ref: "https://www.linkedin.com/company/Dokuso"
+            ref: "https://www.linkedin.com/company/trendflowco"
         },
     ];
 
     return (
-        <section className='flex flex-col items-center bg-dokuso-black bg-opacity-20 w-full h-fit'>
+        <section className='flex flex-col items-center bg-trendflow-black bg-opacity-20 w-full h-fit'>
             <div className='flex flex-row justify-center w-full max-w-[80%] pt-4'>
                 <PagesDesktop handleSelectPage={handleSelectPage}/>
             </div>
@@ -68,11 +56,11 @@ const Footer = () => {
                     </div>
                 )})}
             </div>
-            <div className='w-full max-w-[80%] mx-auto text-start text-dokuso-black mt-2 pb-4'>
+            <div className='w-full max-w-[80%] mx-auto text-start text-trendflow-black mt-2 pb-4'>
                 <Typography variant="body2" color="text.secondary">
                 {'Copyright © '}
-                <Link color="inherit" href="https:/dokuso.app/">
-                    Dokuso
+                <Link color="inherit" href="https:/trendflow.app/">
+                    trendflow
                 </Link>{' '}
                 {new Date().getFullYear()}
                 {'.'}

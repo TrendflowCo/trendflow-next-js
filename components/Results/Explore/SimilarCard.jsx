@@ -17,9 +17,9 @@ const SimilarCard = ({productItem}) => {
     const secondEdition = firstEdition.split('/').join('_');
     const thirdEdition = secondEdition.split('%20').join('-');
     logEvent(analytics, 'clickSingleCard', {
-      img_id: productItem.id
+      img_id: productItem.id_item
     });
-    router.push(`/${country}/${language}/results/explore/${thirdEdition}%20${productItem.id}`);
+    router.push(`/${country}/${language}/results/explore/${thirdEdition}%20${productItem.id_item}`);
   }
 
   return (
@@ -38,8 +38,8 @@ const SimilarCard = ({productItem}) => {
               onClick={() => {handleShowSingleCard()}}
             />
           {productItem.old_price !== productItem.price && 
-            <div className='flex flex-col items-center justify-center absolute shadow-xl border border-dokuso-white top-2 right-2 w-fit h-fit p-1 md:p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
-              <span className='text-xs md:text-sm lg:text-base font-semibold text-dokuso-white leading-full'>{translations?.results?.on_sale.toUpperCase()}</span>
+            <div className='flex flex-col items-center justify-center absolute shadow-xl border border-trendflow-white top-2 right-2 w-fit h-fit p-1 md:p-2 rounded-xl bg-gradient-to-r from-trendflow-pink to-trendflow-orange text-center'>
+              <span className='text-xs md:text-sm lg:text-base font-semibold text-trendflow-white leading-full'>{translations?.results?.on_sale.toUpperCase()}</span>
             </div>
           }
         </section>
@@ -50,7 +50,7 @@ const SimilarCard = ({productItem}) => {
               {
                 productItem.old_price !== productItem.price ? 
                 <div className='flex flex-row w-full'>
-                  <span className='font-semibold text-dokuso-pink mr-1'>{`$${""+productItem.price}`}</span> 
+                  <span className='font-semibold text-trendflow-pink mr-1'>{`$${""+productItem.price}`}</span> 
                   <span className='font-semibold line-through'>{`$${""+productItem.old_price}`}</span> 
                 </div>
               : 

@@ -5,7 +5,7 @@ import { distanceCalculator } from "../components/functions/distanceCalculator";
 
 const HomeRedirect = () => {
   const router = useRouter();
-  useEffect(() => { // this is made when someone enters to www.dokuso.app/
+  useEffect(() => { // this is made when someone enters to www.trendflow.app/
     const defCountry = localStorage.getItem('country'); // pais por localStorage
     const defLanguage = localStorage.getItem('language'); // idioma por localStorage
     const isValidCountry = countriesAndLanguages.some((item) => item.aliasCountry === defCountry)

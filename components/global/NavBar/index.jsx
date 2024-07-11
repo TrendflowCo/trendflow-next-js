@@ -16,7 +16,7 @@ const Navbar = ({ logOut , user , loading }) => {
   
   return (
   <ThemeProvider theme={muiColors}>
-    <AppBar position="static" color="dokusoWhite" enableColorOnDark={true} className='border-b border-b-[#D8D8D8] h-[72px]'>
+    <AppBar position="static" color="trendflowWhite" enableColorOnDark={true} className='border-b border-b-[#D8D8D8] h-[72px]'>
       <Container maxWidth="xxl" sx={{display: 'flex' , flexDirection: 'row' , width: '100%', height: '100%', alignItems: 'center' , justifyContent: 'space-between'}}>
         <section className='flex flex-row items-center'>
           <TitleDesktop/>

@@ -6,7 +6,7 @@ const StammInput = ({labelText , widths , type , value , onChange , placeholder}
             <label className="font-semibold mb-2">{labelText}</label>
             <input 
                 type={type} 
-                className="h-10 w-full border border-dokuso-black rounded bg-transparent px-4 text-sm"
+                className="h-10 w-full border border-trendflow-black rounded bg-transparent px-4 text-sm"
                 value={value} 
                 onChange={(e) => {onChange(e)}}
                 placeholder={placeholder}

@@ -10,7 +10,7 @@ const BrandCard = ({brand}) => {
     };
     return (
             <button 
-                className="p-4 flex flex-col items-center justify-center font-semibold items-center cursor-pointer rounded-lg hover:shadow hover:text-dokuso-pink hover:underline"
+                className="p-4 flex flex-col items-center justify-center font-semibold items-center cursor-pointer rounded-lg hover:shadow hover:text-trendflow-pink hover:underline"
                 onClick={() => {handleSearchBrand(brand)}}
             >
                 {brand}

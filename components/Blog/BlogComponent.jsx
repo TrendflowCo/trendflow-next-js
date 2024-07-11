@@ -47,14 +47,14 @@ const BlogComponent = () => {
             :
                 <>
                     <Head>
-                        <title>{`Dokusō - Blog`}</title>
+                        <title>{`TrendFlow - Blog`}</title>
                         <meta name="description" content='Blog'/>
                     </Head>
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25 mx-5'>
                             <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>Blog</h6>
                         {(user?.email === 'artuknees@gmail.com' || user?.email === 'julianlopezba@gmail.com' || user?.email ==='leolucianna@gmail.com') && 
                             <button 
-                                className="bg-gradient-to-r from-dokuso-pink to-dokuso-blue text-dokuso-white rounded px-3 font-semibold shadow-lg hover:from-dokuso-blue hover:to-dokuso-green hover:text-dokuso-black"
+                                className="bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-trendflow-white rounded px-3 font-semibold shadow-lg hover:from-trendflow-blue hover:to-trendflow-green hover:text-trendflow-black"
                                 onClick={() => {router.push(`/${router.query.lan}/blog/addPost`)}}
                             >
                                 Create post

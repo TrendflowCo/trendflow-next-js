@@ -97,7 +97,7 @@ const Wishlist = () => {
                     { products.length > 0 && 
                         <div className="flex flex-col w-full items-center py-4">
                             <ThemeProvider theme={muiColors}>
-                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
+                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="trendflowOrange" />
                             </ThemeProvider>
                         </div>
                     }

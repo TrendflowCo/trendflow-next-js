@@ -76,8 +76,8 @@ const Sort = ( props ) => {
 
     return(
         <>
-            {sortingModal && <div className="h-full w-full bg-dokuso-black absolute top-0 left-0 z-10 bg-opacity-30"></div>}
-            <div className={`px-6 h-full overflow-auto w-full lg:w-1/3 flex flex-col bg-dokuso-white border-l border-l-stamm-gray shadow-2xl top-0 right-0 fixed z-20 pt-[20px] ease-in-out duration-500 ${sortingModal ? 'transform translate-none shadow-[-10px_0px_30px_10px_rgba(0,0,0,0.3)]' : 'transform translate-x-full shadow-none'}`} ref={ref}>
+            {sortingModal && <div className="h-full w-full bg-trendflow-black absolute top-0 left-0 z-10 bg-opacity-30"></div>}
+            <div className={`px-6 h-full overflow-auto w-full lg:w-1/3 flex flex-col bg-trendflow-white border-l border-l-stamm-gray shadow-2xl top-0 right-0 fixed z-20 pt-[20px] ease-in-out duration-500 ${sortingModal ? 'transform translate-none shadow-[-10px_0px_30px_10px_rgba(0,0,0,0.3)]' : 'transform translate-x-full shadow-none'}`} ref={ref}>
                 { sortingModal && 
                     <>
                         <div className=" flex flex-row justify-end" >
@@ -115,8 +115,8 @@ const Sort = ( props ) => {
                         </div>
 
                         <div className="flex flex-col lg:flex-row w-full lg:mt-24 mt-12 mb-8">
-                            <button className='bg-gradient-to-r from-dokuso-pink to-dokuso-orange place-self-center w-full text-dokuso-white border border-stamm-primary p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => handleApplySorting()}>{enhanceText(translations?.results?.apply_sorting)}</button>
-                            <button className='bg-dokuso-black place-self-center w-full text-dokuso-white border border-stamm-black p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:ml-2.5' onClick={() => deleteSorting()}>{enhanceText(translations?.results?.delete_sorting)}</button>
+                            <button className='bg-gradient-to-r from-trendflow-pink to-trendflow-orange place-self-center w-full text-trendflow-white border border-stamm-primary p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => handleApplySorting()}>{enhanceText(translations?.results?.apply_sorting)}</button>
+                            <button className='bg-trendflow-black place-self-center w-full text-trendflow-white border border-stamm-black p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:ml-2.5' onClick={() => deleteSorting()}>{enhanceText(translations?.results?.delete_sorting)}</button>
                         </div>
                     </>
                 }

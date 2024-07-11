@@ -144,7 +144,7 @@ const LogInForm = () => {
                 <ThemeProvider theme={muiColors}>
                     <LoadingButton
                         fullWidth={true}
-                        className="bg-dokuso-blue" 
+                        className="bg-trendflow-blue" 
                         size="large"
                         type="submit"
                         variant="contained"

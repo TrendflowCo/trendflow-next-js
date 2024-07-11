@@ -31,7 +31,7 @@ const Searcher = () => {
                 <section className="flex-auto w-full lg:w-fit px-4 md:px-0">
                     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
                     <input 
-                        className="bg-dokuso-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-4 pr-10 pl-5 relative flex-auto w-full items-center text-dokuso-black"
+                        className="bg-trendflow-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-4 pr-10 pl-5 relative flex-auto w-full items-center text-trendflow-black"
                         type="text"
                         placeholder={translations?.search?.placeholder}
                         style={{'fontFamily':"Arial, FontAwesome"}}
@@ -42,7 +42,7 @@ const Searcher = () => {
                 <section className="px-2 lg:mt-0 mt-6">
                     <ThemeProvider theme={muiColors}>
                         <Button 
-                            className="text-dokuso-white hover:text-dokuso-black bg-gradient-to-r from-dokuso-pink to-dokuso-blue hover:from-dokuso-blue hover:to-dokuso-green" 
+                            className="text-trendflow-white hover:text-trendflow-black bg-gradient-to-r from-trendflow-pink to-trendflow-blue hover:from-trendflow-blue hover:to-trendflow-green" 
                             variant="contained" 
                             onClick={() => handleButtonSearch()} 
                             onKeyDown={(e) => {handleEnterSearch(e)}}
