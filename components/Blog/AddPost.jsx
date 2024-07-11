@@ -120,7 +120,7 @@ const AddPost = () => {
         :
             <section className="pb-8">
                 <Head>
-                    <title>{`Dokusō - ${updateMode ? 'Update' : 'Add'} post`}</title>
+                    <title>{`TrendFlow - ${updateMode ? 'Update' : 'Add'} post`}</title>
                     <meta name="description" content='Blog'/>
                 </Head>
                 <div className='flex flex-col lg:flex-row lg:justify-between mt-25 mx-5'>

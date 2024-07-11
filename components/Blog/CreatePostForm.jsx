@@ -83,7 +83,7 @@ const CreatePostForm = ({ post , setPost }) => {
                     />
                     <div className={`flex flex-col first:ml-0 last:mr-0 mx-2 w-[10%] justify-end items-start`}>
                         <label className="font-semibold mb-2">{'Add img url'}</label>
-                        <div className="bg-dokuso-pink w-10 h-10 rounded-full">
+                        <div className="bg-trendflow-pink w-10 h-10 rounded-full">
                             <IconButton onClick={() => {handleAdd('cover_img',imgUri , setImgUri)}}>
                                 <AddIcon/>
                             </IconButton>
@@ -99,20 +99,20 @@ const CreatePostForm = ({ post , setPost }) => {
                     />
                     <div className={`flex flex-col first:ml-0 last:mr-0 mx-2 w-[10%] justify-end items-start`}>
                         <label className="font-semibold mb-2">{'Add tag'}</label>
-                        <div className="bg-dokuso-pink w-10 h-10 rounded-full">
+                        <div className="bg-trendflow-pink w-10 h-10 rounded-full">
                             <IconButton onClick={() => {handleAdd('tags',tagString , setTagString)}}>
                                 <AddIcon/>
                             </IconButton>
                         </div>
                     </div>
                 </div>
-                <div className="w-full flex flex-col xl:flex-row mt-4 text-dokuso-white">
+                <div className="w-full flex flex-col xl:flex-row mt-4 text-trendflow-white">
                     <div className="flex flex-col w-1/2 overflow-hidden mr-2">
                         <label className="font-semibold mb-2">{'Added images'}</label>
                         <div className="flex flex-col w-full">
                             {post.cover_img.length > 0 && post.cover_img.map((itemImg , indexImg) => {
                                 return (
-                                    <div key={indexImg} className="w-full rounded-lg bg-dokuso-blue mb-2 p-1">
+                                    <div key={indexImg} className="w-full rounded-lg bg-trendflow-blue mb-2 p-1">
                                         <span className="text-xs">{itemImg}</span>
                                         <IconButton onClick={() => {handleRemove('cover_img',itemImg)}}>
                                             <CloseIcon sx={{color: '#FAFAFA'}}/>
@@ -127,7 +127,7 @@ const CreatePostForm = ({ post , setPost }) => {
                         <div className="flex flex-row w-full">
                             {post.tags.length > 0 && post.tags.map((itemTag , indexTag) => {
                                 return (
-                                    <div key={indexTag} className="w-fit rounded-lg bg-dokuso-blue mb-2 py-1 pl-3 mx-1 first:ml-0 last:mr-0">
+                                    <div key={indexTag} className="w-fit rounded-lg bg-trendflow-blue mb-2 py-1 pl-3 mx-1 first:ml-0 last:mr-0">
                                         <span className="text-xs">{itemTag}</span>
                                         <IconButton onClick={() => {handleRemove('tags',itemTag)}}>
                                             <CloseIcon sx={{color: '#FAFAFA'}}/>

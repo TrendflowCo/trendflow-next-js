@@ -12,11 +12,11 @@ const TitleAndImage = () => {
     return (
         <ThemeProvider theme={muiColors}>
         <section className="mt-12 pt-8 pb-4 px-4 w-full flex flex-col items-center max-w-[80%] mx-auto">
-            <p className="text-5xl lg:text-6xl font-bold text-dokuso-black">
+            <p className="text-5xl lg:text-6xl font-bold text-trendflow-black">
                 {translations?.header?.title1}
-                <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-dokuso-pink to-dokuso-blue">{translations?.header?.title2}</span>
+                <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-trendflow-pink to-trendflow-blue">{translations?.header?.title2}</span>
             </p>
-            <div className="mt-12 py-4 px-1 sm:px-0 sm:text-lg text-xl text-center text-dokuso-black">
+            <div className="mt-12 py-4 px-1 sm:px-0 sm:text-lg text-xl text-center text-trendflow-black">
                 {language === 'en' && <EnglishTranslation/>}
                 {language === 'es' && <SpanishTranslation/>}
                 {language === 'fr' && <FrenchTranslation/>}

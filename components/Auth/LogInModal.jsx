@@ -52,7 +52,7 @@ const LogInModal = () => {
         fontWeight: 'bold',
         lineHeight: 1.235,
         letterSpacing: '0.00735em',
-        color: muiColors.palette.dokusoBlack.main,
+        color: muiColors.palette.trendflowBlack.main,
         fontFamily: [
           'Roboto',
           '"Helvetica Neue"',
@@ -68,7 +68,7 @@ const LogInModal = () => {
         fontWeight: 'regular',
         lineHeight: 1.334,
         letterSpacing: '0em',
-        color: muiColors.palette.dokusoBlack.main,
+        color: muiColors.palette.trendflowBlack.main,
         fontFamily: [
           'Roboto',
           '"Helvetica Neue"',
@@ -85,7 +85,7 @@ const LogInModal = () => {
 
     return (
         <section className="h-screen w-screen flex flex-col items-center justify-center">
-            <div className="fixed top-[10%] h-[80vh] lg:left-[25%] left-[6%] lg:w-[50vw] w-[88vw] flex flex-col items-center bg-dokuso-white shadow-2xl rounded-3xl p-4">
+            <div className="fixed top-[10%] h-[80vh] lg:left-[25%] left-[6%] lg:w-[50vw] w-[88vw] flex flex-col items-center bg-trendflow-white shadow-2xl rounded-3xl p-4">
                 <div className="flex flex-col items-end justify-center h-12 w-full flex-none">
                     <IconButton sx={{marginRight: '4px'}} onClick={() => dispatch(setLogInFlag(false))}>
                         <CloseIcon/>

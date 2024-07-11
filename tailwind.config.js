@@ -32,12 +32,12 @@ module.exports = {
     },
     extend: {
       colors: {
-        'dokuso-black': '#262626',
-        'dokuso-white': '#FAFAFA',
-        'dokuso-green': '#57FA3E',
-        'dokuso-orange': '#FAB332',
-        'dokuso-blue': '#318AFA',
-        'dokuso-pink': '#FA39BE',
+        'trendflow-black': '#262626',
+        'trendflow-white': '#FAFAFA',
+        'trendflow-green': '#57FA3E',
+        'trendflow-orange': '#FAB332',
+        'trendflow-blue': '#318AFA',
+        'trendflow-pink': '#FA39BE',
       },
     },
   },

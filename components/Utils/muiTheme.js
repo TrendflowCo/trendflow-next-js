@@ -2,22 +2,22 @@ import { createTheme } from "@mui/material";
 
 export const muiColors = createTheme({
     palette: {
-      dokusoBlack: {
+      trendflowBlack: {
         main: '#262626',
       },
-      dokusoWhite: {
+      trendflowWhite: {
         main: '#FAFAFA',
       },
-      dokusoGreen: {
+      trendflowGreen: {
         main: '#57FA3E',
       },
-      dokusoOrange: {
+      trendflowOrange: {
         main: '#FAB332',
       },
-      dokusoBlue: {
+      trendflowBlue: {
         main: '#318AFA',
       },
-      dokusoPink: {
+      trendflowPink: {
         main: '#FA39BE',
       },
     },

@@ -64,17 +64,17 @@ const SinglePost = ({post , reload , setReload , user}) => {
     }
     
     return (
-        <div className="bg-dokuso-white text-dokuso-black rounded-[12px] overflow-hidden flex flex-row shadow-lg w-[95%] mx-auto mt-4 mb-4 relative">
+        <div className="bg-trendflow-white text-trendflow-black rounded-[12px] overflow-hidden flex flex-row shadow-lg w-[95%] mx-auto mt-4 mb-4 relative">
             {loading && <div className="absolute w-full h-full flex flex-col items-center justify-center">
                 <CircularProgress size={64} thickness={3} sx={{color: '#318AFA'}}/>            
             </div>}
             <div className="p-4 w-[75%]">
-                <div className="text-dokuso-pink font-semibold text-sm mb-2">
+                <div className="text-trendflow-pink font-semibold text-sm mb-2">
                     {formatDateFromTimestamp(post?.date)}
                 </div>
                 <h1 className="text-2xl font-semibold mb-2">{post.title}</h1>
                 <h3 className="text-lg font-normal mb-2">{post.subTitle}</h3>
-                <section className="text-sm text-dokuso-black mb-4">{post.text.split('\n').map((item,index)=> {
+                <section className="text-sm text-trendflow-black mb-4">{post.text.split('\n').map((item,index)=> {
                     return (
                         <Fragment key={index}>
                             {item}<br/>
@@ -83,14 +83,14 @@ const SinglePost = ({post , reload , setReload , user}) => {
                 })}</section>
 
 
-                <div className="text-dokuso-black font-medium text-sm">
+                <div className="text-trendflow-black font-medium text-sm">
                 By {post.author}
                 </div>
                 <div className="mt-2">
                     {post?.tags?.map((tag, index) => (
                         <span
                             key={index}
-                            className="bg-dokuso-blue text-dokuso-white text-xs px-2 py-1 rounded-full mr-2"
+                            className="bg-trendflow-blue text-trendflow-white text-xs px-2 py-1 rounded-full mr-2"
                         >
                             {tag}
                         </span>

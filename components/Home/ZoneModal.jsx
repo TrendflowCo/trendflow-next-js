@@ -19,8 +19,8 @@ const ZoneModal = () => {
     },[]) // eslint-disable-line
     const [selectedOption , setSelectedOption] = useState(-1);
     return (
-        <section className="bg-dokuso-black bg-opacity-10 w-screen h-screen fixed top-0 right-0 flex flex-col items-center justify-center">
-            <div className="w-[40vw] h-[40vh] z-10 rounded-2xl shadow-xl bg-dokuso-white p-4 flex flex-col items-center justify-center">
+        <section className="bg-trendflow-black bg-opacity-10 w-screen h-screen fixed top-0 right-0 flex flex-col items-center justify-center">
+            <div className="w-[40vw] h-[40vh] z-10 rounded-2xl shadow-xl bg-trendflow-white p-4 flex flex-col items-center justify-center">
                 <div className="mb-4 w-[330px] px-2 flex flex-col items-start">
                     <h1 className="font-semibold text-xl mb-4">{translations?.firstVisit?.selectYourRegion}</h1>
                     {countriesAndLanguagesOptions.sort((a,b) => a.completeCountry.localeCompare(b.completeCountry)).map((singleOption,indexOption) => 
@@ -30,7 +30,7 @@ const ZoneModal = () => {
                             onClick={() => setSelectedOption(indexOption)}
                         >
                             <LocationIcon/>
-                            <span className={`ml-2 underline ${selectedOption === indexOption && 'text-dokuso-pink font-semibold'}`}>{`${singleOption.completeCountry.toUpperCase()} - ${enhanceText(singleOption.completeLanguage)}`}</span>                    
+                            <span className={`ml-2 underline ${selectedOption === indexOption && 'text-trendflow-pink font-semibold'}`}>{`${singleOption.completeCountry.toUpperCase()} - ${enhanceText(singleOption.completeLanguage)}`}</span>                    
                         </div>
                     )}
                 </div>

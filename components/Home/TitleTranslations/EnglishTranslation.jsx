@@ -5,7 +5,7 @@ const EnglishTranslation = () => {
         Our search bar is your gateway to finding the 
         <b> perfect </b>
         items to fit
-        <b className="text-dokuso-blue"> your </b>
+        <b className="text-trendflow-blue"> your </b>
         style.
         Don&apos;t limit 
         <b> yourself </b>
@@ -13,7 +13,7 @@ const EnglishTranslation = () => {
         Try something 
         <b> new, unexpected, </b>
         and 
-        <b className="text-dokuso-pink"> uniquely </b>
+        <b className="text-trendflow-pink"> uniquely </b>
         you.
     </>
 };

@@ -37,23 +37,23 @@ const ResultCard = ({productItem }) => {
   const handleShowSingleCard = () => {
     const withoutSlash = productItem.name.split('/').join('%2F');
     logEvent(analytics, 'clickSingleCard', {
-      img_id: productItem.id
+      img_id: productItem.id_item
     });
-    router.push(`/${router.query.zone}/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id}`)
+    router.push(`/${router.query.zone}/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id_item}`)
   };
   const handleAddWishlist = async (event) => {
     event.stopPropagation();
     if (user) {
       setLoadingFav(true);
-      const response = await wishlistChange(productItem.id , user , wishlist);
+      const response = await wishlistChange(productItem.id_item , user , wishlist);
       if(response === 'added'){
         let newWishlist = [...wishlist];
-        newWishlist.push(productItem.id);
+        newWishlist.push(productItem.id_item);
         dispatch(setWishlist(newWishlist))
         setLoadingFav(false);
       } else if (response === 'deleted') {
         let newWishlist = [...wishlist];
-        const index = newWishlist.findIndex(item => item === productItem.id);
+        const index = newWishlist.findIndex(item => item === productItem.id_item);
         newWishlist.splice(index, 1); // 2nd parameter means remove one item only
         dispatch(setWishlist(newWishlist))
         setLoadingFav(false);
@@ -120,8 +120,8 @@ const ResultCard = ({productItem }) => {
           </div>
         }
         {productItem.sale && 
-          <div className='flex-none absolute shadow-xl border border-dokuso-white top-2 right-2 w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-dokuso-pink to-dokuso-orange text-center'>
-            <span className='text-xs md:text-sm lg:text-base font-semibold text-dokuso-white'>{translations?.results?.on_sale.toUpperCase()}</span>
+          <div className='flex-none absolute shadow-xl border border-trendflow-white top-2 right-2 w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-trendflow-pink to-trendflow-orange text-center'>
+            <span className='text-xs md:text-sm lg:text-base font-semibold text-trendflow-white'>{translations?.results?.on_sale.toUpperCase()}</span>
           </div>
         }
         <section className='flex flex-row p-3 mt-1 w-full'>
@@ -130,7 +130,7 @@ const ResultCard = ({productItem }) => {
             {
               productItem.sale ? 
               <div className='flex flex-row w-full'>
-                <span className='font-semibold text-dokuso-pink mr-1'>{`${productItem.currency} ${productItem.price}`}</span> 
+                <span className='font-semibold text-trendflow-pink mr-1'>{`${productItem.currency} ${productItem.price}`}</span> 
                 <span className='line-through text-xs self-center'>{`${productItem.currency} ${productItem.old_price}`}</span> 
               </div>
             : 
@@ -159,7 +159,7 @@ const ResultCard = ({productItem }) => {
               { loadingFav ?
                 <CircularProgress style={{'color': "#FA39BE"}} size={24} thickness={4}/> 
               :
-                wishlist.includes(productItem.id) ? 
+                wishlist.includes(productItem.id_item) ? 
                 <FavoriteIcon style={{'color': "#FA39BE"}} /> : 
                 <FavoriteBorderOutlinedIcon/>
               }

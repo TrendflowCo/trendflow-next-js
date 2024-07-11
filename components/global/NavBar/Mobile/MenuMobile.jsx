@@ -36,7 +36,7 @@ const MenuMobile = ({handleSelectPage}) => {
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleOpenNavMenu}
-            color="dokusoBlack"
+            color="trendflowBlack"
           >
             <MenuIcon />
           </IconButton>

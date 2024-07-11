@@ -11,7 +11,7 @@ const FeatureImages = () => {
       fontWeight: 'bold',
       lineHeight: 1.2,
       letterSpacing: '-0.00833em',
-      color: muiColors.palette.dokusoBlack.main,
+      color: muiColors.palette.trendflowBlack.main,
       textAlign: 'center',
       fontFamily: [
         'Roboto',
@@ -40,7 +40,7 @@ const FeatureImages = () => {
         //                         {itemTitle}
         //                     </Typography>
         //                 </ThemeProvider>
-        //                 <p className="text-center text-dokuso-black">{subTitles[indexTitle]}</p>
+        //                 <p className="text-center text-trendflow-black">{subTitles[indexTitle]}</p>
         //             </div>
         //         )})}
         //     </div>
@@ -58,7 +58,7 @@ const FeatureImages = () => {
                             {itemTitle}
                         </Typography>
                     </ThemeProvider>
-                    <p className="text-center text-dokuso-black">{subTitles[indexTitle]}</p>
+                    <p className="text-center text-trendflow-black">{subTitles[indexTitle]}</p>
                 </div>
             )})}
         </div>

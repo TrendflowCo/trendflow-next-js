@@ -181,7 +181,7 @@ const Results = () => {
                     : 
                     <>
                         <Head>
-                            {lastSearch && <title>{`Dokusō - ${enhanceText(lastSearch)}`}</title>}
+                            {lastSearch && <title>{`TrendFlow - ${enhanceText(lastSearch)}`}</title>}
                             {lastSearch && <meta name="description" content={enhanceText(lastSearch)}/>}
                             {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
                         </Head>
@@ -202,7 +202,7 @@ const Results = () => {
                         {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-2'>
                             <div className="flex flex-row h-fit flex-wrap w-full">
                             {searchTags.sort().map((tag,index) => <div 
-                                className="flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit bg-dokuso-black text-dokuso-white rounded-full cursor-pointer hover:bg-gradient-to-tl hover:from-dokuso-pink hover:to-dokuso-blue" 
+                                className="flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit bg-trendflow-black text-trendflow-white rounded-full cursor-pointer hover:bg-gradient-to-tl hover:from-trendflow-pink hover:to-trendflow-blue" 
                                 key={index}
                                 onClick={()=> {handleAddTag( dispatch , currentSearch , tag )}}
                                 >{enhanceText(tag)}</div>)}
@@ -219,7 +219,7 @@ const Results = () => {
                         </section>
                         <div className="flex flex-col w-full items-center py-4">
                             <ThemeProvider theme={muiColors}>
-                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="dokusoOrange" />
+                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="trendflowOrange" />
                             </ThemeProvider>
                         </div>
                     </>

@@ -20,7 +20,7 @@ const PopularSearches = () => {
     return (
         <div className="flex flex-col items-center w-full pt-8">
             <div className="flex flex-col max-w-xl w-full items-start">
-                <h1 className="text-dokuso-black text-2xl sm:text-3xl font-bold mb-3">
+                <h1 className="text-trendflow-black text-2xl sm:text-3xl font-bold mb-3">
                     {translations?.popular_searches}
                 </h1>
                 <div className="flex-wrap flex flex-row justify-start">
@@ -30,7 +30,7 @@ const PopularSearches = () => {
                             type="button"  
                             onClick={() => {handleQuickSearch(prompt)}} 
                             value={prompt} 
-                            className="px-6 py-3 border-2 border-dokuso-blue mr-1 mb-1 text-dokuso-blue font-semibold text-sm leading-tight uppercase rounded bg-dokuso-white hover:bg-dokuso-pink hover:bg-opacity-20 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                            className="px-6 py-3 border-2 border-trendflow-blue mr-1 mb-1 text-trendflow-blue font-semibold text-sm leading-tight uppercase rounded bg-trendflow-white hover:bg-trendflow-pink hover:bg-opacity-20 hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
                         >
                             {prompt}
                         </button>

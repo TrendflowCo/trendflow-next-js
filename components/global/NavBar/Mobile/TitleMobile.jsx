@@ -23,7 +23,7 @@ const TitleMobile = () => {
                     textDecoration: 'none',
                     }}
                 >
-                    Dokusō
+                    TrendFlow
                 </Typography>
             }
         </section>

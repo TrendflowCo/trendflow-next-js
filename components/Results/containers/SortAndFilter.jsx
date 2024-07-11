@@ -51,14 +51,14 @@ const SortAndFilter = (props) => {
                     justifyContent: 'center',
                     borderRadius: 2,
                     }}
-                    color="dokusoBlack"
+                    color="trendflowBlack"
                     onClick={() => handleOpenFilterModal()}
                     startIcon={<FilterAltIcon/>}
                 >
                     <span>{enhanceText(translations?.results?.filters)}</span>
                     {totalFilters > 0 && 
-                        <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
-                            <span className='font-bold text-dokuso-white'>{totalFilters}</span>
+                        <div className='ml-2 flex flex-col items-center justify-center bg-trendflow-pink w-6 h-6 rounded-full'>
+                            <span className='font-bold text-trendflow-white'>{totalFilters}</span>
                         </div>
                     }
                 </Button>
@@ -72,14 +72,14 @@ const SortAndFilter = (props) => {
                     justifyContent: 'center',
                     borderRadius: 2,
                     }}
-                    color="dokusoBlack"
+                    color="trendflowBlack"
                     onClick={() => handleOpenSortingModal()}
                     startIcon={<SortIcon/>}
                 >
                     <span>{enhanceText(translations?.results?.sorts)}</span>
                     {totalSorts > 0 && 
-                        <div className='ml-2 flex flex-col items-center justify-center bg-dokuso-pink w-6 h-6 rounded-full'>
-                            <span className='font-bold text-dokuso-white'>{totalSorts}</span>
+                        <div className='ml-2 flex flex-col items-center justify-center bg-trendflow-pink w-6 h-6 rounded-full'>
+                            <span className='font-bold text-trendflow-white'>{totalSorts}</span>
                         </div>
                     }
                 </Button>

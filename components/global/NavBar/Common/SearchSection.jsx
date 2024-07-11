@@ -26,7 +26,7 @@ const SearchSection = () => {
             { router.pathname.includes('results') && 
                 <div className="flex flex-row items-center outline-none justify-center items-center w-full h-full relative mr-4">
                     <input 
-                        className="bg-dokuso-black outline-none bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-dokuso-black"
+                        className="bg-trendflow-black outline-none bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-2 pr-10 pl-5 relative flex-auto w-[120px] md:w-full items-center text-trendflow-black"
                         type="text"
                         placeholder={translations?.search?.placeholder}
                         value={currentSearch.split('-').join(' ')}
@@ -38,7 +38,7 @@ const SearchSection = () => {
                         onClick={() => {handleSearchQuery(language , currentSearch , 'search' , router)}} 
                         sx={{ p: 0 , width: '40px' , height: '40px', position: 'absolute', right: '0px' }}
                     >
-                        <div className='h-[40px] w-[40px] rounded-r-[5px] bg-gradient-to-tl from-dokuso-pink to-dokuso-blue'>
+                        <div className='h-[40px] w-[40px] rounded-r-[5px] bg-gradient-to-tl from-trendflow-pink to-trendflow-blue'>
                         <SearchIcon fontSize='medium' style={{'color': "#FAFAFA"}}/>
                         </div>
                     </IconButton>

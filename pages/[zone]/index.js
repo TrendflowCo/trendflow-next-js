@@ -5,7 +5,7 @@ import { distanceCalculator } from "../../components/functions/distanceCalculato
 
 const LanguageRedirect = () => {
   const router = useRouter();
-  useEffect(() => { // this is made when someone enters to www.dokuso.app/us without language
+  useEffect(() => { // this is made when someone enters to www.trendflow.app/us without language
     if(router.query.zone) {
         const defCountry = router.query.zone; // pais por router
         const defLanguage = localStorage.getItem('language'); // idioma por localStorage

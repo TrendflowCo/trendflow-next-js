@@ -41,7 +41,7 @@ const Brands = () => {
             :
                 <>
                     <Head>
-                        <title>{`Dokusō - ${translations?.brands}`}</title>
+                        <title>{`TrendFlow - ${translations?.brands}`}</title>
                         <meta name="description" content='Brands'/>
                     </Head>
                     <div className='flex flex-col lg:flex-row lg:justify-between mt-25 mx-5'>

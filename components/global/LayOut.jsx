@@ -20,9 +20,9 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className='w-screen h-screen flex flex-col bg-dokuso-white'>
+    <div className='w-screen h-screen flex flex-col bg-trendflow-white'>
       <Head>
-        <title>Dokusō</title>
+        <title>TrendFlow</title>
         <meta name="description" content="Your innovative fashion search tool" />
         <link rel="icon" href=""/>
       </Head>

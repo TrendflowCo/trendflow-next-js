@@ -13,11 +13,11 @@ const TitleDesktop = () => {
                 href={`/${country}/${language}`}
                 sx={{
                     fontWeight: 700,
-                    color: 'dokusoBlack',
+                    color: 'trendflowBlack',
                     textDecoration: 'none',
                 }}
             >
-                Dokusō
+                TrendFlow
             </Typography>
 
         </section>
