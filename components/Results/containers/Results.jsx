@@ -22,7 +22,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 import Searcher from "../../Home/Searcher";
- 
+import { toast } from "sonner"; // Import toast from sonner
+
 const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
@@ -46,6 +47,8 @@ const Results = () => {
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
     const [searchTags , setSearchTags] = useState([]);
     const [filteredBrand , setFilteredBrand] = useState('');
+    const [selectedTags, setSelectedTags] = useState([]); // Added state for selected tags
+    const [currentSortings, setCurrentSortings] = useState({}); // Added state for current sortings
     // Filter
     const [filterModal , setFilterModal] = useState(false); // modal controller
     const [currentFilters, setCurrentFilters] = useState({});
@@ -67,26 +70,31 @@ const Results = () => {
             setFailedSearch(false);
             setLoadingFlag(true);
             setTotalResults(0);
-            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${Object.values(sortings).join('')}`;
-            console.log('request to API: ', requestURI)
-            const rsp = (await axios.get(requestURI)).data; // get data
+
+            // Ensure tags are included in the API request
+            const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
+            const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}`;
+            console.log('request to API: ', requestURI);
+
+            const rsp = (await axios.get(requestURI)).data;
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
-            setFilteredBrand(router.query.brands ? router.query.brands : '')
+            setFilteredBrand(router.query.brands ? router.query.brands : '');
             setProducts(rsp?.results);
-            setSearchTags(rsp?.metadata?.tags)
+            setSearchTags(rsp?.metadata?.tags);
             setTotalResults(rsp?.total_results);
-            setCurrentPage(router.query.page ? parseInt(router.query.page) : 1)
+            setCurrentPage(router.query.page ? parseInt(router.query.page) : 1);
             setLastPage(rsp?.total_pages);
-            setAvailableBrands(rsp?.metadata?.brands || []); // sets available brands if its a base request
+            setAvailableBrands(rsp?.metadata?.brands || []);
             if (filters.maxPrice === '' && filters.minPrice === '') {
-                setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]); // sets available prices if its a base request
+                setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]);
             }
             logEvent(analytics, 'page_view', {
                 page_title: 'results',
-            });         
-            setLoadingFlag(false);    
-        } catch(err) {
+            });
+            setLoadingFlag(false);
+        } catch (err) {
             console.error(err);
             setLoadingFlag(false);
             setFailedSearch(true);
@@ -116,12 +124,22 @@ const Results = () => {
                     sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '', // price, category
                     ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '', // default false
                 };
+                setCurrentSortings(sortings); // Set current sortings
                 fetchDataToAPI(filters,sortings);
                 dispatch(setTotalFilters(countFilters(filters)));
             }
         }
     },[user, router.isReady ,  router.query.lan , router.query.zone , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
     
+    useEffect(() => { // Reset selected tags when the query changes
+        if (router.isReady) {
+            const { query } = router.query;
+            if (query) {
+                setSelectedTags([]); // Reset selected tags when the query changes
+            }
+        }
+    }, [router.query.query, router.isReady]); // Add other dependencies as needed
+
     useEffect(() => { // wishlist search
         const fetchData = async () => {
             if (user) {
@@ -144,8 +162,21 @@ const Results = () => {
         newQuery = {...newQuery, page: newPage}
         router.push({ href: "./", query: newQuery })
     };
+
+    const handleRefineSearch = () => {
+        const tagsQuery = selectedTags.join(',');
+        const newQuery = { ...router.query, tags: tagsQuery };
+        router.push({
+            pathname: `./results`,
+            query: newQuery
+        }).then(() => {
+            fetchDataToAPI(currentFilters, currentSortings); // Assuming currentFilters and currentSortings are up to date
+            toast.success('Search refined with selected tags.'); // Show toast notification
+        });
+    };
+
     return (
-        <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
+        <Box sx={{ display: 'flex' , width: '100%' , height: '100%' , flexDirection: 'column' , py: '24px' }}>
             {/* Filter component */}
             <Filter 
                 setFilterModal={setFilterModal} 
@@ -202,12 +233,31 @@ const Results = () => {
                         {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-2'>
                             <div className="flex flex-row h-fit flex-wrap w-full">
                             {searchTags.sort().map((tag,index) => <div 
-                                className="flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit bg-trendflow-black text-trendflow-white rounded-full cursor-pointer hover:bg-gradient-to-tl hover:from-trendflow-pink hover:to-trendflow-blue" 
+                                className={`flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit rounded-full cursor-pointer ${selectedTags.includes(tag) ? 'bg-gradient-to-tl from-trendflow-pink to-trendflow-blue text-white' : 'bg-trendflow-black text-trendflow-white'}`} 
                                 key={index}
-                                onClick={()=> {handleAddTag( dispatch , currentSearch , tag )}}
+                                onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
                                 >{enhanceText(tag)}</div>)}
                             </div>
                         </section>}
+                        <div className="flex flex-col w-full items-center py-4">
+                            <button 
+                                onClick={handleRefineSearch} 
+                                title="Click to apply selected tags to your search"
+                                style={{
+                                    backgroundColor: '#FF6347',
+                                    color: 'white',
+                                    padding: '10px 20px',
+                                    borderRadius: '5px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                                }}
+                            >
+                                Refine Search With Tags
+                            </button>
+                        </div>
                         <section>
                             <Grid container spacing={2} sx={{padding: 2}}>
                                 {products?.length > 0 && products.map((productItem,productIndex) => {return (
@@ -217,6 +267,7 @@ const Results = () => {
                                 )})}
                             </Grid>
                         </section>
+                        {/* Pagination at the bottom */}
                         <div className="flex flex-col w-full items-center py-4">
                             <ThemeProvider theme={muiColors}>
                                 <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="trendflowOrange" />
