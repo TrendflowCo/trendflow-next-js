@@ -1,5 +1,8 @@
 # Dokuso web app:  
 ## Steps to use the repository:  
+
+version: 1.0.0
+
 -Create ".env.local" as following:  
   
 NEXT_PUBLIC_API_KEY=""  
