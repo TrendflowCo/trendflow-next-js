@@ -14,11 +14,39 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'ww1.freelogovectors.net'
+        hostname: 'static.zara.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.desigual.com'
       },
       {
         protocol: 'https',
         hostname: 'cdn.shopify.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.loewe.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'image.uniqlo.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'lp.stories.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'lp2.hm.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.farmrio.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'st.mngbcn.com'
       },
       {
         protocol: 'https',
@@ -140,7 +168,85 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'www.sweetlemonboutique.com'
       },
-    ]
+      {
+        protocol: 'https',
+        hostname: 'static.zara.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.desigual.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.loewe.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'image.uniqlo.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.championstore.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.bershka.net'
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.e-stradivarius.net'
+      },
+    ],
+    domains: [
+      'api.producthunt.com',
+      'upload.wikimedia.org',
+      'static.zara.net',
+      'www.desigual.com',
+      'cdn.shopify.com',
+      'www.loewe.com',
+      'image.uniqlo.com',
+      'lp.stories.com',
+      'lp2.hm.com',
+      'www.farmrio.com',
+      'st.mngbcn.com',
+      'seeklogo.com',
+      'www.pacificplace.com.hk',
+      'torrado.es',
+      'cdn.shopify.com',
+      'logodownload.org',
+      'logos-download.com',
+      'fashionunited.com',
+      'lh3.googleusercontent.com',
+      'images.squarespace-cdn.com',
+      'www.ink-clothing.com',
+      'adanola.com',
+      'danielleguiziony.com',
+      'geel.us',
+      'gimaguas.com',
+      'kitteny.com',
+      'media.licdn.com',
+      'modemischiefstudios.com',
+      'nodress67.com',
+      'vanessamooney.com',
+      'withjean.com',
+      'troisthelabel.com',
+      'shop.amlul.com',
+      'maisxfrida.com',
+      'www.getinspired.no',
+      'www.storets.com',
+      'i.pinimg.com',
+      'www.disturbia.co.uk',
+      '2.bp.blogspot.com',
+      'images.crunchbase.com',
+      'www.sweetlemonboutique.com',
+      'static.zara.net',
+      'www.desigual.com',
+      'www.loewe.com',
+      'image.uniqlo.com',
+      'www.championstore.com',
+      'static.bershka.net',
+      'static.e-stradivarius.net'
+    ],
   }
 }
 module.exports = nextConfig

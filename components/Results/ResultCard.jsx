@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -24,7 +23,7 @@ import { setWishlist } from '../../redux/features/actions/search';
 import { useRouter } from 'next/router';
 import CloudOffIcon from '@mui/icons-material/CloudOff';
 
-const ResultCard = ({productItem }) => {
+const ResultCard = ({ productItem, onImageError }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
@@ -95,6 +94,7 @@ const ResultCard = ({productItem }) => {
   const handleMediaError = () => {
     setIsLoading(false);
     setHasError(true);
+    onImageError(productItem.id_item);
   };
 
   return (
@@ -103,22 +103,25 @@ const ResultCard = ({productItem }) => {
       className='shadow-lg flex-none hover:shadow-2xl transition-shadow	duration-500 ease-in-out'
     >
       <section className='flex flex-col w-full h-full relative'>
-        <CardMedia
-          component="img"
-          image={productItem.img_url}
-          alt={productItem.name}
-          sx={{ height: finalHeight , objectFit: 'cover' , cursor: 'pointer' }}
-          onClick={() => {handleShowSingleCard()}}
-          onLoad={handleMediaLoad}
-          onError={handleMediaError}  
-        /> 
-        {isLoading && <Skeleton variant="rectangular" width={'100%'} height={400} />}
-        {hasError && 
-          <div className='h-[400px] flex flex-col items-center justify-center'>
-            <CloudOffIcon fontSize='large'/>
-            <span>Error loading media</span>
-          </div>
-        }
+        <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+          {isLoading && <Skeleton variant="rectangular" width={'100%'} height={400} />}
+          {!hasError ? (
+            <Image
+              src={productItem.img_url}
+              alt={productItem.name}
+              layout="fill"
+              objectFit="cover"
+              onClick={() => {handleShowSingleCard()}}
+              onLoadingComplete={handleMediaLoad}
+              onError={handleMediaError}
+            />
+          ) : (
+            <div className='h-full flex flex-col items-center justify-center bg-gray-200'>
+              <CloudOffIcon fontSize='large' className='text-gray-400'/>
+              <span className='text-gray-600 mt-2'>Image unavailable</span>
+            </div>
+          )}
+        </div>
         {productItem.sale && 
           <div className='flex-none absolute shadow-xl border border-trendflow-white top-2 right-2 w-fit h-fit p-2 rounded-xl bg-gradient-to-r from-trendflow-pink to-trendflow-orange text-center'>
             <span className='text-xs md:text-sm lg:text-base font-semibold text-trendflow-white'>{translations?.results?.on_sale.toUpperCase()}</span>

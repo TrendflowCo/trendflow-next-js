@@ -175,6 +175,12 @@ const Results = () => {
         });
     };
 
+    const handleImageError = (productId) => {
+        setProducts(prevProducts => 
+            prevProducts.filter(product => product.id_item !== productId)
+        );
+    };
+
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%' , flexDirection: 'column' , py: '24px' }}>
             {/* Filter component */}
@@ -262,7 +268,7 @@ const Results = () => {
                             <Grid container spacing={2} sx={{padding: 2}}>
                                 {products?.length > 0 && products.map((productItem,productIndex) => {return (
                                     <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                        <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
+                                        <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} onImageError={handleImageError}/>
                                     </Grid>
                                 )})}
                             </Grid>
