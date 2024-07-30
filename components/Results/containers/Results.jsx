@@ -3,7 +3,7 @@ import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { analytics, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
-import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
@@ -23,6 +23,7 @@ import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 import Searcher from "../../Home/Searcher";
 import { toast } from "sonner"; // Import toast from sonner
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Results = () => {
     const db = getFirestore(app);
@@ -41,7 +42,6 @@ const Results = () => {
     //
     const [lastSearch , setLastSearch] = useState('')
     const [currentPage , setCurrentPage] = useState(1); // current page value
-    const [lastPage , setLastPage] = useState(0); // last page value
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
@@ -65,7 +65,7 @@ const Results = () => {
         setDimensions({width: window.innerWidth});
         window.addEventListener("resize", handleResize, false);
     },[])
-    const fetchDataToAPI = async(filters,sortings) => {
+    const fetchDataToAPI = async (filters, sortings, page = 1) => {
         try {
             setFailedSearch(false);
             setLoadingFlag(true);
@@ -74,18 +74,16 @@ const Results = () => {
             // Ensure tags are included in the API request
             const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
             const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
-            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}`;
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}&page=${page}${sortingParams}${tags}`;
             console.log('request to API: ', requestURI);
 
             const rsp = (await axios.get(requestURI)).data;
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
             setFilteredBrand(router.query.brands ? router.query.brands : '');
-            setProducts(rsp?.results);
             setSearchTags(rsp?.metadata?.tags);
             setTotalResults(rsp?.total_results);
             setCurrentPage(router.query.page ? parseInt(router.query.page) : 1);
-            setLastPage(rsp?.total_pages);
             setAvailableBrands(rsp?.metadata?.brands || []);
             if (filters.maxPrice === '' && filters.minPrice === '') {
                 setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]);
@@ -93,6 +91,7 @@ const Results = () => {
             logEvent(analytics, 'page_view', {
                 page_title: 'results',
             });
+            setProducts(rsp?.results || []); // Set the products state directly
             setLoadingFlag(false);
         } catch (err) {
             console.error(err);
@@ -102,10 +101,10 @@ const Results = () => {
     };
     useEffect(() => {
         if (router.isReady) {
-            const { lan , zone } = router.query;
-            if(lan) {
-                dispatch(setLanguage(lan)); // write redux variable - avoid refresh
-                localStorage.setItem('language',lan.toLowerCase());
+            const { lan, zone } = router.query;
+            if (lan) {
+                dispatch(setLanguage(lan));
+                localStorage.setItem('language', lan.toLowerCase());
                 const filters = {
                     language: `language=${lan}`,
                     country: `&country=${zone}`,
@@ -119,23 +118,43 @@ const Results = () => {
                     maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
                     onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '', // si no quiero lo tengo que sacar
                 }
-                setCurrentFilters(filters); // set the current filters
+                setCurrentFilters(filters);
                 const sortings = {
                     sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '', // price, category
                     ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '', // default false
                 };
-                setCurrentSortings(sortings); // Set current sortings
-                fetchDataToAPI(filters,sortings);
+                setCurrentSortings(sortings);
+                fetchDataToAPI(filters, sortings);
                 dispatch(setTotalFilters(countFilters(filters)));
             }
         }
-    },[user, router.isReady ,  router.query.lan , router.query.zone , router.query.query , router.query.onSale , router.query.category , router.query.brands , router.query.minPrice , router.query.maxPrice , router.query.sortBy , router.query.ascending , router.query.page ]); // eslint-disable-line
-    
+    }, [user, router.isReady, router.query.lan, router.query.zone, router.query.query, router.query.onSale, router.query.category, router.query.brands, router.query.minPrice, router.query.maxPrice, router.query.sortBy, router.query.ascending, router.query.page]);
+
+    useEffect(() => {
+        if (router.isReady) {
+            const { query } = router.query;
+            if (query) {
+                setSelectedTags([]);
+                setCurrentPage(1);
+                setProducts([]); // Clear previous results when the query changes
+            }
+        }
+    }, [router.query.query, router.isReady]);
+
     useEffect(() => { // Reset selected tags when the query changes
         if (router.isReady) {
             const { query } = router.query;
             if (query) {
                 setSelectedTags([]); // Reset selected tags when the query changes
+            }
+        }
+    }, [router.query.query, router.isReady]); // Add other dependencies as needed
+
+    useEffect(() => { // Reset currentPage when the query changes
+        if (router.isReady) {
+            const { query } = router.query;
+            if (query) {
+                setCurrentPage(1); // Reset currentPage when the query changes
             }
         }
     }, [router.query.query, router.isReady]); // Add other dependencies as needed
@@ -174,6 +193,56 @@ const Results = () => {
             toast.success('Search refined with selected tags.'); // Show toast notification
         });
     };
+
+    const fetchMoreData = async () => {
+        console.log('fetchMoreData called');
+        const nextPage = currentPage + 1;
+        console.log('Current Page:', currentPage);
+        console.log('Next Page:', nextPage);
+        
+        try {
+            const newProducts = (await axios.get(`${endpoints('results')}${Object.values(currentFilters).join('')}&page=${nextPage}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`)).data?.results || [];
+            console.log('New Products:', newProducts);
+            
+            if (newProducts.length > 0) {
+                setProducts((prevProducts) => {
+                    const updatedProducts = [...prevProducts, ...newProducts];
+                    console.log('Updated Products:', updatedProducts);
+                    return updatedProducts;
+                });
+                
+                setCurrentPage(nextPage);
+                console.log('Updated Current Page:', nextPage);
+            } else {
+                console.log('No more products to load');
+            }
+        } catch (err) {
+            console.error('Error fetching more data:', err);
+        }
+    };
+
+    useEffect(() => {
+        console.log('Products state updated:', products);
+    }, [products]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            console.log('Scroll event detected');
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                console.log('Near bottom of page');
+                fetchMoreData();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        console.log('Current page updated:', currentPage);
+    }, [currentPage]);
+
+    const MemoizedResultCard = React.memo(ResultCard);
 
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%' , flexDirection: 'column' , py: '24px' }}>
@@ -258,20 +327,29 @@ const Results = () => {
                                 Refine Search With Tags
                             </button>
                         </div>
-                        <section>
-                            <Grid container spacing={2} sx={{padding: 2}}>
-                                {products?.length > 0 && products.map((productItem,productIndex) => {return (
-                                    <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                        <ResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag}/>
+                        <div style={{ minHeight: '100vh' }}>
+                            {console.log('Before InfiniteScroll')}
+                            <InfiniteScroll
+                                dataLength={products.length}
+                                next={fetchMoreData}
+                                hasMore={true}
+                                loader={<h4>Loading...</h4>}
+                                scrollThreshold="100px"
+                                scrollableTarget="scrollableDiv"
+                            >
+                                {console.log('InfiniteScroll rendered, products length:', products.length)}
+                                <div id="scrollableDiv" style={{ height: '100vh', overflow: 'auto' }}>
+                                    <Grid container spacing={2} sx={{ padding: 2 }}>
+                                        {products?.length > 0 &&
+                                            products.map((productItem, productIndex) => (
+                                                <Grid key={`${productItem.id_item}-${productIndex}`} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
+                                                    <MemoizedResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} />
+                                                </Grid>
+                                            ))}
                                     </Grid>
-                                )})}
-                            </Grid>
-                        </section>
-                        {/* Pagination at the bottom */}
-                        <div className="flex flex-col w-full items-center py-4">
-                            <ThemeProvider theme={muiColors}>
-                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="trendflowOrange" />
-                            </ThemeProvider>
+                                </div>
+                            </InfiniteScroll>
+                            {console.log('After InfiniteScroll')}
                         </div>
                     </>
                     }
