@@ -3,7 +3,7 @@ import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { analytics, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, CircularProgress } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
@@ -75,7 +75,7 @@ const Results = () => {
             const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
             const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
             const requestURI = `${endpoints('results')}${Object.values(filters).join('')}&page=${page}${sortingParams}${tags}`;
-            console.log('request to API: ', requestURI);
+            // console.log('request to API: ', requestURI);
 
             const rsp = (await axios.get(requestURI)).data;
             setLastSearch(router.query.query ? router.query.query : '');
@@ -83,7 +83,7 @@ const Results = () => {
             setFilteredBrand(router.query.brands ? router.query.brands : '');
             setSearchTags(rsp?.metadata?.tags);
             setTotalResults(rsp?.total_results);
-            setCurrentPage(router.query.page ? parseInt(router.query.page) : 1);
+            // setCurrentPage(router.query.page ? parseInt(router.query.page) : 1);
             setAvailableBrands(rsp?.metadata?.brands || []);
             if (filters.maxPrice === '' && filters.minPrice === '') {
                 setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]);
@@ -194,42 +194,40 @@ const Results = () => {
         });
     };
 
+    const [loadingMore, setLoadingMore] = useState(false);
+
     const fetchMoreData = async () => {
-        console.log('fetchMoreData called');
-        const nextPage = currentPage + 1;
-        console.log('Current Page:', currentPage);
-        console.log('Next Page:', nextPage);
-        
-        try {
-            const newProducts = (await axios.get(`${endpoints('results')}${Object.values(currentFilters).join('')}&page=${nextPage}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`)).data?.results || [];
-            console.log('New Products:', newProducts);
-            
-            if (newProducts.length > 0) {
-                setProducts((prevProducts) => {
-                    const updatedProducts = [...prevProducts, ...newProducts];
-                    console.log('Updated Products:', updatedProducts);
-                    return updatedProducts;
-                });
-                
-                setCurrentPage(nextPage);
-                console.log('Updated Current Page:', nextPage);
-            } else {
-                console.log('No more products to load');
+        if (!loadingMore) {
+            setLoadingMore(true);
+            const nextPage = currentPage + 1;
+            const updatedFilters = {
+                ...currentFilters,
+                page: `&page=${nextPage}`
+            };
+
+            try {
+                const newProducts = (await axios.get(`${endpoints('results')}${Object.values(updatedFilters).join('')}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`)).data?.results || [];
+                if (newProducts.length > 0) {
+                    setProducts(prevProducts => [...prevProducts, ...newProducts]);
+                    setCurrentPage(nextPage);
+                }
+                setLoadingMore(false);
+            } catch (err) {
+                console.error('Error fetching more data:', err);
+                setLoadingMore(false);
             }
-        } catch (err) {
-            console.error('Error fetching more data:', err);
         }
     };
 
     useEffect(() => {
-        console.log('Products state updated:', products);
+        // console.log('Products state updated:', products);
     }, [products]);
 
     useEffect(() => {
         const handleScroll = () => {
-            console.log('Scroll event detected');
+            // console.log('Scroll event detected');
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-                console.log('Near bottom of page');
+                // console.log('Near bottom of page');
                 fetchMoreData();
             }
         };
@@ -239,7 +237,7 @@ const Results = () => {
     }, []);
 
     useEffect(() => {
-        console.log('Current page updated:', currentPage);
+        // console.log('Current page updated:', currentPage);
     }, [currentPage]);
 
     const MemoizedResultCard = React.memo(ResultCard);
@@ -290,7 +288,7 @@ const Results = () => {
                                 <div className='mx-5'>
                                     { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
                                     { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
-                                    <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6>
+                                    {/* <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6> */}
                                 </div>
                                 <SortAndFilter 
                                     setFilterModal={setFilterModal} 
@@ -328,16 +326,16 @@ const Results = () => {
                             </button>
                         </div>
                         <div style={{ minHeight: '100vh' }}>
-                            {console.log('Before InfiniteScroll')}
+                            {/* {console.log('Before InfiniteScroll')} */}
                             <InfiniteScroll
                                 dataLength={products.length}
                                 next={fetchMoreData}
                                 hasMore={true}
-                                loader={<h4>Loading...</h4>}
-                                scrollThreshold="100px"
-                                scrollableTarget="scrollableDiv"
+                                loader={loadingMore ? <GlobalLoader /> : <div />}
+                                scrollThreshold="100%"  // This ensures the loader appears only when the bottom is reached
+                                scrollableTarget="scrollableDiv"  // Ensures scrolling is confined to this div
                             >
-                                {console.log('InfiniteScroll rendered, products length:', products.length)}
+                                {/* {console.log('InfiniteScroll rendered, products length:', products.length)} */}
                                 <div id="scrollableDiv" style={{ height: '100vh', overflow: 'auto' }}>
                                     <Grid container spacing={2} sx={{ padding: 2 }}>
                                         {products?.length > 0 &&
@@ -349,7 +347,7 @@ const Results = () => {
                                     </Grid>
                                 </div>
                             </InfiniteScroll>
-                            {console.log('After InfiniteScroll')}
+                            {/* {console.log('After InfiniteScroll')} */}
                         </div>
                     </>
                     }
