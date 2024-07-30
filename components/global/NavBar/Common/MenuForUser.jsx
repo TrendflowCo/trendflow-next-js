@@ -1,8 +1,8 @@
-import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
+import { Box, CircularProgress, IconButton, Tooltip, Button } from "@mui/material";
+import LoginIcon from '@mui/icons-material/Login';
 import { logEvent } from "firebase/analytics";
 import React from "react";
 import Image from 'next/image';
-import Button from '@mui/material/Button';
 import { analytics } from "../../../../services/firebase";
 import { useAppDispatch , useAppSelector } from "../../../../redux/hooks";
 import { setLogInFlag } from "../../../../redux/features/actions/auth";
@@ -45,15 +45,23 @@ const MenuForUser = ({loading , user , setAnchorElUser}) => {
                   </IconButton>
                 </Tooltip>
               :
-                <div className="bg-yellow-200 w-full">
-                  <Button 
-                    onClick={() => dispatch(setLogInFlag(true))}
-                    className="hover:text-trendflow-white bg-gradient-to-r from-trendflow-pink to-trendflow-blue hover:from-trendflow-pink hover:to-trendflow-orange" variant="contained" 
-                    sx={{fontWeight: 'bold' , flex: 'none'}}
-                    >
-                    {translations?.login?.log_in}
-                  </Button>
-                </div>
+                <Button 
+                  onClick={() => dispatch(setLogInFlag(true))}
+                  variant="contained" 
+                  startIcon={<LoginIcon />}
+                  sx={{
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                    borderRadius: 20,
+                    padding: '8px 16px',
+                    background: 'linear-gradient(to right, #FF6B6B, #4ECDC4)',
+                    '&:hover': {
+                      background: 'linear-gradient(to right, #FF8E53, #FE4B8D)',
+                    },
+                  }}
+                >
+                  {translations?.login?.log_in || 'Log In'}
+                </Button>
             }
           </section>
           }

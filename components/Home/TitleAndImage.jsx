@@ -8,7 +8,7 @@ import FrenchTranslation from "./TitleTranslations/FrenchTranslation";
 import ItalianTranslation from "./TitleTranslations/ItalianTranslation";
 
 const TitleAndImage = () => {
-    const { translations , language } = useAppSelector(state => state.region);
+    const { translations, language } = useAppSelector(state => state.region);
     return (
         <ThemeProvider theme={muiColors}>
         <section className="mt-12 pt-8 pb-4 px-4 w-full flex flex-col items-center max-w-[80%] mx-auto">
