@@ -104,9 +104,6 @@ const Explore = () => {
         navigator.clipboard.writeText(currentProduct.shop_link);
         toast.success('Copied to clipboard')    
     };
-    const redirectToBrand = (brandName) => {
-        window.open(`/${country}/${language}/results?brands=${brandName.split('&').join('%26')}&page=1`, '_ blank')       
-    };
     
     return (
         <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
