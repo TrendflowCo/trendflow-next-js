@@ -3,7 +3,7 @@ import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { analytics, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
-import { Box, Grid, CircularProgress } from "@mui/material";
+import { Box, Grid, CircularProgress, Fab, styled } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
@@ -21,9 +21,25 @@ import { countFilters } from "../../functions/countFilters";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
-import Searcher from "../../Home/Searcher";
 import { toast } from "sonner"; // Import toast from sonner
 import InfiniteScroll from 'react-infinite-scroll-component';
+import FilterListIcon from '@mui/icons-material/FilterList';
+
+const StyledFab = styled(Fab)(({ theme }) => ({
+  position: 'fixed',
+  bottom: '2rem',
+  right: '2rem',
+  backgroundColor: '#3f51b5', // A more subtle blue color
+  color: '#ffffff',
+  padding: '1rem',
+  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    backgroundColor: '#303f9f', // Slightly darker shade for hover state
+    transform: 'scale(1.05)',
+    boxShadow: '0 6px 15px rgba(0, 0, 0, 0.3)',
+  },
+}));
 
 const Results = () => {
     const db = getFirestore(app);
@@ -243,38 +259,14 @@ const Results = () => {
     const MemoizedResultCard = React.memo(ResultCard);
 
     return (
-        <Box sx={{ display: 'flex' , width: '100%' , height: '100%' , flexDirection: 'column' , py: '24px' }}>
-            {/* Filter component */}
-            <Filter 
-                setFilterModal={setFilterModal} 
-                filterModal={filterModal}
-                availableBrands={availableBrands}
-                currentPriceRange={currentPriceRange}
-                deviceWidth={dimensions.width}
-            />
-            {/* Sorting component */}
-            <Sort 
-                sortingModal={sortingModal}
-                setSortingModal={setSortingModal}
-                deviceWidth={dimensions.width}
-            />
+        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px' }}>
             { loadingFlag ? 
                 <GlobalLoader/>
             :
                 <>
                     {failedSearch ? 
                         <section className="flex flex-col w-full mt-25 mb-2">
-                            <section className='flex flex-col lg:flex-row lg:justify-between'>
-                                <div className='mx-5'>
-                                    <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{currentSearch ? enhanceText(currentSearch) : ''}</h6>
-                                    <h6 className="text-sm mt-1">No results for this search</h6>
-                                </div>
-                                <SortAndFilter 
-                                    setFilterModal={setFilterModal} 
-                                    setSortingModal={setSortingModal}
-                                    />
-                            </section>
-                            <Searcher/>
+                            <h6 className="text-sm mt-1">No results for this search</h6>
                         </section>
                     : 
                     <>
@@ -284,45 +276,46 @@ const Results = () => {
                             {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
                         </Head>
                         <section className="flex flex-col w-full mt-25 mb-2">
-                            <div className='flex flex-col lg:flex-row lg:justify-between '>
-                                <div className='mx-5'>
-                                    { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
-                                    { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
-                                    {/* <h6 className="text-sm mt-1">{totalResults > 0 && `Total results: ${totalResults}`}</h6> */}
-                                </div>
-                                <SortAndFilter 
-                                    setFilterModal={setFilterModal} 
-                                    setSortingModal={setSortingModal}
-                                    />
+                            <div className='mx-5'>
+                                { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
+                                { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
                             </div>
-                            <Searcher/>
                         </section>
-                        {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-2'>
-                            <div className="flex flex-row h-fit flex-wrap w-full">
-                            {searchTags.sort().map((tag,index) => <div 
-                                className={`flex flex-col items-center justify-center px-4 py-2 mb-2 mx-1 first:ml-0 last:mr-0 w-fit rounded-full cursor-pointer ${selectedTags.includes(tag) ? 'bg-gradient-to-tl from-trendflow-pink to-trendflow-blue text-white' : 'bg-trendflow-black text-trendflow-white'}`} 
-                                key={index}
-                                onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
-                                >{enhanceText(tag)}</div>)}
+                        {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-4'>
+                            <h6 className='text-black text-xl font-semibold mb-3'>Refine Your Search</h6>
+                            <div className="flex flex-row flex-wrap w-full">
+                                {searchTags.sort().map((tag, index) => (
+                                    <button 
+                                        key={index}
+                                        className={`
+                                            px-4 py-2 mb-2 mr-2 rounded-full text-sm font-medium
+                                            transition-all duration-300 ease-in-out
+                                            ${selectedTags.includes(tag) 
+                                                ? 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white shadow-md transform scale-105' 
+                                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                                        `}
+                                        onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
+                                    >
+                                        {enhanceText(tag)}
+                                    </button>
+                                ))}
                             </div>
                         </section>}
                         <div className="flex flex-col w-full items-center py-4">
                             <button 
-                                onClick={handleRefineSearch} 
-                                title="Click to apply selected tags to your search"
-                                style={{
-                                    backgroundColor: '#FF6347',
-                                    color: 'white',
-                                    padding: '10px 20px',
-                                    borderRadius: '5px',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                                }}
+                                onClick={handleRefineSearch}
+                                className="
+                                    bg-gradient-to-r from-trendflow-pink to-trendflow-blue
+                                    text-white font-bold py-3 px-6 rounded-lg
+                                    shadow-lg hover:shadow-xl transition-all duration-300
+                                    transform hover:scale-105
+                                    flex items-center justify-center
+                                "
                             >
-                                Refine Search With Tags
+                                <span className="mr-2">Refine Search</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
+                                </svg>
                             </button>
                         </div>
                         <div style={{ minHeight: '100vh' }}>
@@ -353,6 +346,27 @@ const Results = () => {
                     }
                 </>
             }
+            <div className="sticky top-0 z-50 bg-white shadow">
+                <Filter 
+                    setFilterModal={setFilterModal} 
+                    filterModal={filterModal}
+                    availableBrands={availableBrands}
+                    currentPriceRange={currentPriceRange}
+                    deviceWidth={dimensions.width}
+                />
+                <Sort 
+                    sortingModal={sortingModal}
+                    setSortingModal={setSortingModal}
+                    deviceWidth={dimensions.width}
+                />
+               
+            </div>
+            <StyledFab
+                aria-label="filter"
+                onClick={() => setFilterModal(true)}
+            >
+                <FilterListIcon sx={{ fontSize: '2rem' }} />
+            </StyledFab>
         </Box>
     )
 };

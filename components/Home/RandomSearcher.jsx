@@ -34,8 +34,9 @@ const RandomSearcher = () => {
         <div className="flex flex-col items-center w-full items-center justify-center flex-wrap max-w-[80%] mx-auto">
             <section className=" w-full h-[280px] overflow-y-hidden mt-2 hover:overflow-y-auto hover:scrollbar">
                 <div className="flex-wrap flex flex-col justify-start">
-                    <p className="px-6 py-3 text-trendflow-black font-semibold text-base leading-tight hover:bg-trendflow-orange hover:bg-opacity-30 transition duration-300 ease-in-out cursor-pointer" 
+                    <p className="px-6 py-4 text-trendflow-black font-bold text-lg leading-tight bg-gradient-to-r from-trendflow-pink to-trendflow-orange bg-opacity-20 rounded-lg shadow-md mb-4 transition duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:bg-opacity-30" 
                     onClick={() => handleSearchRandom()}>
+                        <span role="img" aria-label="sparkles" className="mr-2">✨</span>
                         {translations?.not_sure}
                     </p>
                     {translations?.prompts && Object.entries(translations?.prompts).sort().map(([key, prompt]) => (
