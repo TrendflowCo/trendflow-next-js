@@ -5,5 +5,5 @@ export const handleSearchQuery = (country, language, val, event, router) => {
     logEvent(analytics, event, {
         search_term: val
     });
-    router.push(`/${country}/${language}/results?query=${encodeURIComponent(val)}&page=1`);
+    router.push(`/${country}/${language}/results?query=${encodeURIComponent(val)}`);
 };
