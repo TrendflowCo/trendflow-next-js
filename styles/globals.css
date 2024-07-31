@@ -21,3 +21,24 @@
       background: linear-gradient(0deg, #318AFA 0%, #FA39BE 100%);
     }
   }
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.slider-rtl .animate-scroll {
+  animation-direction: reverse;
+}
+
+.slider-ltr .animate-scroll {
+  animation-direction: normal;
+}

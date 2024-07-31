@@ -4,7 +4,6 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { muiColors } from '../../Utils/muiTheme';
 import TitleDesktop from './Desktop/TitleDesktop';
-import PagesDesktop from './Desktop/PagesDesktop';
 import TitleMobile from './Mobile/TitleMobile';
 import MenuForUser from './Common/MenuForUser';
 import MenuToggleUser from './Common/MenuToggleUser';
@@ -22,6 +21,7 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { country, language, translations } = useAppSelector(state => state.region);
+  const isHomePage = router.pathname === '/[zone]/[lan]';
 
   const handleExplore = () => {
     if (translations?.prompts) {
@@ -41,16 +41,15 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
 
   return (
     <ThemeProvider theme={muiColors}>
-      <AppBar position="static" elevation={0} className='bg-gradient-to-r from-trendflow-pink to-trendflow-blue'>
+      <AppBar position="fixed" elevation={0} className={`${isHomePage ? 'bg-transparent' : 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue'}`}>
         <Container maxWidth="xxl">
-          <div className="flex items-center justify-between py-2">
+          <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-6">
               <TitleDesktop />
-              {/* <PagesDesktop /> */}
               <TitleMobile />
             </div>
             <div className="flex items-center space-x-4">
-              <SearchBar />
+              {!isHomePage && <SearchBar />}
               <Tooltip title="Explore new ideas">
                 <Button
                   variant="contained"
@@ -73,28 +72,9 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
                   Explore
                 </Button>
               </Tooltip>
-              {/* <Tooltip title="Filter">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<FilterListIcon />}
-                  onClick={handleFilterClick}
-                  sx={{
-                    borderRadius: '20px',
-                    textTransform: 'none',
-                    fontWeight: 'bold',
-                    boxShadow: 'none',
-                    '&:hover': {
-                      boxShadow: '0 0 10px rgba(0,0,0,0.2)',
-                    },
-                  }}
-                >
-                  Filter
-                </Button>
-              </Tooltip> */}
               <LanAndCountrySelection loading={loading} />
-              <MenuForUser loading={loading} user={user} setAnchorElUser={setAnchorElUser} />
-              <MenuToggleUser anchorElUser={anchorElUser} setAnchorElUser={setAnchorElUser} logOut={logOut} />
+              <MenuForUser logOut={logOut} user={user} loading={loading} />
+              <MenuToggleUser setAnchorElUser={setAnchorElUser} anchorElUser={anchorElUser} />
             </div>
           </div>
         </Container>
