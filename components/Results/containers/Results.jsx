@@ -22,7 +22,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 import { toast } from "sonner"; // Import toast from sonner
-import InfiniteScroll from 'react-infinite-scroll-component';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
@@ -211,9 +210,10 @@ const Results = () => {
     };
 
     const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
 
     const fetchMoreData = async () => {
-        if (!loadingMore) {
+        if (!loadingMore && hasMore) {
             setLoadingMore(true);
             const nextPage = currentPage + 1;
             const updatedFilters = {
@@ -226,35 +226,22 @@ const Results = () => {
                 if (newProducts.length > 0) {
                     setProducts(prevProducts => [...prevProducts, ...newProducts]);
                     setCurrentPage(nextPage);
+                } else {
+                    setHasMore(false);
                 }
-                setLoadingMore(false);
             } catch (err) {
                 console.error('Error fetching more data:', err);
+                toast.error('Failed to load more products. Please try again.');
+            } finally {
                 setLoadingMore(false);
             }
         }
     };
 
     useEffect(() => {
-        // console.log('Products state updated:', products);
-    }, [products]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            // console.log('Scroll event detected');
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-                // console.log('Near bottom of page');
-                fetchMoreData();
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    useEffect(() => {
-        // console.log('Current page updated:', currentPage);
-    }, [currentPage]);
+        console.log('Products state updated:', products.length);
+        console.log('Total results:', totalResults);
+    }, [products, totalResults]);
 
     const MemoizedResultCard = React.memo(ResultCard);
 
@@ -312,35 +299,62 @@ const Results = () => {
                                     flex items-center justify-center
                                 "
                             >
-                                <span className="mr-2">Refine Search</span>
+                                <span className="mr-2">
+                                    Refine Search {selectedTags.length > 0 && `(${selectedTags.length})`}
+                                </span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
                                 </svg>
                             </button>
                         </div>
                         <div style={{ minHeight: '100vh' }}>
-                            {/* {console.log('Before InfiniteScroll')} */}
-                            <InfiniteScroll
-                                dataLength={products.length}
-                                next={fetchMoreData}
-                                hasMore={true}
-                                loader={loadingMore ? <GlobalLoader /> : <div />}
-                                scrollThreshold="100%"  // This ensures the loader appears only when the bottom is reached
-                                scrollableTarget="scrollableDiv"  // Ensures scrolling is confined to this div
-                            >
-                                {/* {console.log('InfiniteScroll rendered, products length:', products.length)} */}
-                                <div id="scrollableDiv" style={{ height: '100vh', overflow: 'auto' }}>
-                                    <Grid container spacing={2} sx={{ padding: 2 }}>
-                                        {products?.length > 0 &&
-                                            products.map((productItem, productIndex) => (
-                                                <Grid key={`${productItem.id_item}-${productIndex}`} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                                    <MemoizedResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} />
-                                                </Grid>
-                                            ))}
-                                    </Grid>
+                            <Grid container spacing={2} sx={{ padding: 2 }}>
+                                {products?.length > 0 &&
+                                    products.map((productItem, productIndex) => (
+                                        <Grid key={`${productItem.id_item}-${productIndex}`} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
+                                            <MemoizedResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} />
+                                        </Grid>
+                                    ))}
+                            </Grid>
+                            {console.log('Render check - products.length:', products.length, 'totalResults:', totalResults)}
+                            {hasMore && (
+                                <div className="flex justify-center mt-8 mb-12">
+                                    <button
+                                        onClick={fetchMoreData}
+                                        className="bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white font-bold py-4 px-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-trendflow-pink"
+                                        style={{
+                                            clipPath: 'polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0)',
+                                            backgroundColor: '#3f51b5', // A more subtle blue color
+                                            color: '#ffffff',
+                                            padding: '1rem',
+                                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                                            transition: 'all 0.3s ease-in-out',
+                                        }}
+                                    >
+                                        {loadingMore ? (
+                                            <div className="flex items-center justify-center">
+                                                <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                Loading...
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center">
+                                                See More
+                                                <svg className="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </button>
                                 </div>
-                            </InfiniteScroll>
-                            {/* {console.log('After InfiniteScroll')} */}
+                            )}
+                            {!hasMore && (
+                                <div className="text-center mt-8 mb-12 text-gray-500">
+                                    No more products to load
+                                </div>
+                            )}
                         </div>
                     </>
                     }
