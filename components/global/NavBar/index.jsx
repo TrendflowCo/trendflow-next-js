@@ -21,13 +21,15 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { country, language } = useAppSelector(state => state.region);
+  const { country, language, translations } = useAppSelector(state => state.region);
 
   const handleExplore = () => {
-    const randomSearchTerms = ['fashion', 'tech', 'home', 'beauty', 'sports'];
-    const randomTerm = randomSearchTerms[Math.floor(Math.random() * randomSearchTerms.length)];
-    dispatch(setCurrentSearch(randomTerm));
-    handleSearchQuery(country, language, randomTerm, 'search', router);
+    if (translations?.prompts) {
+      const promptValues = Object.values(translations.prompts);
+      const randomTerm = promptValues[Math.floor(Math.random() * promptValues.length)];
+      dispatch(setCurrentSearch(randomTerm));
+      handleSearchQuery(country, language, randomTerm, 'explore', router);
+    }
   };
 
   const handleFilterClick = () => {
