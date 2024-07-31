@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardMedia, CardContent, CardActions, IconButton, Typography, Tooltip, Chip, Box, Fade } from '@mui/material';
+import { Card, CardContent, CardActions, IconButton, Typography, Tooltip, Chip, Box, Fade } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import StorefrontIcon from '@mui/icons-material/Storefront';
@@ -15,6 +15,8 @@ import { analytics } from "../../services/firebase";
 import { useRouter } from 'next/router';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const theme = createTheme({
   typography: {
@@ -70,11 +72,19 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-const StyledCardMedia = styled(CardMedia)({
-  height: 0,
-  paddingTop: '100%', // This creates a 3:4 aspect ratio
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
+const ImageWrapper = styled(Box)({
+  position: 'relative',
+  paddingTop: '95%',
+  overflow: 'hidden',
+});
+
+const StyledLazyLoadImage = styled(LazyLoadImage)({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
 });
 
 const BrandLogo = styled(Image)({
@@ -155,16 +165,17 @@ const ResultCard = ({ productItem }) => {
   return (
     <ThemeProvider theme={theme}>
       <StyledCard>
-        <Box sx={{ position: 'relative' }}>
-          <StyledCardMedia
-            image={productItem.img_url}
-            title={productItem.name}
+        <ImageWrapper>
+          <StyledLazyLoadImage
+            src={productItem.img_url}
+            alt={productItem.name}
+            placeholderSrc="/path/to/placeholder.jpg"
             onClick={handleShowSingleCard}
           />
           {productItem.sale && (
             <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
           )}
-        </Box>
+        </ImageWrapper>
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" noWrap>
             {enhanceText(productItem.name)}
