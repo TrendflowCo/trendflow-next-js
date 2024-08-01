@@ -89,7 +89,7 @@ const Results = () => {
             // Ensure tags are included in the API request
             const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
             const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
-            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}&page=${page}${sortingParams}${tags}`;
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}`;
             // console.log('request to API: ', requestURI);
 
             const rsp = (await axios.get(requestURI)).data;
@@ -123,7 +123,7 @@ const Results = () => {
                 const filters = {
                     language: `language=${lan}`,
                     country: `&country=${zone}`,
-                    page: router.query.page ? `&page=${router.query.page}` : '&page=1',
+                    page: router.query.page ? `&page=${router.query.page}` : '',
                     limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
                     query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
                     imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
@@ -245,6 +245,13 @@ const Results = () => {
 
     const MemoizedResultCard = React.memo(ResultCard);
 
+    // Add this state to control rendering
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
     return (
         <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px' }}>
             { loadingFlag ? 
@@ -257,11 +264,13 @@ const Results = () => {
                         </section>
                     : 
                     <>
-                        <Head>
-                            {lastSearch && <title>{`TrendFlow - ${enhanceText(lastSearch)}`}</title>}
-                            {lastSearch && <meta name="description" content={enhanceText(lastSearch)}/>}
-                            {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
-                        </Head>
+                        {isClient && (
+                            <Head>
+                                {lastSearch && <title>{`TrendFlow - ${enhanceText(lastSearch)}`}</title>}
+                                {lastSearch && <meta name="description" content={enhanceText(lastSearch)}/>}
+                                {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
+                            </Head>
+                        )}
                         <section className="flex flex-col w-full mt-25 mb-2">
                             <div className='mx-5'>
                                 { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
