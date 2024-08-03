@@ -42,3 +42,8 @@
 .slider-ltr .animate-scroll {
   animation-direction: normal;
 }
+
+:root {
+  --trendflow-pink: #FA39BE;
+  --trendflow-blue: #FE9D2B;
+}
