@@ -17,6 +17,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import CheckIcon from '@mui/icons-material/Check';
+import Badge from '@mui/material/Badge';
 
 const theme = createTheme({
   typography: {
@@ -97,11 +100,11 @@ const SaleChip = styled(Chip)(({ theme }) => ({
   position: 'absolute',
   top: theme.spacing ? theme.spacing(1) : '8px',
   right: theme.spacing ? theme.spacing(1) : '8px',
-  background: 'linear-gradient(to right, #FA39BE, #FE9D2B)', // TrendFlow gradient
+  background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
   color: '#ffffff',
   fontWeight: 'bold',
   '&:hover': {
-    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)', // Keep the same gradient on hover
+    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
   },
 }));
 
@@ -210,7 +213,15 @@ const SimilarCard = ({ productItem }) => {
         <CardActions disableSpacing sx={{ marginTop: 'auto' }}>
           <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
             <IconButton onClick={handleAddWishlist} disabled={loadingFav}>
-              <FavoriteIcon color={wishlist.includes(productItem.id_item) ? "error" : "action"} />
+              {loadingFav ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : wishlist.includes(productItem.id_item) ? (
+                <Badge badgeContent={<CheckIcon fontSize="small" />} color="success">
+                  <FavoriteIcon />
+                </Badge>
+              ) : (
+                <BookmarkBorderIcon />
+              )}
             </IconButton>
           </Tooltip>
           <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
