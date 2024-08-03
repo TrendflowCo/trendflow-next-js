@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardActions, IconButton, Typography, Tooltip, Chip, Box, Fade } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ShareIcon from '@mui/icons-material/Share';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import SearchIcon from '@mui/icons-material/Search'; // Import the search icon
 import { styled } from '@mui/system';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
@@ -17,6 +18,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import axios from 'axios'; // Ensure axios is imported
+import { endpoints } from '../../config/endpoints';
 
 const theme = createTheme({
   typography: {
@@ -162,6 +165,20 @@ const ResultCard = ({ productItem }) => {
     // Show success toast
   };
 
+  const handleSearchSimilar = async (productId) => {
+    try {
+      const response = await axios.get(`${endpoints('similarProducts')}${productId}`);
+      const similarProducts = response.data;
+      router.push({
+        pathname: '/results',
+        query: { similarProducts: JSON.stringify(similarProducts) }
+      });
+    } catch (error) {
+      console.error('Failed to fetch similar products:', error);
+      // Optionally handle errors, e.g., show an error message
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <StyledCard>
@@ -208,12 +225,17 @@ const ResultCard = ({ productItem }) => {
         <CardActions disableSpacing sx={{ marginTop: 'auto' }}>
           <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
             <IconButton onClick={handleAddWishlist} disabled={loadingFav}>
-              <FavoriteIcon color={wishlist.includes(productItem.id_item) ? "error" : "action"} />
+              <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} />
             </IconButton>
           </Tooltip>
           <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
             <IconButton onClick={handleCopyToClipboard}>
               <ShareIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Search similar products">
+            <IconButton onClick={() => handleSearchSimilar(productItem.id_item)}>
+              <SearchIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title={enhanceText(translations?.results?.visit_site)}>
