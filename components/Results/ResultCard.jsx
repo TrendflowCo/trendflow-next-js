@@ -108,7 +108,7 @@ const SaleChip = styled(Chip)(({ theme }) => ({
   },
 }));
 
-const ResultCard = ({ productItem }) => {
+const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
@@ -179,6 +179,18 @@ const ResultCard = ({ productItem }) => {
     }
   };
 
+  if (layoutType === 'image-only') {
+    return (
+      <div className="w-full h-0 pb-[100%] relative overflow-hidden">
+        <img
+          src={productItem.img_url}
+          alt={productItem.name}
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <StyledCard>
@@ -193,57 +205,61 @@ const ResultCard = ({ productItem }) => {
             <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
           )}
         </ImageWrapper>
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div" noWrap>
-            {enhanceText(productItem.name)}
-          </Typography>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Box>
-              {productItem.sale ? (
-                <>
-                  <Typography variant="body1" color="error" fontWeight="bold">
-                    {`${productItem.currency} ${productItem.price}`}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
-                    {`${productItem.currency} ${productItem.old_price}`}
-                  </Typography>
-                </>
-              ) : (
-                <Typography variant="body1" fontWeight="bold">
-                  {productItem.price !== 0 ? `${productItem.currency} ${productItem.price}` : enhanceText(translations?.results?.no_price)}
-                </Typography>
-              )}
-            </Box>
-            <BrandLogo
-              src={logos[productItem?.brand?.toLowerCase()]}
-              alt={productItem?.brand}
-              width={50}
-              height={50}
-            />
-          </Box>
-        </CardContent>
-        <CardActions disableSpacing sx={{ marginTop: 'auto' }}>
-          <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
-            <IconButton onClick={handleAddWishlist} disabled={loadingFav}>
-              <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
-            <IconButton onClick={handleCopyToClipboard}>
-              <ShareIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Search similar products">
-            <IconButton onClick={() => handleSearchSimilar(productItem.id_item)}>
-              <SearchIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={enhanceText(translations?.results?.visit_site)}>
-            <IconButton onClick={handleVisitSite}>
-              <StorefrontIcon />
-            </IconButton>
-          </Tooltip>
-        </CardActions>
+        {layoutType === 'default' && (
+          <>
+            <CardContent>
+              <Typography gutterBottom variant="h6" component="div" noWrap>
+                {enhanceText(productItem.name)}
+              </Typography>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box>
+                  {productItem.sale ? (
+                    <>
+                      <Typography variant="body1" color="error" fontWeight="bold">
+                        {`${productItem.currency} ${productItem.price}`}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
+                        {`${productItem.currency} ${productItem.old_price}`}
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography variant="body1" fontWeight="bold">
+                      {productItem.price !== 0 ? `${productItem.currency} ${productItem.price}` : enhanceText(translations?.results?.no_price)}
+                    </Typography>
+                  )}
+                </Box>
+                <BrandLogo
+                  src={logos[productItem?.brand?.toLowerCase()]}
+                  alt={productItem?.brand}
+                  width={50}
+                  height={50}
+                />
+              </Box>
+            </CardContent>
+            <CardActions disableSpacing sx={{ marginTop: 'auto' }}>
+              <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
+                <IconButton onClick={handleAddWishlist} disabled={loadingFav}>
+                  <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
+                <IconButton onClick={handleCopyToClipboard}>
+                  <ShareIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Search similar products">
+                <IconButton onClick={() => handleSearchSimilar(productItem.id_item)}>
+                  <SearchIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={enhanceText(translations?.results?.visit_site)}>
+                <IconButton onClick={handleVisitSite}>
+                  <StorefrontIcon />
+                </IconButton>
+              </Tooltip>
+            </CardActions>
+          </>
+        )}
       </StyledCard>
     </ThemeProvider>
   );

@@ -23,6 +23,9 @@ import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 import { toast } from "sonner"; // Import toast from sonner
 import FilterListIcon from '@mui/icons-material/FilterList';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import GridViewIcon from '@mui/icons-material/GridView';
+import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
@@ -44,9 +47,8 @@ const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.region);
-    // const { user } = useAppSelector(state => state.auth);
-    const auth = getAuth(app); // instance of auth method
-    const [user, loading] = useAuthState(auth); // user data
+    const auth = getAuth(app);
+    const [user, loading] = useAuthState(auth);
 
     const { currentSearch } = useAppSelector(state => state.search);
     const router = useRouter();
@@ -54,25 +56,21 @@ const Results = () => {
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
     const [failedSearch , setFailedSearch] = useState(false);
-    //
     const [lastSearch , setLastSearch] = useState('')
-    const [currentPage , setCurrentPage] = useState(1); // current page value
+    const [currentPage , setCurrentPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
     const [availableBrands , setAvailableBrands] = useState([]);
     const [currentPriceRange , setCurrentPriceRange] = useState([0,10000]);
     const [searchTags , setSearchTags] = useState([]);
     const [filteredBrand , setFilteredBrand] = useState('');
-    const [selectedTags, setSelectedTags] = useState([]); // Added state for selected tags
-    const [currentSortings, setCurrentSortings] = useState({}); // Added state for current sortings
-    // Filter
-    const [filterModal , setFilterModal] = useState(false); // modal controller
+    const [selectedTags, setSelectedTags] = useState([]);
+    const [currentSortings, setCurrentSortings] = useState({});
+    const [filterModal , setFilterModal] = useState(false);
     const [currentFilters, setCurrentFilters] = useState({});
-    // Sorting
-    const [sortingModal , setSortingModal] = useState(false); // modal controller
-    // device size
-    const [dimensions, setDimensions] = useState({
-        width: 0,
-    });
+    const [sortingModal , setSortingModal] = useState(false);
+    const [dimensions, setDimensions] = useState({ width: 0 });
+    const [gridLayout, setGridLayout] = useState('default');
+
     const handleResize = () => {
         setDimensions({width: window.innerWidth});
     }
@@ -80,7 +78,7 @@ const Results = () => {
         setDimensions({width: window.innerWidth});
         window.addEventListener("resize", handleResize, false);
     },[])
-    const fetchDataToAPI = async (filters, sortings, page = 1) => {
+    const fetchDataToAPI = async (filters, sortings, page = 1, limit = 20) => {
         try {
             setFailedSearch(false);
             setLoadingFlag(true);
@@ -89,7 +87,7 @@ const Results = () => {
             // Ensure tags are included in the API request
             const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
             const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
-            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}`;
+            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}&limit=${limit}`;
             // console.log('request to API: ', requestURI);
 
             const rsp = (await axios.get(requestURI)).data;
@@ -124,26 +122,34 @@ const Results = () => {
                     language: `language=${lan}`,
                     country: `&country=${zone}`,
                     page: router.query.page ? `&page=${router.query.page}` : '',
-                    limit: router.query.limit ? `&limit=${router.query.limit}` : '&limit=20',
+                    limit: '', // We'll set this dynamically based on the grid layout
                     query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
                     imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
-                    brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '', // list of brands
+                    brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
                     category: router.query.category ? `&category=${router.query.category}` : '',
                     minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
                     maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
-                    onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '', // si no quiero lo tengo que sacar
+                    onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '',
                 }
                 setCurrentFilters(filters);
                 const sortings = {
-                    sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '', // price, category
-                    ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '', // default false
+                    sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '',
+                    ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '',
                 };
                 setCurrentSortings(sortings);
-                fetchDataToAPI(filters, sortings);
+
+                let limit = 20;
+                if (gridLayout === 'compact') {
+                    limit = 48;
+                } else if (gridLayout === 'image-only') {
+                    limit = 144;
+                }
+
+                fetchDataToAPI(filters, sortings, 1, limit);
                 dispatch(setTotalFilters(countFilters(filters)));
             }
         }
-    }, [user, router.isReady, router.query.lan, router.query.zone, router.query.query, router.query.onSale, router.query.category, router.query.brands, router.query.minPrice, router.query.maxPrice, router.query.sortBy, router.query.ascending, router.query.page]);
+    }, [user, router.isReady, router.query.lan, router.query.zone, router.query.query, router.query.onSale, router.query.category, router.query.brands, router.query.minPrice, router.query.maxPrice, router.query.sortBy, router.query.ascending, router.query.page, gridLayout]);
 
     useEffect(() => {
         if (router.isReady) {
@@ -216,9 +222,16 @@ const Results = () => {
         if (!loadingMore && hasMore) {
             setLoadingMore(true);
             const nextPage = currentPage + 1;
+            let limit = 20;
+            if (gridLayout === 'compact') {
+                limit = 48;
+            } else if (gridLayout === 'image-only') {
+                limit = 144;
+            }
             const updatedFilters = {
                 ...currentFilters,
-                page: `&page=${nextPage}`
+                page: `&page=${nextPage}`,
+                limit: `&limit=${limit}`
             };
 
             try {
@@ -262,6 +275,19 @@ const Results = () => {
             // Existing code to fetch products based on other criteria
         }
     }, [router.query]);
+
+    const getGridItemProps = () => {
+        switch (gridLayout) {
+            case 'compact':
+                return { xs: 6, sm: 4, md: 3, lg: 2, xl: 2, spacing: 1 };
+            case 'image-only':
+                return { xs: 4, sm: 3, md: 2, lg: 1, xl: 1, spacing: 0 };
+            default:
+                return { xs: 12, sm: 6, md: 4, lg: 3, xl: 2.4, spacing: 2 };
+        }
+    };
+
+    const gridItemProps = getGridItemProps();
 
     return (
         <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px' }}>
@@ -327,12 +353,32 @@ const Results = () => {
                                 </svg>
                             </button>
                         </div>
+                        <div className="flex justify-end mb-4 mr-4">
+                            <button
+                                onClick={() => setGridLayout('default')}
+                                className={`p-2 rounded-l-lg ${gridLayout === 'default' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                            >
+                                <GridViewIcon />
+                            </button>
+                            <button
+                                onClick={() => setGridLayout('compact')}
+                                className={`p-2 ${gridLayout === 'compact' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                            >
+                                <ViewModuleIcon/>
+                            </button>
+                            <button
+                                onClick={() => setGridLayout('image-only')}
+                                className={`p-2 rounded-r-lg ${gridLayout === 'image-only' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                            >
+                                <ViewCompactIcon />
+                            </button>
+                        </div>
                         <div style={{ minHeight: '100vh' }}>
-                            <Grid container spacing={2} sx={{ padding: 2 }}>
+                            <Grid container spacing={gridItemProps.spacing} sx={{ padding: 2 }}>
                                 {products?.length > 0 &&
                                     products.map((productItem, productIndex) => (
-                                        <Grid key={`${productItem.id_item}-${productIndex}`} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                            <MemoizedResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} />
+                                        <Grid key={`${productItem.id_item}-${productIndex}`} item xs={gridItemProps.xs} sm={gridItemProps.sm} md={gridItemProps.md} lg={gridItemProps.lg} xl={gridItemProps.xl}>
+                                            <MemoizedResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} layoutType={gridLayout} />
                                         </Grid>
                                     ))}
                             </Grid>
