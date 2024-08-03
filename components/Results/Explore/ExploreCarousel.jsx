@@ -1,53 +1,45 @@
-import { CardMedia } from "@mui/material";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import ResultCard from '../ResultCard';
+import { useAppSelector } from "../../../redux/hooks";
 
-const CarouselComp = ({images}) => {
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 9999, min: 1024 },
-      items: 1,
-      slidesToSlide: 1 // optional, default to 1.
-    },
-    tablet: {
-        breakpoint: { max: 1024, min: 768 },
-        items: 1,
-        slidesToSlide: 1 // optional, default to 1.
-    },
-    mobile: {
-        breakpoint: { max: 768, min: 0 },
-        items: 1,
-        slidesToSlide: 1 // optional, default to 1.
-    },  
-  };
+const ExploreCarousel = ({ products }) => {
+  const { translations } = useAppSelector(state => state.region);
+
+  if (!products || products.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="h-full w-full">
-      <Carousel
-        swipeable={true}
-        draggable={false}
-        responsive={responsive}
-        ssr={true} // means to render carousel on server-side.
-        infinite={true}
-        keyBoardControl={true}
-        transitionDuration={200}
-        containerClass="carousel-container"
-        removeArrowOnDeviceType={["mobile"]}
-        dotListClass="custom-dot-list-style"
-        itemClass="carousel-item-padding-10-px"
-        centerMode={true}
-      >
-        {images?.map((item , index) => 
-            <CardMedia 
-                key={item}
-                component="img"
-                image={item}
-                alt={`image ${index}`}
-                sx={{ maxHeight:'100vh', width:'100%', objectFit:'scale-down' }}
-            />
-        )}
-      </Carousel>
-    </section>
-  )
-}
+    <Swiper
+      modules={[Navigation, Pagination]}
+      spaceBetween={20}
+      slidesPerView={1}
+      navigation
+      pagination={{ clickable: true }}
+      breakpoints={{
+        640: {
+          slidesPerView: 2,
+        },
+        768: {
+          slidesPerView: 3,
+        },
+        1024: {
+          slidesPerView: 4,
+        },
+      }}
+    >
+      {products.map((product, index) => (
+        <SwiperSlide key={index}>
+          <ResultCard productItem={product} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  );
+};
 
-export default CarouselComp
+export default ExploreCarousel;

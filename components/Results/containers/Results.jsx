@@ -7,7 +7,7 @@ import { Box, Grid, CircularProgress, Fab, styled } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
-import { setCurrentSearch , setTotalFilters, setWishlist } from "../../../redux/features/actions/search";
+import { setCurrentSearch , setTotalFilters, setWishlist, setPreviousResults } from "../../../redux/features/actions/search";
 import { setLanguage } from "../../../redux/features/actions/region";
 import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
@@ -241,7 +241,9 @@ const Results = () => {
     useEffect(() => {
         console.log('Products state updated:', products.length);
         console.log('Total results:', totalResults);
-    }, [products, totalResults]);
+        // Store the results in Redux
+        dispatch(setPreviousResults(products));
+    }, [products, totalResults, dispatch]);
 
     const MemoizedResultCard = React.memo(ResultCard);
 
@@ -251,6 +253,15 @@ const Results = () => {
     useEffect(() => {
         setIsClient(true);
     }, []);
+
+    useEffect(() => {
+        if (router.query.similarProducts) {
+            const products = JSON.parse(router.query.similarProducts);
+            setProducts(products);
+        } else {
+            // Existing code to fetch products based on other criteria
+        }
+    }, [router.query]);
 
     return (
         <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px' }}>

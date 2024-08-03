@@ -1,0 +1,57 @@
+import React from 'react';
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { CardMedia } from "@mui/material";
+
+const ProductImageGallery = ({ images }) => {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1,
+      slidesToSlide: 1
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1,
+      slidesToSlide: 1
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      slidesToSlide: 1
+    }
+  };
+
+  return React.createElement(
+    'section',
+    { className: "h-full w-full" },
+    React.createElement(
+      Carousel,
+      {
+        swipeable: true,
+        draggable: false,
+        responsive: responsive,
+        ssr: true,
+        infinite: true,
+        keyBoardControl: true,
+        transitionDuration: 200,
+        containerClass: "carousel-container",
+        removeArrowOnDeviceType: ["tablet", "mobile"],
+        dotListClass: "custom-dot-list-style",
+        itemClass: "carousel-item-padding-10-px",
+        centerMode: true
+      },
+      images.map((item, index) => 
+        React.createElement(CardMedia, {
+          key: index,
+          component: "img",
+          image: item,
+          alt: `image ${index}`,
+          sx: { maxHeight: '100vh', width: '100%', objectFit: 'scale-down' }
+        })
+      )
+    )
+  );
+};
+
+export default ProductImageGallery;

@@ -400,7 +400,9 @@
     "select_brands": "seleccionar marcas",
     "brand": "marca",
     "price": "precio",
-    "select_filter": "seleccionar filtro"
+    "select_filter": "seleccionar filtro",
+    "share": "Compartir",
+    "share_product": "Compartir este producto"
   },
   "firstVisit": {
     "selectYourRegion": "Selecciona tu región",
