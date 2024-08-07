@@ -347,7 +347,7 @@ const Results = () => {
     }, [router.query.query]);
 
     return (
-        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px' }}>
+        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px', pb: '48px' }}>
             { loadingFlag ? 
                 <GlobalLoader/>
             :
@@ -430,7 +430,7 @@ const Results = () => {
                                 <ViewCompactIcon />
                             </button>
                         </div>
-                        <div style={{ minHeight: '100vh' }}>
+                        <div style={{ minHeight: '100vh', marginBottom: '2rem' }}>
                             <Grid container spacing={gridItemProps.spacing} sx={{ padding: 2 }}>
                                 {products?.length > 0 &&
                                     products.map((productItem, productIndex) => (

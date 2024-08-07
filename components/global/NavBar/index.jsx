@@ -43,13 +43,13 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
     <ThemeProvider theme={muiColors}>
       <AppBar position="fixed" elevation={0} className={`${isHomePage ? 'bg-transparent' : 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue'}`}>
         <Container maxWidth="xxl">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center space-x-6">
+          <div className="flex flex-wrap items-center justify-between py-2">
+            <div className="flex items-center space-x-2 md:space-x-4 flex-grow flex-shrink-0">
               <TitleDesktop />
               <TitleMobile />
-            </div>
-            <div className="flex items-center space-x-4">
               {!isHomePage && <SearchBar />}
+            </div>
+            <div className="flex items-center space-x-2 md:space-x-4 mt-2 md:mt-0">
               <Tooltip title="Explore new ideas">
                 <Button
                   variant="contained"
