@@ -191,6 +191,48 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
     );
   }
 
+  if (layoutType === 'compact') {
+    return (
+      <ThemeProvider theme={theme}>
+        <StyledCard>
+          <ImageWrapper>
+            <StyledLazyLoadImage
+              src={productItem.img_url}
+              alt={productItem.name}
+              placeholderSrc="/path/to/placeholder.jpg"
+              onClick={handleShowSingleCard}
+            />
+            {productItem.sale && (
+              <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
+            )}
+            <CardActions disableSpacing sx={{ position: 'absolute', bottom: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
+                <IconButton onClick={handleAddWishlist} disabled={loadingFav} style={{ color: '#FFA500' }}>
+                  <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
+                <IconButton onClick={handleCopyToClipboard} style={{ color: '#FFA500' }}>
+                  <ShareIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Search similar products">
+                <IconButton onClick={() => handleSearchSimilar(productItem.id_item)} style={{ color: '#FFA500' }}>
+                  <SearchIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={enhanceText(translations?.results?.visit_site)}>
+                <IconButton onClick={handleVisitSite} style={{ color: '#FFA500' }}>
+                  <StorefrontIcon />
+                </IconButton>
+              </Tooltip>
+            </CardActions>
+          </ImageWrapper>
+        </StyledCard>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <StyledCard>
