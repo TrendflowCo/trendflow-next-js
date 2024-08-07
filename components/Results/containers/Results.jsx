@@ -1,4 +1,4 @@
-import React , {useState , useEffect} from "react";
+import React , {useState , useEffect, useRef} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { analytics, app } from "../../../services/firebase";
@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
 import { setCurrentSearch , setTotalFilters, setWishlist, setPreviousResults } from "../../../redux/features/actions/search";
 import { setLanguage } from "../../../redux/features/actions/region";
-import SortAndFilter from "./SortAndFilter";
 import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
 import Sort from "../Sort";
@@ -70,6 +69,15 @@ const Results = () => {
     const [sortingModal , setSortingModal] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 0 });
     const [gridLayout, setGridLayout] = useState('default');
+    const [priceHistogramData, setPriceHistogramData] = useState([]);
+
+    const resetFiltersRef = useRef(null);
+
+    const resetFilters = () => {
+      if (resetFiltersRef.current) {
+        resetFiltersRef.current();
+      }
+    };
 
     const handleResize = () => {
         setDimensions({width: window.innerWidth});
@@ -113,43 +121,51 @@ const Results = () => {
         }
     };
     useEffect(() => {
-        if (router.isReady) {
-            const { lan, zone } = router.query;
-            if (lan) {
-                dispatch(setLanguage(lan));
-                localStorage.setItem('language', lan.toLowerCase());
-                const filters = {
-                    language: `language=${lan}`,
-                    country: `&country=${zone}`,
-                    page: router.query.page ? `&page=${router.query.page}` : '',
-                    limit: '', // We'll set this dynamically based on the grid layout
-                    query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
-                    imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
-                    brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
-                    category: router.query.category ? `&category=${router.query.category}` : '',
-                    minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
-                    maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
-                    onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '',
-                }
-                setCurrentFilters(filters);
-                const sortings = {
-                    sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '',
-                    ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '',
-                };
-                setCurrentSortings(sortings);
+      if (router.isReady) {
+        const { lan, zone } = router.query;
+        if (lan) {
+          dispatch(setLanguage(lan));
+          localStorage.setItem('language', lan.toLowerCase());
+          const filters = {
+            language: `language=${lan}`,
+            country: `&country=${zone}`,
+            page: router.query.page ? `&page=${router.query.page}` : '',
+            limit: '', // We'll set this dynamically based on the grid layout
+            query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
+            imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
+            brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
+            category: router.query.category ? `&category=${router.query.category}` : '',
+            minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
+            maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
+            onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '',
+            tags: router.query.tags ? `&tags=${encodeURIComponent(router.query.tags)}` : '',
+          }
+          setCurrentFilters(filters);
+          const sortings = {
+            sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '',
+            ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '',
+          };
+          setCurrentSortings(sortings);
 
-                let limit = 20;
-                if (gridLayout === 'compact') {
-                    limit = 48;
-                } else if (gridLayout === 'image-only') {
-                    limit = 144;
-                }
+          let limit = 20;
+          if (gridLayout === 'compact') {
+            limit = 48;
+          } else if (gridLayout === 'image-only') {
+            limit = 144;
+          }
 
-                fetchDataToAPI(filters, sortings, 1, limit);
-                dispatch(setTotalFilters(countFilters(filters)));
-            }
+          fetchDataToAPI(filters, sortings, 1, limit);
+          dispatch(setTotalFilters(countFilters(filters)));
+          
+          // Set selected tags based on the URL
+          if (router.query.tags) {
+            setSelectedTags(router.query.tags.split(','));
+          } else {
+            setSelectedTags([]);
+          }
         }
-    }, [user, router.isReady, router.query.lan, router.query.zone, router.query.query, router.query.onSale, router.query.category, router.query.brands, router.query.minPrice, router.query.maxPrice, router.query.sortBy, router.query.ascending, router.query.page, gridLayout]);
+      }
+    }, [user, router.isReady, router.query, gridLayout]);
 
     useEffect(() => {
         if (router.isReady) {
@@ -256,6 +272,8 @@ const Results = () => {
         console.log('Total results:', totalResults);
         // Store the results in Redux
         dispatch(setPreviousResults(products));
+        // Calculate and set price histogram data
+        setPriceHistogramData(calculatePriceHistogram(products));
     }, [products, totalResults, dispatch]);
 
     const MemoizedResultCard = React.memo(ResultCard);
@@ -289,6 +307,45 @@ const Results = () => {
 
     const gridItemProps = getGridItemProps();
 
+    const calculatePriceHistogram = (products, bins = 10) => {
+      if (products.length === 0) return [];
+
+      const prices = products.map(product => product.price).filter(price => typeof price === 'number' && price > 0);
+      if (prices.length === 0) return [];
+
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      
+      // Handle the case where all prices are the same
+      if (minPrice === maxPrice) {
+        return [{ range: `${minPrice}-${maxPrice}`, count: prices.length }];
+      }
+
+      const binWidth = (maxPrice - minPrice) / bins;
+
+      const histogram = Array(bins).fill(0).map((_, index) => ({
+        range: `${Math.round(minPrice + index * binWidth)}-${Math.round(minPrice + (index + 1) * binWidth)}`,
+        count: 0
+      }));
+
+      prices.forEach(price => {
+        const binIndex = Math.min(Math.floor((price - minPrice) / binWidth), bins - 1);
+        if (binIndex >= 0 && binIndex < histogram.length) {
+          histogram[binIndex].count++;
+        }
+      });
+
+      // Remove empty bins
+      return histogram.filter(bin => bin.count > 0);
+    };
+
+    useEffect(() => {
+      if (router.isReady && router.query.query) {
+        resetFilters();
+        // ... perform search ...
+      }
+    }, [router.query.query]);
+
     return (
         <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px', pb: '48px' }}>
             { loadingFlag ? 
@@ -315,24 +372,24 @@ const Results = () => {
                             </div>
                         </section>
                         {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-4'>
-                            <h6 className='text-black text-xl font-semibold mb-3'>Refine Your Search</h6>
-                            <div className="flex flex-row flex-wrap w-full">
-                                {searchTags.sort().map((tag, index) => (
-                                    <button 
-                                        key={index}
-                                        className={`
-                                            px-4 py-2 mb-2 mr-2 rounded-full text-sm font-medium
-                                            transition-all duration-300 ease-in-out
-                                            ${selectedTags.includes(tag) 
-                                                ? 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white shadow-md transform scale-105' 
-                                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-                                        `}
-                                        onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
-                                    >
-                                        {enhanceText(tag)}
-                                    </button>
-                                ))}
-                            </div>
+                          <h6 className='text-black text-xl font-semibold mb-3'>Refine Your Search</h6>
+                          <div className="flex flex-row flex-wrap w-full">
+                            {searchTags.sort().map((tag, index) => (
+                              <button 
+                                key={index}
+                                className={`
+                                  px-4 py-2 mb-2 mr-2 rounded-full text-sm font-medium
+                                  transition-all duration-300 ease-in-out
+                                  ${selectedTags.includes(tag) 
+                                    ? 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white shadow-md transform scale-105' 
+                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                                `}
+                                onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
+                              >
+                                {enhanceText(tag)}
+                              </button>
+                            ))}
+                          </div>
                         </section>}
                         <div className="flex flex-col w-full items-center py-4">
                             <button 
@@ -433,24 +490,13 @@ const Results = () => {
                     availableBrands={availableBrands}
                     currentPriceRange={currentPriceRange}
                     deviceWidth={dimensions.width}
-                    translations={{
-                        results: {
-                            filters: 'Filters',
-                            on_sale_products: 'On Sale Products',
-                            section: 'Section',
-                            select_section: 'Select section',
-                            brands: 'Brands',
-                            select_brands: 'Select brands',
-                            price_range: 'Price Range',
-                            tags: 'Tags',
-                            select_tags: 'Select tags',
-                            apply_filters: 'Apply Filters',
-                            delete_filters: 'Delete Filters',
-                        }
-                    }}
-                    router={router}
-                    priceHistogramData={[]}
+                    priceHistogramData={priceHistogramData}
                     searchTags={searchTags}
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                    setResetFiltersRef={(resetFunc) => {
+                      resetFiltersRef.current = resetFunc;
+                    }}
                 />
                 <Sort 
                     sortingModal={sortingModal}
