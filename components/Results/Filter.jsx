@@ -1,231 +1,422 @@
-import React , {useEffect, useState , useRef} from "react";
-import { IconButton } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { 
+  Drawer, IconButton, Typography, Slider, Box, Divider, Grid, ThemeProvider, Tooltip, Chip
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Switch from '@mui/material/Switch';
-import { useRouter } from "next/router";
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Box from '@mui/material/Box';
-import { enhanceText } from "../Utils/enhanceText";
-import { useAppSelector } from "../../redux/hooks";
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import Slider from '@mui/material/Slider';
-import { logEvent } from "firebase/analytics";
-import { analytics } from "../../services/firebase";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme, createTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+import { styled } from '@mui/system';
+import { logos } from '../Utils/logos';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useAppSelector } from '../../redux/hooks';
+import { toast } from 'sonner';
 
+const CustomDrawer = styled(Drawer)(({ theme }) => ({
+  '& .MuiDrawer-paper': {
+    width: '100%',
+    maxWidth: 450,
+    padding: theme.spacing(3),
+    background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
+    boxShadow: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff',
+  },
+}));
+
+const CategoryButton = styled(Box)(({ theme, selected }) => ({
+  margin: theme.spacing(1),
+  borderRadius: 20,
+  textTransform: 'capitalize',
+  fontWeight: 'bold',
+  padding: '8px 16px',
+  color: theme.palette.text.primary,
+  backgroundColor: 'transparent',
+  border: `2px solid ${selected ? theme.palette.primary.main : theme.palette.grey[300]}`,
+  cursor: 'pointer',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    backgroundColor: theme.palette.grey[100],
+    border: `2px solid ${selected ? theme.palette.primary.main : theme.palette.grey[400]}`,
+  },
+}));
+
+const BrandLogoWrapper = styled(Box)(({ theme, selected }) => ({
+  width: 80,
+  height: 80,
+  borderRadius: '50%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  border: selected ? `3px solid ${theme.palette.primary.main}` : '3px solid transparent',
+  boxShadow: selected ? `0 0 15px ${theme.palette.primary.main}` : 'none',
+  backgroundColor: '#ffffff',
+  '&:hover': {
+    transform: 'scale(1.1)',
+    boxShadow: `0 5px 15px rgba(0,0,0,0.1)`,
+  },
+}));
+
+const SaleChip = styled(Box)(({ theme, selected }) => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: '4px 12px',
+  borderRadius: 20,
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
+  backgroundColor: selected ? theme.palette.secondary.main : 'transparent',
+  border: `2px solid ${selected ? theme.palette.secondary.main : theme.palette.grey[300]}`,
+  '&:hover': {
+    backgroundColor: selected ? theme.palette.secondary.light : theme.palette.grey[100],
+  },
+}));
+
+const ActionButton = styled(Box)(({ theme, variant }) => ({
+  padding: '10px 16px',
+  borderRadius: 4,
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontWeight: 'bold',
+  transition: 'all 0.3s ease',
+  ...(variant === 'contained' ? {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  } : {
+    border: `1px solid ${theme.palette.primary.main}`,
+    color: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  }),
+}));
 
 const Filter = (props) => {
-    const router = useRouter();
-    const { translations , language , country } = useAppSelector(state => state.region);
-    const { 
-        setFilterModal , 
-        filterModal , 
-        availableBrands , 
-        currentPriceRange , 
-        deviceWidth
-    } = props;
-    const categoryOptions = ['men','women','kids','home','gift']
-    const [onSaleChecked, setOnSaleChecked] = useState(false);
-    const [categoryFilter , setCategoryFilter] = useState('');
-    const [selectedBrands, setSelectedBrands] = useState([]);
-    const priceLimits = { // for query management
-        min: currentPriceRange[0],
-        max: currentPriceRange[1]
-    };
-    const [priceRange , setPriceRange] = useState(currentPriceRange); // for edition
-    useEffect(() => { // sets price range for filter if it changes
-        setPriceRange(currentPriceRange);
-        
-    },[currentPriceRange])
-    const priceMarks = [ // for range selector marks
-        {
-            value: currentPriceRange[0],
-            label: `$${currentPriceRange[0]}`,
-        },
-        {
-          value: currentPriceRange[1],
-          label: `$${currentPriceRange[1]}`,
-        },
-    ];
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    };
-    const handleSetOnSale = (event) => { // set on sale value
-        setOnSaleChecked(event.target.checked);
-    };
-    const handleChangeCategory = (event) => { // set category value
-        setCategoryFilter(event.target.value);
-    };
-    const handleChangeBrands = (event) => { // set brands for router
-        const { target: { value } } = event;
-        const queryBrands = typeof value === 'string' ? value.split(',') : value;
-        setSelectedBrands(queryBrands);
-    };
-    const handleChangePriceRange = (e , newValue) => {
-        setPriceRange(newValue)
-    }
-    const handleApplyFilter = () => {
-        let newQuery = {...router.query};
-        if (categoryFilter !== '') { // category filtering
-            newQuery = {...newQuery, category: categoryFilter}
-        }
-        if (selectedBrands.length > 0) { // brands filtering
-            if (selectedBrands.length > 1) {
-                newQuery = {...newQuery , brands: selectedBrands.join(',') }
-            } else {
-                newQuery = {...newQuery , brands: selectedBrands[0] }
-            }
-        };
-        if(onSaleChecked) { // on sale filtering
-            newQuery = {...newQuery , onSale:'true' }
-        } else {
-            delete newQuery.onSale;
-        }
-        if (priceRange[0] > priceLimits.min) {
-            newQuery = {...newQuery, minPrice: priceRange[0]}
-        }
-        if (priceRange[1] < priceLimits.max) {
-            newQuery = {...newQuery, maxPrice: priceRange[1]}
-        }
-        newQuery = {...newQuery, page: 1}
-        logEvent(analytics, 'FilterAndSorting', {
-            action: 'Apply_filter'
-        });
-        router.push({ href: "./", query: newQuery })
-        if (deviceWidth < 1024) {
-            setFilterModal(false);
-        }
-    };
-    
-    const ref = useRef(null);
-    const deleteFilter = () => {
-        const { pathname, query } = router;
-        console.log(router)
-        const params = new URLSearchParams(query);
-        params.delete('onSale');
-        params.delete('category');
-        params.delete('brands');
-        params.delete('minPrice');
-        params.delete('maxPrice');
-        params.delete('page');
-        router.push(`/${country}/${language}/results?query=${encodeURIComponent(query.query)}`)
-        setOnSaleChecked(false);
-        setCategoryFilter('');
-        setSelectedBrands([]);
-        setPriceRange(currentPriceRange);
-        logEvent(analytics, 'FilterAndSorting', {
-            action: 'Delete_filter'
-        }); 
-        if (deviceWidth < 1024) {
-            setFilterModal(false);
-        }       
-    }
+  const { 
+    setFilterModal, 
+    filterModal, 
+    availableBrands = [], 
+    currentPriceRange = [0, 1000], 
+    translations = {},
+    priceHistogramData = [],
+    searchTags = [],
+    selectedTags,
+    setSelectedTags,
+    setResetFiltersRef
+  } = props;
 
-    return(
-        <>
-            {filterModal && <div className="h-full w-full bg-trendflow-black absolute top-0 left-0 z-10 bg-opacity-30"></div>}
-            <div 
-                className={`px-6 h-full overflow-auto w-full lg:w-1/3 flex flex-col bg-trendflow-white border-l border-l-stamm-gray shadow-2xl top-0 right-0 fixed z-20 pt-[20px] ease-in-out duration-500 ${filterModal ? 'transform translate-none shadow-[-10px_0px_30px_10px_rgba(0,0,0,0.3)]' : 'transform translate-x-full shadow-none'}`} 
-                ref={ref}
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const router = useRouter();
+  const { country, language } = useAppSelector(state => state.region);
+
+  const [onSaleChecked, setOnSaleChecked] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [priceRange, setPriceRange] = useState(currentPriceRange);
+
+  useEffect(() => {
+    setSelectedTags(selectedTags);
+  }, [selectedTags]);
+
+  const categoryOptions = ['men', 'women', 'kids', 'home', 'gift'];
+
+  const handleSetOnSale = () => {
+    setOnSaleChecked(prev => !prev);
+  };
+
+  const handleChangeCategory = (category) => {
+    setSelectedCategory(prev => prev === category ? '' : category);
+  };
+
+  const handleChangeBrands = (brand) => {
+    setSelectedBrands(prev => 
+      prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
+    );
+  };
+
+  const handleChangePriceRange = (event, newValue) => {
+    setPriceRange(newValue);
+  };
+
+  const handleTagSelection = (tag) => {
+    setSelectedTags(prevTags => 
+      prevTags.includes(tag)
+        ? prevTags.filter(t => t !== tag)
+        : [...prevTags, tag]
+    );
+  };
+
+  const handleApplyFilter = () => {
+    let newQuery = {...router.query};
+    if (selectedCategory !== '') {
+      newQuery = {...newQuery, category: selectedCategory}
+    }
+    if (selectedBrands.length > 0) {
+      newQuery = {...newQuery, brands: selectedBrands.join(',')}
+    }
+    if(onSaleChecked) {
+      newQuery = {...newQuery, onSale:'true'}
+    } else {
+      delete newQuery.onSale;
+    }
+    if (priceRange[0] > currentPriceRange[0]) {
+      newQuery = {...newQuery, minPrice: priceRange[0]}
+    }
+    if (priceRange[1] < currentPriceRange[1]) {
+      newQuery = {...newQuery, maxPrice: priceRange[1]}
+    }
+    if (selectedTags.length > 0) {
+      newQuery = {...newQuery, tags: selectedTags.join(',')}
+    }
+    newQuery = {...newQuery, page: 1}
+
+    // Construct the new path with country and language from the Redux store
+    const newPath = `/${country}/${language}/results`;
+
+    router.push({ 
+      pathname: newPath,
+      query: newQuery 
+    });
+    setFilterModal(false);
+    toast.success(translations?.results?.filters_applied || 'Filters applied successfully!');
+  };
+
+  const resetFilters = () => {
+    setSelectedCategory('');
+    setSelectedBrands([]);
+    setOnSaleChecked(false);
+    setPriceRange(currentPriceRange);
+    setSelectedTags([]);
+    toast.success(translations?.results?.filters_reset || 'Filters reset successfully!');
+  };
+
+  const deleteFilter = () => {
+    resetFilters();
+    router.push({
+      pathname: `/${country}/${language}/results`,
+      query: { query: router.query.query }
+    });
+    setFilterModal(false);
+  };
+
+  useEffect(() => {
+    setResetFiltersRef(resetFilters);
+  }, [setResetFiltersRef]);
+
+  return (
+    <ThemeProvider theme={createTheme({
+      palette: {
+        primary: {
+          main: '#FA39BE',
+          contrastText: '#ffffff',
+        },
+        secondary: {
+          main: '#FE9D2B',
+        },
+      },
+    })}>
+      <CustomDrawer
+        anchor="right"
+        open={filterModal}
+        onClose={() => setFilterModal(false)}
+      >
+        <AnimatePresence>
+          {filterModal && (
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.3 }}
             >
-                { filterModal &&
-                <>
-                    <div className=" flex flex-row justify-end" >
-                        <IconButton onClick={() => setFilterModal(false)}>
-                            <CloseIcon fontSize="medium"/>
-                        </IconButton>
-                    </div>
-                    <div className="mt-4">
-                        <h4 className="text-2xl font-semibold">{enhanceText(translations?.results?.filters)}</h4>
-                    </div>
-                    <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold mr-5'>{enhanceText(translations?.results?.on_sale_products)}</label>
-                        <Switch
-                            checked={onSaleChecked}
-                            onChange={handleSetOnSale}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                        />                    
-                    </div>
-                    <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold'>{enhanceText(translations?.results?.section)}</label>
-                        <Box sx={{ width: '50%' }}>
-                            <Select
-                                sx={{width: '100%'}}
-                                displayEmpty
-                                value={categoryFilter}
-                                onChange={handleChangeCategory}
-                                renderValue={(selected) => {
-                                    if (selected.length === 0) {
-                                        return <span>{enhanceText(translations?.results?.select_section)}</span>;
-                                    }
-                                    return enhanceText(selected);
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h5" fontWeight="bold">
+                  {translations?.results?.filters || 'Filters'}
+                </Typography>
+                <IconButton onClick={() => setFilterModal(false)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              <Divider sx={{ mb: 3 }} />
+
+              <Box sx={{ mt: 3, mb: 3 }}>
+                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  {translations?.results?.section || 'Section'}
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+                  {categoryOptions.map((category) => (
+                    <CategoryButton
+                      key={category}
+                      selected={selectedCategory === category}
+                      onClick={() => handleChangeCategory(category)}
+                    >
+                      {translations?.results?.[category] || category}
+                    </CategoryButton>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box sx={{ mt: 3, mb: 3 }}>
+                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  {translations?.results?.brands || 'Brands'}
+                </Typography>
+                <Grid container spacing={2}>
+                  {availableBrands.map((brand) => {
+                    const brandName = brand.name || brand;
+                    const logoKey = brandName.toLowerCase();
+                    const isSelected = selectedBrands.includes(brandName);
+                    const logoUrl = logos[logoKey];
+                    console.log(`Brand: ${brandName}, Logo URL: ${logoUrl}`); // Debug log
+                    return (
+                      <Grid item key={brandName}>
+                        <Tooltip title={brandName}>
+                          <BrandLogoWrapper
+                            onClick={() => handleChangeBrands(brandName)}
+                            selected={isSelected}
+                          >
+                            {logoUrl ? (
+                              <Image 
+                                src={logoUrl} 
+                                alt={brandName} 
+                                width={60}
+                                height={60}
+                                objectFit="contain"
+                                onError={(e) => {
+                                  console.error(`Error loading image for ${brandName}`);
+                                  e.target.style.display = 'none';
                                 }}
-                            >
-                                {[...categoryOptions].sort((a,b) => a.localeCompare(b)).map(item => 
-                                    <MenuItem key={item} value={item}>{enhanceText(item)}</MenuItem>
-                                )}
-                            </Select>
-                        </Box>
-                    </div>
-                    <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold'>{enhanceText(translations?.results?.brands)}</label>
-                        <Box sx={{ width: '50%' }}>
-                            <Select
-                                sx={{width: '100%'}}
-                                displayEmpty
-                                value={selectedBrands}
-                                onChange={handleChangeBrands}
-                                multiple
-                                renderValue={(selected) => {
-                                    if(selected.length === 0) {
-                                        return <span>{enhanceText(translations?.results?.select_brands)}</span>
-                                    }
-                                    
-                                    return selected.join(', ')
-                                    // return selected.join(', ').split('-').join(' ')
-                                }}
-                                MenuProps={MenuProps}
-                            >
-                                {[...availableBrands].sort((a,b) => a.localeCompare(b)).map((brand) => (
-                                // <MenuItem key={brand} value={brand.split(' ').join('-')}>
-                                <MenuItem key={brand} value={brand}>
-                                    <Checkbox checked={selectedBrands.indexOf(brand) > -1} />
-                                    {/* <Checkbox checked={selectedBrands.indexOf(brand.split(' ').join('-')) > -1} /> */}
-                                    <ListItemText primary={brand} />
-                                </MenuItem>
-                            ))}                                
-                            </Select>
-                        </Box>
-                    </div>
-                    <div className='flex flex-row mt-5 items-center justify-between'>
-                        <label className='text-black text-sm font-semibold'>{enhanceText(translations?.results?.price_range)}</label>
-                        <Box sx={{ width: '50%' , display: 'flex' , flexDirection: 'row' , alignItems: 'center' , justifyContent: 'center' , px: 1.5 }}>
-                            <Slider
-                                value={priceRange}
-                                onChange={handleChangePriceRange}
-                                valueLabelDisplay="auto"
-                                min={currentPriceRange[0]}
-                                max={currentPriceRange[1]}
-                                marks={priceMarks}
-                            />
-                        </Box>
-                    </div>
-                    <div className="flex flex-col lg:flex-row w-full lg:mt-24 mt-12 mb-8">
-                        <button className='bg-gradient-to-r from-trendflow-pink to-trendflow-orange place-self-center w-full text-trendflow-white border border-stamm-primary p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:mr-2.5' onClick={() => handleApplyFilter()}>{enhanceText(translations?.results?.apply_filters)}</button>
-                        <button className='bg-trendflow-black place-self-center w-full text-trendflow-white border border-stamm-black p-1.5 h-11.5 rounded hover:opacity-80 lg:w-1/2 mb-2.5 lg:mb-0 lg:ml-2.5' onClick={() => deleteFilter()}>{enhanceText(translations?.results?.delete_filters)}</button>
-                    </div>
-                </>}
-            </div>
-        </>
-    )
+                              />
+                            ) : (
+                              <Typography variant="h5">{brandName.charAt(0)}</Typography>
+                            )}
+                          </BrandLogoWrapper>
+                        </Tooltip>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
+
+              <Box sx={{ mt: 3, mb: 3 }}>
+                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  {translations?.results?.price_range || 'Price Range'}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                  <Typography variant="body2">
+                    ${priceRange[0]} - ${priceRange[1]}
+                  </Typography>
+                  <Tooltip title={onSaleChecked ? "Show all products" : "Show only sale products"}>
+                    <SaleChip
+                      onClick={handleSetOnSale}
+                      selected={onSaleChecked}
+                    >
+                      <LocalOfferIcon sx={{ mr: 1, color: onSaleChecked ? 'white' : 'inherit', fontSize: 20 }} />
+                      <Typography
+                        variant="body2"
+                        fontWeight="bold"
+                        color={onSaleChecked ? 'white' : 'inherit'}
+                      >
+                        {translations?.results?.sale || 'SALE'}
+                      </Typography>
+                    </SaleChip>
+                  </Tooltip>
+                </Box>
+                <Box sx={{ height: 200, mb: 2 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={priceHistogramData}>
+                      <XAxis dataKey="range" />
+                      <YAxis hide />
+                      <RechartsTooltip
+                        formatter={(value, name, props) => [`${value} products`, `$${props.payload.range}`]}
+                      />
+                      <Bar dataKey="count" fill="#FA39BE" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Box>
+                <Box sx={{ px: 2, mt: 2 }}>
+                  <Slider
+                    value={priceRange}
+                    onChange={handleChangePriceRange}
+                    valueLabelDisplay="auto"
+                    min={currentPriceRange[0]}
+                    max={currentPriceRange[1]}
+                    marks={[
+                      { value: currentPriceRange[0], label: `$${currentPriceRange[0]}` },
+                      { value: currentPriceRange[1], label: `$${currentPriceRange[1]}` },
+                    ]}
+                  />
+                </Box>
+              </Box>
+
+              <Box sx={{ mt: 3, mb: 3 }}>
+                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  {translations?.results?.tags || 'Tags'}
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {searchTags.map((tag, index) => (
+                    <Chip
+                      key={index}
+                      label={tag}
+                      onClick={() => handleTagSelection(tag)}
+                      color={selectedTags.includes(tag) ? "primary" : "default"}
+                      sx={{
+                        borderRadius: '16px',
+                        '&:hover': {
+                          backgroundColor: theme => selectedTags.includes(tag) ? theme.palette.primary.main : theme.palette.action.hover,
+                        },
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                <ActionButton
+                  variant="contained"
+                  onClick={handleApplyFilter}
+                  sx={{
+                    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
+                    '&:hover': {
+                      background: 'linear-gradient(to right, #FE9D2B, #FA39BE)',
+                    },
+                  }}
+                >
+                  <FilterAltIcon sx={{ mr: 1 }} />
+                  {translations?.results?.apply_filters || 'Apply Filters'}
+                </ActionButton>
+                <ActionButton
+                  variant="outlined"
+                  onClick={deleteFilter}
+                  sx={{
+                    borderColor: '#FA39BE',
+                    color: '#FA39BE',
+                    '&:hover': {
+                      borderColor: '#FE9D2B',
+                      color: '#FE9D2B',
+                    },
+                  }}
+                >
+                  {translations?.results?.delete_filters || 'Delete Filters'}
+                </ActionButton>
+              </Box>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </CustomDrawer>
+    </ThemeProvider>
+  );
 };
 
 export default Filter;
