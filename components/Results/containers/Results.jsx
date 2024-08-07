@@ -290,7 +290,7 @@ const Results = () => {
     const gridItemProps = getGridItemProps();
 
     return (
-        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px' }}>
+        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px', pb: '48px' }}>
             { loadingFlag ? 
                 <GlobalLoader/>
             :
@@ -373,7 +373,7 @@ const Results = () => {
                                 <ViewCompactIcon />
                             </button>
                         </div>
-                        <div style={{ minHeight: '100vh' }}>
+                        <div style={{ minHeight: '100vh', marginBottom: '2rem' }}>
                             <Grid container spacing={gridItemProps.spacing} sx={{ padding: 2 }}>
                                 {products?.length > 0 &&
                                     products.map((productItem, productIndex) => (
@@ -433,6 +433,24 @@ const Results = () => {
                     availableBrands={availableBrands}
                     currentPriceRange={currentPriceRange}
                     deviceWidth={dimensions.width}
+                    translations={{
+                        results: {
+                            filters: 'Filters',
+                            on_sale_products: 'On Sale Products',
+                            section: 'Section',
+                            select_section: 'Select section',
+                            brands: 'Brands',
+                            select_brands: 'Select brands',
+                            price_range: 'Price Range',
+                            tags: 'Tags',
+                            select_tags: 'Select tags',
+                            apply_filters: 'Apply Filters',
+                            delete_filters: 'Delete Filters',
+                        }
+                    }}
+                    router={router}
+                    priceHistogramData={[]}
+                    searchTags={searchTags}
                 />
                 <Sort 
                     sortingModal={sortingModal}

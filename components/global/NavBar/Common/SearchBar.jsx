@@ -30,7 +30,7 @@ const SearchBar = () => {
                 p: '2px 4px', 
                 display: 'flex', 
                 alignItems: 'center', 
-                width: 400, 
+                width: { xs: '100%', sm: '300px', md: '400px' }, 
                 borderRadius: '20px', 
                 boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
                 '&:focus-within': {
