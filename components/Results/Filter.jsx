@@ -199,11 +199,11 @@ const Filter = (props) => {
     setOnSaleChecked(false);
     setPriceRange(currentPriceRange);
     setSelectedTags([]);
-    toast.success(translations?.results?.filters_reset || 'Filters reset successfully!');
   };
 
   const deleteFilter = () => {
     resetFilters();
+    toast.success(translations?.results?.filters_reset || 'Filters reset successfully!');
     router.push({
       pathname: `/${country}/${language}/results`,
       query: { query: router.query.query }
