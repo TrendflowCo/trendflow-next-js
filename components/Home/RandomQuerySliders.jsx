@@ -44,7 +44,8 @@ const RandomQuerySliders = () => {
 
   const scroll = (index, direction) => {
     const slider = sliderRefs.current[index];
-    const scrollAmount = slider.clientWidth;
+    const isSmallScreen = window.innerWidth < 768; // Adjust this breakpoint as needed
+    const scrollAmount = isSmallScreen ? slider.clientWidth * 0.9 : slider.clientWidth * 0.5;
     slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
   };
 
@@ -77,25 +78,25 @@ const RandomQuerySliders = () => {
           </div>
           <div className="relative">
             <button 
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10 sm:block hidden"
               onClick={() => scroll(index, index % 2 === 0 ? -1 : 1)}
             >
               &#8592;
             </button>
             <div 
               ref={el => sliderRefs.current[index] = el}
-              className={`overflow-hidden ${index % 2 === 0 ? 'slider-rtl' : 'slider-ltr'}`}
+              className={`overflow-x-auto sm:overflow-hidden ${index % 2 === 0 ? 'slider-rtl' : 'slider-ltr'}`}
             >
               <div className="flex animate-scroll">
                 {[...queryResults[index], ...queryResults[index]].map((product, productIndex) => (
-                  <div key={`${product.id_item}-${productIndex}`} className="flex-shrink-0 w-1/5 px-2">
+                  <div key={`${product.id_item}-${productIndex}`} className="flex-shrink-0 w-4/5 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 px-2">
                     <SimilarCard productItem={product} />
                   </div>
                 ))}
               </div>
             </div>
             <button 
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10 sm:block hidden"
               onClick={() => scroll(index, index % 2 === 0 ? 1 : -1)}
             >
               &#8594;
