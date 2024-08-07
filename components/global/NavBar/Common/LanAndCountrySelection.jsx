@@ -43,14 +43,16 @@ const LanAndCountrySelection = ({ loading }) => {
                             onClick={(event) => handleCountryMenuOpen(event)}
                             sx={{
                                 borderRadius: 24,
-                                mr: 2,
-                                px: 1.5 ,
+                                mr: { xs: 0, sm: 2 },
+                                px: { xs: 1, sm: 1.5 },
                                 textTransform: 'none',
-                                fontSize: '15px'
+                                fontSize: { xs: '12px', sm: '15px' },
+                                whiteSpace: 'nowrap',
                             }}
                         >
                             <LocationIcon/>
-                            <span className="ml-2">{`${countriesAndLanguagesOptions[indexZone].country.toUpperCase()} - ${enhanceText(countriesAndLanguagesOptions[indexZone].language)}`}</span>
+                            <span className="ml-1 hidden sm:inline">{`${countriesAndLanguagesOptions[indexZone].country.toUpperCase()} - ${enhanceText(countriesAndLanguagesOptions[indexZone].language)}`}</span>
+                            <span className="ml-1 sm:hidden">{countriesAndLanguagesOptions[indexZone].country.toUpperCase()}</span>
                         </Button>
                     </Tooltip>
                 </section>
