@@ -179,9 +179,10 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
     }
   };
 
+  // Add a conditional check to handle visiting the product dedicated page for image-only layout
   if (layoutType === 'image-only') {
     return (
-      <div className="w-full h-0 pb-[100%] relative overflow-hidden">
+      <div className="w-full h-0 pb-[100%] relative overflow-hidden" onClick={handleShowSingleCard}>
         <img
           src={productItem.img_url}
           alt={productItem.name}
@@ -207,8 +208,8 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
             )}
             <CardActions disableSpacing sx={{ position: 'absolute', bottom: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
               <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
-                <IconButton onClick={handleAddWishlist} disabled={loadingFav} style={{ color: '#FFA500' }}>
-                  <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} />
+                <IconButton onClick={handleAddWishlist} disabled={loadingFav} style={{ color: '#FFA500', variant: 'outlined'}}>
+                  <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "disabled"} />
                 </IconButton>
               </Tooltip>
               <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
