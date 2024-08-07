@@ -31,7 +31,7 @@ const StyledFab = styled(Fab)(({ theme }) => ({
   bottom: '2rem',
   right: '2rem',
   backgroundColor: '#3f51b5', // A more subtle blue color
-  color: '#ffffff',
+  color: '#9966CC',
   padding: '1rem',
   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
   transition: 'all 0.3s ease-in-out',
