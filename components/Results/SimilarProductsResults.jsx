@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { endpoints } from "../../config/endpoints";
-import { Box, Typography, CircularProgress, Grid, Paper } from '@mui/material';
+import { Box, Typography, CircularProgress, Grid, Paper, ExpandLessIcon, ExpandMoreIcon } from '@mui/material';
 import Image from 'next/image';
 import ResultCard from './ResultCard';
 import { languageAdapter } from '../Results/functions/languageAdapter';

@@ -128,7 +128,7 @@ const Filter = (props) => {
 
   useEffect(() => {
     setSelectedTags(selectedTags);
-  }, [selectedTags]);
+  }, [selectedTags, setSelectedTags]);
 
   const categoryOptions = ['men', 'women', 'kids', 'home', 'gift'];
 
@@ -213,7 +213,7 @@ const Filter = (props) => {
 
   useEffect(() => {
     setResetFiltersRef(resetFilters);
-  }, [setResetFiltersRef]);
+  }, [setResetFiltersRef, resetFilters]);
 
   return (
     <ThemeProvider theme={createTheme({
