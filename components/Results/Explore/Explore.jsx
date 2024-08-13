@@ -43,6 +43,7 @@ import ProductImageGallery from './ProductImageGallery';
 import CheckIcon from '@mui/icons-material/Check';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import Link from 'next/link';
+import ShareModal from '../../Common/ShareModal';
 
 const Explore = () => {
     const router = useRouter();
@@ -58,8 +59,6 @@ const Explore = () => {
     const [similarProducts , setSimilarProducts] = useState([]);
     const [loading , setLoading] = useState(true);
     const [shareModalOpen, setShareModalOpen] = useState(false);
-    const shareUrl = `https://trendflow.co/${country}/${language}/results/explore/${encodeURIComponent(currentProduct.name)}%20${currentProduct.id_item}`;
-    const shareTitle = currentProduct.name;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -138,7 +137,7 @@ const Explore = () => {
                 <GlobalLoader/>
             :
                 <>
-                    {!loading && currentProduct.id_item ? 
+                    {!loading && currentProduct?.id_item ? 
                         <>
                             <Head>
                                 {currentProduct?.name && <title>{`TrendFlow - ${enhanceText(currentProduct.name)}`}</title>}
@@ -146,7 +145,7 @@ const Explore = () => {
                                 {currentProduct?.brand && <meta name="brand" content={enhanceText(currentProduct.brand)}/>}
                                 {currentProduct?.category && <meta name="section" content={enhanceText(currentProduct.category)}/>}
                             </Head>
-                            <section className="container mx-auto px-4 py-20">
+                            <section className="container mx-auto px-4 py-10" style={{ marginBottom: '1rem' }}>
                                 <nav className="flex mb-4" aria-label="Breadcrumb">
                                   <ol className="inline-flex items-center space-x-1 md:space-x-3">
                                     <li className="inline-flex items-center">
@@ -372,10 +371,18 @@ const Explore = () => {
                                 </div>
                             </section>
                             {similarProducts && similarProducts.length > 0 && (
-                              <section className="w-full px-4 mt-8">
-                                <h2 className='text-trendflow-black text-xl font-semibold mb-2'>{translations?.exploreSection?.similarProducts}</h2>
-                                <p className="text-gray-600 text-sm mb-3">{translations?.exploreSection?.similarProductsDescription}</p>
-                                <ExploreCarousel products={similarProducts} translations={translations} />
+                              <section className="w-full" style={{ padding: '1rem', marginTop: '1rem', marginBottom: '3rem' }}>
+                                <div className="max-w-6xl mx-auto">
+                                  <h2 className='text-trendflow-black text-2xl font-semibold mb-4' style={{ marginBottom: '0.5rem' }}>
+                                    {translations?.exploreSection?.similarProducts}
+                                  </h2>
+                                  <p className="text-gray-600 text-sm mb-6" style={{ marginBottom: '1rem' }}>
+                                    {translations?.exploreSection?.similarProductsDescription}
+                                  </p>
+                                  <div style={{ marginBottom: '2rem' }}>
+                                    <ExploreCarousel products={similarProducts} translations={translations} />
+                                  </div>
+                                </div>
                               </section>
                             )}
                         </>
@@ -385,50 +392,24 @@ const Explore = () => {
                 </>
             }
 
-            <Dialog 
-                open={shareModalOpen} 
-                onClose={() => setShareModalOpen(false)}
-                PaperProps={{
-                    style: {
-                        borderRadius: '16px',
-                        padding: '16px',
-                        background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
-                        boxShadow: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff',
-                    },
-                }}
-            >
-                <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', color: '#333' }}>
-                    {enhanceText(translations?.results?.share_product)}
-                </DialogTitle>
-                <DialogContent>
-                    <div className="flex flex-col items-center space-y-6 py-4">
-                        <EmailShareButton url={shareUrl} subject={shareTitle}>
-                            <EmailIcon size={48} round />
-                        </EmailShareButton>
-                        <TwitterShareButton url={shareUrl} title={shareTitle}>
-                            <TwitterIcon size={48} round />
-                        </TwitterShareButton>
-                        <WhatsappShareButton url={shareUrl} title={shareTitle}>
-                            <WhatsappIcon size={48} round />
-                        </WhatsappShareButton>
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button 
-                        onClick={() => setShareModalOpen(false)}
-                        sx={{
-                            background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
-                            color: '#ffffff',
-                            fontWeight: 'bold',
-                            '&:hover': {
-                                background: 'linear-gradient(to right, #FE9D2B, #FA39BE)',
-                            },
-                        }}
-                    >
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            {currentProduct && (() => {
+                const shareUrl = currentProduct?.name 
+                    ? `${window.location.origin}/${router.query.zone}/${router.query.lan}/results/explore/${currentProduct.name.split(' ').join('-')}%20${currentProduct.id_item}`
+                    : '';
+                const shareTitle = currentProduct?.name 
+                    ? `Check out this product: ${currentProduct.name}`
+                    : 'Check out this product';
+                
+                return (
+                    <ShareModal
+                        open={shareModalOpen}
+                        onClose={() => setShareModalOpen(false)}
+                        shareUrl={shareUrl}
+                        shareTitle={shareTitle}
+                        translations={translations}
+                    />
+                );
+            })()}
         </Box>
     )
 };
