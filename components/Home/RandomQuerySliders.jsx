@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import axios from 'axios';
 import { endpoints } from "../../config/endpoints";
-import SimilarCard from '../Results/Explore/SimilarCard';
+import ResultCard from '../Results/ResultCard';
 import { useRouter } from 'next/router';
 import { setCurrentSearch } from "../../redux/features/actions/search";
 
@@ -60,7 +60,7 @@ const RandomQuerySliders = () => {
 
   return (
     <div className="w-full mt-5">
-        <h2 className="text-3xl font-semibold mb-4 text-center">Trending Searches</h2>
+      <h2 className="text-3xl font-semibold mb-4 text-center">Trending Searches</h2>
 
       {randomQueries.map((query, index) => (
         <div key={query} className="mb-12">
@@ -90,7 +90,7 @@ const RandomQuerySliders = () => {
               <div className="flex animate-scroll">
                 {[...queryResults[index], ...queryResults[index]].map((product, productIndex) => (
                   <div key={`${product.id_item}-${productIndex}`} className="flex-shrink-0 w-4/5 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 px-2">
-                    <SimilarCard productItem={product} />
+                    <ResultCard productItem={product} layoutType="default" />
                   </div>
                 ))}
               </div>

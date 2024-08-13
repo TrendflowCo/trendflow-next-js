@@ -1,6 +1,7 @@
+import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import SimilarCard from "./SimilarCard";
+import ResultCard from "../ResultCard";
 
 const CarouselComp = ({ similarProducts }) => {
   const responsive = {
@@ -30,6 +31,7 @@ const CarouselComp = ({ similarProducts }) => {
       slidesToSlide: 1 // optional, default to 1.
     }
   };
+
   return (
     <section className="h-full">
       <Carousel
@@ -46,7 +48,14 @@ const CarouselComp = ({ similarProducts }) => {
         itemClass="carousel-item-padding-10-px"
         centerMode={true}
       >
-        {similarProducts?.map((item , index) => <SimilarCard key={index} productItem={item}/>)}
+        {similarProducts?.map((item, index) => (
+          <div key={index} className="px-2">
+            <ResultCard 
+              productItem={item} 
+              layoutType="compact"
+            />
+          </div>
+        ))}
       </Carousel>
     </section>
   )
