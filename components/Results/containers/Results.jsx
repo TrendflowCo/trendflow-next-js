@@ -25,6 +25,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewCompactIcon from '@mui/icons-material/ViewCompact';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ResultsGrid from '../ResultsGrid';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
@@ -70,6 +73,7 @@ const Results = () => {
     const [dimensions, setDimensions] = useState({ width: 0 });
     const [gridLayout, setGridLayout] = useState('default');
     const [priceHistogramData, setPriceHistogramData] = useState([]);
+    const [tagSectionVisible, setTagSectionVisible] = useState(true);
 
     const resetFiltersRef = useRef(null);
 
@@ -174,6 +178,7 @@ const Results = () => {
                 setSelectedTags([]);
                 setCurrentPage(1);
                 setProducts([]); // Clear previous results when the query changes
+                setTagSectionVisible(true); // Reset tag section visibility when the query changes
             }
         }
     }, [router.query.query, router.isReady]);
@@ -286,12 +291,14 @@ const Results = () => {
     }, []);
 
     useEffect(() => {
-        if (router.query.similarProducts) {
-            const products = JSON.parse(router.query.similarProducts);
-            setProducts(products);
-        } else {
-            // Existing code to fetch products based on other criteria
-        }
+      if (router.query.similarProducts) {
+        const similarProducts = JSON.parse(decodeURIComponent(router.query.similarProducts));
+        setProducts(similarProducts);
+        setTotalResults(similarProducts.length);
+        // You might want to update other states or perform additional actions here
+      } else {
+        // Existing code to fetch products based on other criteria
+      }
     }, [router.query]);
 
     const getGridItemProps = () => {
@@ -371,45 +378,61 @@ const Results = () => {
                                 { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
                             </div>
                         </section>
-                        {searchTags?.length > 0 && <section className='mx-5 mt-6 mb-4'>
-                          <h6 className='text-black text-xl font-semibold mb-3'>Refine Your Search</h6>
-                          <div className="flex flex-row flex-wrap w-full">
-                            {searchTags.sort().map((tag, index) => (
+                        {searchTags?.length > 0 && (
+                          <section className='mx-5 mt-6 mb-4'>
+                            <div className="flex justify-between items-center mb-3">
+                              <h6 className='text-black text-xl font-semibold'>
+                                {tagSectionVisible ? 'Refine Your Search' : 'Search Results'}
+                              </h6>
                               <button 
-                                key={index}
-                                className={`
-                                  px-4 py-2 mb-2 mr-2 rounded-full text-sm font-medium
-                                  transition-all duration-300 ease-in-out
-                                  ${selectedTags.includes(tag) 
-                                    ? 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white shadow-md transform scale-105' 
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-                                `}
-                                onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
+                                onClick={() => setTagSectionVisible(!tagSectionVisible)}
+                                className="text-trendflow-blue hover:text-trendflow-pink transition-colors duration-300 p-2 rounded-full hover:bg-gray-100"
                               >
-                                {enhanceText(tag)}
+                                {tagSectionVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                               </button>
-                            ))}
-                          </div>
-                        </section>}
-                        <div className="flex flex-col w-full items-center py-4">
-                            <button 
-                                onClick={handleRefineSearch}
-                                className="
-                                    bg-gradient-to-r from-trendflow-pink to-trendflow-blue
-                                    text-white font-bold py-3 px-6 rounded-lg
-                                    shadow-lg hover:shadow-xl transition-all duration-300
-                                    transform hover:scale-105
-                                    flex items-center justify-center
-                                "
-                            >
-                                <span className="mr-2">
-                                    Refine Search {selectedTags.length > 0 && `(${selectedTags.length})`}
-                                </span>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
-                                </svg>
-                            </button>
-                        </div>
+                            </div>
+                            {tagSectionVisible && (
+                              <>
+                                <div className="flex flex-row flex-wrap w-full mb-4">
+                                  {searchTags.sort().map((tag, index) => (
+                                    <button 
+                                      key={index}
+                                      className={`
+                                        px-4 py-2 mb-2 mr-2 rounded-full text-sm font-medium
+                                        transition-all duration-300 ease-in-out
+                                        ${selectedTags.includes(tag) 
+                                          ? 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white shadow-md transform scale-105' 
+                                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                                      `}
+                                      onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
+                                    >
+                                      {enhanceText(tag)}
+                                    </button>
+                                  ))}
+                                </div>
+                                <div className="flex justify-center">
+                                  <button 
+                                    onClick={handleRefineSearch}
+                                    className="
+                                      bg-gradient-to-r from-trendflow-pink to-trendflow-blue
+                                      text-white font-bold py-3 px-6 rounded-lg
+                                      shadow-lg hover:shadow-xl transition-all duration-300
+                                      transform hover:scale-105
+                                      flex items-center justify-center
+                                    "
+                                  >
+                                    <span className="mr-2">
+                                      Refine Search {selectedTags.length > 0 && `(${selectedTags.length})`}
+                                    </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </section>
+                        )}
                         <div className="flex justify-end mb-4 mr-4">
                             <button
                                 onClick={() => setGridLayout('default')}
@@ -431,14 +454,9 @@ const Results = () => {
                             </button>
                         </div>
                         <div style={{ minHeight: '100vh', marginBottom: '2rem' }}>
-                            <Grid container spacing={gridItemProps.spacing} sx={{ padding: 2 }}>
-                                {products?.length > 0 &&
-                                    products.map((productItem, productIndex) => (
-                                        <Grid key={`${productItem.id_item}-${productIndex}`} item xs={gridItemProps.xs} sm={gridItemProps.sm} md={gridItemProps.md} lg={gridItemProps.lg} xl={gridItemProps.xl}>
-                                            <MemoizedResultCard productItem={productItem} reloadFlag={reloadFlag} setReloadFlag={setReloadFlag} layoutType={gridLayout} />
-                                        </Grid>
-                                    ))}
-                            </Grid>
+                            {products?.length > 0 && (
+                              <ResultsGrid products={products} gridLayout={gridLayout} />
+                            )}
                             {console.log('Render check - products.length:', products.length, 'totalResults:', totalResults)}
                             {hasMore && (
                                 <div className="flex justify-center mt-8 mb-12">

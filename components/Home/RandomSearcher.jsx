@@ -4,6 +4,7 @@ import { setCurrentSearch } from "../../redux/features/actions/search";
 import { handleSearchQuery } from "../functions/handleSearchQuery";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
+import { FaRandom } from "react-icons/fa";
 
 const RandomSearcher = () => {
     const router = useRouter();
@@ -23,32 +24,18 @@ const RandomSearcher = () => {
 
     return (
         <div className="flex flex-col items-center w-full mb-2">
-            <p className="text-lg text-gray-600 mb-4">Spark your fashion journey with a random inspiration!</p>
             <motion.button
                 onClick={handleSearchRandom}
-                className="mb-8 px-6 py-2 bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300"
+                className="group relative overflow-hidden px-8 py-3 bg-white text-trendflow-blue font-semibold rounded-full border-2 border-trendflow-blue hover:text-white transition-all duration-300 ease-in-out"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
             >
-                <span role="img" aria-label="sparkles" className="mr-2">✨</span>
-                {translations?.explore || "Surprise Me!"}
+                <span className="relative z-10 flex items-center">
+                    <FaRandom className="mr-2" />
+                    {translations?.explore || "Inspire Me"}
+                </span>
+                <span className="absolute inset-0 bg-gradient-to-r from-trendflow-pink to-trendflow-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
             </motion.button>
-            {/* <div className="w-full max-w-3xl">
-                <h3 className="text-xl font-semibold mb-4 text-center">Trending Searches</h3>
-                <div className="flex flex-wrap justify-center gap-2">
-                    {translations?.prompts && Object.entries(translations?.prompts).sort().map(([key, prompt]) => (
-                        <motion.button
-                            key={`${prompt}${key}`}
-                            onClick={() => handleQuickSearch(prompt)}
-                            className="px-4 py-2 bg-gray-100 text-trendflow-blue font-medium rounded-full hover:bg-trendflow-pink hover:bg-opacity-20 transition duration-300 ease-in-out"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {prompt}
-                        </motion.button>
-                    ))}
-                </div>
-            </div> */}
         </div>
     )
 };
