@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardActions, IconButton, Typography, Tooltip, Chip, Box, Fade } from '@mui/material';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import ShareIcon from '@mui/icons-material/Share';
 import StorefrontIcon from '@mui/icons-material/Storefront';
-import SearchIcon from '@mui/icons-material/Search'; // Import the search icon
+import SearchIcon from '@mui/icons-material/Search';
+import ShareIcon from '@mui/icons-material/Share';
 import { styled } from '@mui/system';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
@@ -18,8 +18,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import axios from 'axios'; // Ensure axios is imported
+import axios from 'axios';
 import { endpoints } from '../../config/endpoints';
+import ShareModal from '../Common/ShareModal';
 
 const theme = createTheme({
   typography: {
@@ -100,21 +101,45 @@ const SaleChip = styled(Chip)(({ theme }) => ({
   position: 'absolute',
   top: theme.spacing ? theme.spacing(1) : '8px',
   right: theme.spacing ? theme.spacing(1) : '8px',
-  background: 'linear-gradient(to right, #FA39BE, #FE9D2B)', // TrendFlow gradient
+  background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
   color: '#ffffff',
   fontWeight: 'bold',
   '&:hover': {
-    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)', // Keep the same gradient on hover
+    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
   },
 }));
 
-const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
+const InfoOverlay = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  padding: '8px',
+  borderBottomLeftRadius: '4px',
+  borderBottomRightRadius: '4px',
+}));
+
+const ProductTitle = styled(Typography)({
+  fontWeight: 'bold',
+  fontSize: '0.9rem',
+  lineHeight: 1.2,
+  marginBottom: '4px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+});
+
+const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurrentProduct }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
   const { translations } = useAppSelector(state => state.region);
   const [loadingFav, setLoadingFav] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const handleShowSingleCard = () => {
     const withoutSlash = productItem.name.split('/').join('%2F');
@@ -156,30 +181,21 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
     window.open(finalURI, '_blank').focus();
   };
 
-  const handleCopyToClipboard = () => {
-    logEvent(analytics, 'select_content', {
-      content_type: 'copy_to_clipboard',
-      content_id: productItem.shop_link
+  const handleShare = () => {
+    setShareModalOpen(true);
+  };
+
+  const handleSearchSimilar = useCallback((itemId) => {
+    console.log('handleSearchSimilar called with itemId:', itemId);
+    logEvent(analytics, 'search_similar', {
+      item_id: itemId
     });
-    navigator.clipboard.writeText(productItem.shop_link);
-    // Show success toast
-  };
+    router.push(`/${router.query.zone}/${router.query.lan}/results/similar/${itemId}`);
+  }, [router, logEvent]);
 
-  const handleSearchSimilar = async (productId) => {
-    try {
-      const response = await axios.get(`${endpoints('similarProducts')}${productId}`);
-      const similarProducts = response.data;
-      router.push({
-        pathname: '/results',
-        query: { similarProducts: JSON.stringify(similarProducts) }
-      });
-    } catch (error) {
-      console.error('Failed to fetch similar products:', error);
-      // Optionally handle errors, e.g., show an error message
-    }
-  };
+  const shareUrl = `${window.location.origin}/${router.query.zone}/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id_item}`;
+  const shareTitle = `Check out this product: ${productItem.name}`;
 
-  // Add a conditional check to handle visiting the product dedicated page for image-only layout
   if (layoutType === 'image-only') {
     return (
       <div className="w-full h-0 pb-[100%] relative overflow-hidden" onClick={handleShowSingleCard}>
@@ -195,7 +211,15 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
   if (layoutType === 'compact') {
     return (
       <ThemeProvider theme={theme}>
-        <StyledCard>
+        <StyledCard
+          sx={isCurrentProduct ? {
+            border: '2px solid #FA39BE',
+            boxShadow: '0 4px 8px rgba(250, 57, 190, 0.2)',
+            '&:hover': {
+              boxShadow: '0 6px 12px rgba(250, 57, 190, 0.3)',
+            },
+          } : {}}
+        >
           <ImageWrapper>
             <StyledLazyLoadImage
               src={productItem.img_url}
@@ -206,24 +230,57 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
             {productItem.sale && (
               <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
             )}
-            <CardActions disableSpacing sx={{ position: 'absolute', bottom: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            {isCurrentProduct && (
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  left: 8,
+                  backgroundColor: '#FA39BE',
+                  color: 'white',
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  fontWeight: 'bold',
+                }}
+              >
+                Current Product
+              </Typography>
+            )}
+            <CardActions 
+              disableSpacing 
+              sx={{ 
+                position: 'absolute', 
+                bottom: 0, 
+                right: 0, 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'flex-end',
+                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                borderTopLeftRadius: '12px',
+                padding: '4px'
+              }}
+            >
               <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
-                <IconButton onClick={handleAddWishlist} disabled={loadingFav} style={{ color: '#FFA500', variant: 'outlined'}}>
-                  <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "disabled"} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
-                <IconButton onClick={handleCopyToClipboard} style={{ color: '#FFA500' }}>
-                  <ShareIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Search similar products">
-                <IconButton onClick={() => handleSearchSimilar(productItem.id_item)} style={{ color: '#FFA500' }}>
-                  <SearchIcon />
+                <IconButton 
+                  onClick={handleAddWishlist} 
+                  disabled={loadingFav} 
+                  sx={{ 
+                    color: wishlist.includes(productItem.id_item) ? '#FA39BE' : '#BDBDBD',
+                    '&:hover': { color: '#FA39BE' }
+                  }}
+                >
+                  <BookmarkIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title={enhanceText(translations?.results?.visit_site)}>
-                <IconButton onClick={handleVisitSite} style={{ color: '#FFA500' }}>
+                <IconButton 
+                  onClick={handleVisitSite} 
+                  sx={{ 
+                    color: '#BDBDBD',
+                    '&:hover': { color: '#FA39BE' }
+                  }}
+                >
                   <StorefrontIcon />
                 </IconButton>
               </Tooltip>
@@ -236,7 +293,15 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <StyledCard>
+      <StyledCard
+        sx={isCurrentProduct ? {
+          border: '2px solid #FA39BE',
+          boxShadow: '0 4px 8px rgba(250, 57, 190, 0.2)',
+          '&:hover': {
+            boxShadow: '0 6px 12px rgba(250, 57, 190, 0.3)',
+          },
+        } : {}}
+      >
         <ImageWrapper>
           <StyledLazyLoadImage
             src={productItem.img_url}
@@ -247,63 +312,74 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType }) => {
           {productItem.sale && (
             <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
           )}
+          {isCurrentProduct && (
+            <Typography
+              variant="subtitle2"
+              sx={{
+                position: 'absolute',
+                top: 8,
+                left: 8,
+                backgroundColor: '#FA39BE',
+                color: 'white',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                fontWeight: 'bold',
+              }}
+            >
+              Current Product
+            </Typography>
+          )}
+          <InfoOverlay>
+            <ProductTitle>
+              {enhanceText(productItem.name)}
+            </ProductTitle>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <BrandLogo
+                src={logos[productItem?.brand?.toLowerCase()] || '/path/to/default/logo.png'}
+                alt={productItem?.brand}
+                width={50}
+                height={20}
+              />
+              <Typography variant="body2" fontWeight="bold">
+                {productItem.price !== 0 
+                  ? `${productItem.currency} ${productItem.price}`
+                  : enhanceText(translations?.results?.no_price)}
+              </Typography>
+            </Box>
+          </InfoOverlay>
         </ImageWrapper>
         {layoutType === 'default' && (
-          <>
-            <CardContent>
-              <Typography gutterBottom variant="h6" component="div" noWrap>
-                {enhanceText(productItem.name)}
-              </Typography>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Box>
-                  {productItem.sale ? (
-                    <>
-                      <Typography variant="body1" color="error" fontWeight="bold">
-                        {`${productItem.currency} ${productItem.price}`}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ textDecoration: 'line-through' }}>
-                        {`${productItem.currency} ${productItem.old_price}`}
-                      </Typography>
-                    </>
-                  ) : (
-                    <Typography variant="body1" fontWeight="bold">
-                      {productItem.price !== 0 ? `${productItem.currency} ${productItem.price}` : enhanceText(translations?.results?.no_price)}
-                    </Typography>
-                  )}
-                </Box>
-                <BrandLogo
-                  src={logos[productItem?.brand?.toLowerCase()]}
-                  alt={productItem?.brand}
-                  width={50}
-                  height={50}
-                />
-              </Box>
-            </CardContent>
-            <CardActions disableSpacing sx={{ marginTop: 'auto' }}>
-              <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
-                <IconButton onClick={handleAddWishlist} disabled={loadingFav}>
-                  <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={enhanceText(translations?.results?.copy_to_clipboard)}>
-                <IconButton onClick={handleCopyToClipboard}>
-                  <ShareIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Search similar products">
-                <IconButton onClick={() => handleSearchSimilar(productItem.id_item)}>
-                  <SearchIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={enhanceText(translations?.results?.visit_site)}>
-                <IconButton onClick={handleVisitSite}>
-                  <StorefrontIcon />
-                </IconButton>
-              </Tooltip>
-            </CardActions>
-          </>
+          <CardActions disableSpacing sx={{ marginTop: '4px', padding: '8px' }}>
+            <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
+              <IconButton onClick={handleAddWishlist} disabled={loadingFav} size="small">
+                <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={enhanceText(translations?.results?.share)}>
+              <IconButton onClick={handleShare} size="small">
+                <ShareIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Search similar products">
+              <IconButton onClick={(e) => { e.preventDefault(); handleSearchSimilar(productItem.id_item); }} size="small">
+                <SearchIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={enhanceText(translations?.results?.visit_site)}>
+              <IconButton onClick={handleVisitSite} size="small">
+                <StorefrontIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </CardActions>
         )}
       </StyledCard>
+      <ShareModal
+        open={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        shareUrl={shareUrl}
+        shareTitle={shareTitle}
+        translations={translations}
+      />
     </ThemeProvider>
   );
 };
