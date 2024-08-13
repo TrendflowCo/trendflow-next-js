@@ -6,6 +6,10 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import ResultCard from '../ResultCard';
 import { useAppSelector } from "../../../redux/hooks";
+import { Box, Typography } from '@mui/material';
+import Image from 'next/image';
+import { logos } from '../../Utils/logos';
+import { enhanceText } from '../../Utils/enhanceText';
 
 const ExploreCarousel = ({ products }) => {
   const { translations } = useAppSelector(state => state.region);
@@ -35,7 +39,7 @@ const ExploreCarousel = ({ products }) => {
     >
       {products.map((product, index) => (
         <SwiperSlide key={index}>
-          <ResultCard productItem={product} />
+          <ResultCard productItem={product} layoutType="default" />
         </SwiperSlide>
       ))}
     </Swiper>

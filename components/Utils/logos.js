@@ -30,7 +30,7 @@ export const logos = {
     'hugo boss': 'https://upload.wikimedia.org/wikipedia/commons/7/73/Hugo-Boss-Logo.svg',
     'hyein seo':'https://www.ink-clothing.com/category/XrVGHs4cbTcWxgor.jpg',
     'jaded london': 'https://cdn.shopify.com/s/files/1/0022/9824/9267/files/jaded-london-logo.jpg?height=628&pad_color=ffffff&v=1663689581&width=1200',
-    'the reformation': 'https://ww1.freelogovectors.net/wp-content/uploads/2023/02/reformation-logo-freelogovectors.net_.png',
+    'the reformation': 'https://www.thereformation.com/on/demandware.static/Sites-reformation-us-Site/-/default/dw3cc2418e/images/logo.svg',
     'adanola': 'https://adanola.com/cdn/shop/files/adanola.svg?v=8143487604766917058',
     'bobo choses': 'https://cdn.shopify.com/s/files/1/0705/1899/7292/files/black_logo.png?v=1683619799',
     'danielle guizio': 'https://danielleguiziony.com/cdn/shop/files/LOGO_DG_2d2e791b-4581-4b59-b565-786ec073d56b_2999x.png?v=1669414106',
