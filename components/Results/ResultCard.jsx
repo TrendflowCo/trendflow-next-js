@@ -191,7 +191,7 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
       item_id: itemId
     });
     router.push(`/${router.query.zone}/${router.query.lan}/results/similar/${itemId}`);
-  }, [router, logEvent]);
+  }, [router]);
 
   const shareUrl = `${window.location.origin}/${router.query.zone}/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id_item}`;
   const shareTitle = `Check out this product: ${productItem.name}`;
@@ -199,10 +199,11 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
   if (layoutType === 'image-only') {
     return (
       <div className="w-full h-0 pb-[100%] relative overflow-hidden" onClick={handleShowSingleCard}>
-        <img
+        <Image
           src={productItem.img_url}
           alt={productItem.name}
-          className="absolute top-0 left-0 w-full h-full object-cover"
+          layout="fill"
+          objectFit="cover"
         />
       </div>
     );

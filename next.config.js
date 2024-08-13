@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  webpack5: true,
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
