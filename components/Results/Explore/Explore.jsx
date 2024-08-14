@@ -19,7 +19,6 @@ import axios from "axios";
 import { endpoints } from "../../../config/endpoints";
 import { useRouter } from "next/router";
 import { languageAdapter } from "../functions/languageAdapter";
-import CarouselComp from "./CarouselComp";
 import Head from "next/head";
 import ExploreCarousel from "./ExploreCarousel";
 import arrow from "../../../public/Arrow1.svg";
