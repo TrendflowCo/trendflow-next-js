@@ -92,7 +92,7 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               {!isMobile && (
                 <>
-                  <LanAndCountrySelection loading={loading} />
+                  {/* <LanAndCountrySelection loading={loading} /> */}
                   <MenuForUser logOut={logOut} user={user} loading={loading} />
                   <MenuToggleUser setAnchorElUser={setAnchorElUser} anchorElUser={anchorElUser} />
                 </>
