@@ -132,6 +132,20 @@ const ProductTitle = styled(Typography)({
   WebkitBoxOrient: 'vertical',
 });
 
+const BrandLogoWrapper = styled(Box)({
+  position: 'absolute',
+  bottom: 8,
+  left: 8,
+  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  borderRadius: '4px',
+  padding: '2px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '40px',
+  height: '20px',
+});
+
 const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurrentProduct }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -279,6 +293,14 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
                 Current Product
               </Typography>
             )}
+            <BrandLogoWrapper>
+              <BrandLogo
+                src={logos[productItem?.brand?.toLowerCase()] || '/path/to/default/logo.png'}
+                alt={productItem?.brand}
+                width={36}
+                height={18}
+              />
+            </BrandLogoWrapper>
             <CardActions 
               disableSpacing 
               sx={{ 
