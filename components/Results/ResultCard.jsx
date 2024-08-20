@@ -140,6 +140,18 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
   const { translations } = useAppSelector(state => state.region);
   const [loadingFav, setLoadingFav] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const imageUrls = Array.isArray(productItem.img_url) ? productItem.img_url : [productItem.img_url];
+
+  const handleMouseEnter = () => {
+    if (imageUrls.length > 1) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setCurrentImageIndex(0); // Reset to first image when mouse leaves
+  };
 
   const handleShowSingleCard = () => {
     const withoutSlash = productItem.name.split('/').join('%2F');
@@ -200,7 +212,7 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
     return (
       <div className="w-full h-0 pb-[100%] relative overflow-hidden" onClick={handleShowSingleCard}>
         <Image
-          src={productItem.img_url}
+          src={imageUrls[0]}
           alt={productItem.name}
           layout="fill"
           objectFit="cover"
@@ -221,13 +233,32 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
             },
           } : {}}
         >
-          <ImageWrapper>
+          <ImageWrapper
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             <StyledLazyLoadImage
-              src={productItem.img_url}
+              src={imageUrls[currentImageIndex]}
               alt={productItem.name}
               placeholderSrc="/path/to/placeholder.jpg"
               onClick={handleShowSingleCard}
             />
+            {imageUrls.length > 1 && (
+              <Box sx={{ position: 'absolute', bottom: 8, right: 8, display: 'flex' }}>
+                {imageUrls.map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: '50%',
+                      backgroundColor: index === currentImageIndex ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                      margin: '0 2px',
+                    }}
+                  />
+                ))}
+              </Box>
+            )}
             {productItem.sale && (
               <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
             )}
@@ -303,13 +334,32 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
           },
         } : {}}
       >
-        <ImageWrapper>
+        <ImageWrapper
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <StyledLazyLoadImage
-            src={productItem.img_url}
+            src={imageUrls[currentImageIndex]}
             alt={productItem.name}
             placeholderSrc="/path/to/placeholder.jpg"
             onClick={handleShowSingleCard}
           />
+          {imageUrls.length > 1 && (
+            <Box sx={{ position: 'absolute', bottom: 8, right: 8, display: 'flex' }}>
+              {imageUrls.map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    backgroundColor: index === currentImageIndex ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                    margin: '0 2px',
+                  }}
+                />
+              ))}
+            </Box>
+          )}
           {productItem.sale && (
             <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
           )}

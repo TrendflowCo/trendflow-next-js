@@ -96,27 +96,47 @@ const Results = () => {
             setLoadingFlag(true);
             setTotalResults(0);
 
-            // Ensure tags are included in the API request
             const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
             const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
-            const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}&limit=${limit}`;
-            // console.log('request to API: ', requestURI);
+            
+            let fetchedProducts = [];
+            let currentPage = page;
+            let metadata = null;
 
-            const rsp = (await axios.get(requestURI)).data;
+            while (fetchedProducts.length < limit) {
+                const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}&limit=${limit * 2}&page=${currentPage}`;
+                const response = await axios.get(requestURI);
+                const rsp = response.data;
+                
+                // Store metadata from the first response
+                if (!metadata) {
+                    metadata = rsp.metadata;
+                }
+                
+                // Filter out H&M products
+                const filteredBatch = rsp?.results?.filter(product => product.brand.toLowerCase() !== 'h&m') || [];
+                fetchedProducts = [...fetchedProducts, ...filteredBatch];
+                
+                if (rsp?.results?.length < limit * 2 || currentPage > 5) break; // Prevent infinite loop
+                currentPage++;
+            }
+
+            fetchedProducts = fetchedProducts.slice(0, limit); // Ensure we only have 'limit' number of products
+
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
             setFilteredBrand(router.query.brands ? router.query.brands : '');
-            setSearchTags(rsp?.metadata?.tags);
-            setTotalResults(rsp?.total_results);
-            // setCurrentPage(router.query.page ? parseInt(router.query.page) : 1);
-            setAvailableBrands(rsp?.metadata?.brands || []);
+            setSearchTags(metadata?.tags);
+            
+            setTotalResults(fetchedProducts.length);
+            setAvailableBrands(metadata?.brands?.filter(brand => brand.toLowerCase() !== 'h&m') || []);
             if (filters.maxPrice === '' && filters.minPrice === '') {
-                setCurrentPriceRange([rsp?.metadata?.min_price, rsp?.metadata?.max_price]);
+                setCurrentPriceRange([metadata?.min_price, metadata?.max_price]);
             }
             logEvent(analytics, 'page_view', {
                 page_title: 'results',
             });
-            setProducts(rsp?.results || []); // Set the products state directly
+            setProducts(fetchedProducts);
             setLoadingFlag(false);
         } catch (err) {
             console.error(err);
@@ -252,13 +272,29 @@ const Results = () => {
             const updatedFilters = {
                 ...currentFilters,
                 page: `&page=${nextPage}`,
-                limit: `&limit=${limit}`
+                limit: `&limit=${limit * 2}` // Fetch double to ensure we have enough after filtering
             };
 
             try {
-                const newProducts = (await axios.get(`${endpoints('results')}${Object.values(updatedFilters).join('')}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`)).data?.results || [];
-                if (newProducts.length > 0) {
-                    setProducts(prevProducts => [...prevProducts, ...newProducts]);
+                let fetchedProducts = [];
+                let currentFetchPage = nextPage;
+
+                while (fetchedProducts.length < limit) {
+                    const rsp = await axios.get(`${endpoints('results')}${Object.values(updatedFilters).join('')}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`);
+                    
+                    // Filter out H&M products
+                    const filteredBatch = rsp.data?.results?.filter(product => product.brand.toLowerCase() !== 'h&m') || [];
+                    fetchedProducts = [...fetchedProducts, ...filteredBatch];
+                    
+                    if (rsp.data?.results?.length < limit * 2 || currentFetchPage > nextPage + 5) break; // Prevent infinite loop
+                    currentFetchPage++;
+                    updatedFilters.page = `&page=${currentFetchPage}`;
+                }
+
+                fetchedProducts = fetchedProducts.slice(0, limit); // Ensure we only have 'limit' number of products
+
+                if (fetchedProducts.length > 0) {
+                    setProducts(prevProducts => [...prevProducts, ...fetchedProducts]);
                     setCurrentPage(nextPage);
                 } else {
                     setHasMore(false);
@@ -354,7 +390,7 @@ const Results = () => {
     }, [router.query.query]);
 
     return (
-        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px', pb: '48px' }}>
+        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px', pb: '48px', mt: '64px' }}>
             { loadingFlag ? 
                 <GlobalLoader/>
             :
@@ -372,7 +408,7 @@ const Results = () => {
                                 {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
                             </Head>
                         )}
-                        <section className="flex flex-col w-full mt-25 mb-2">
+                        <section className="flex flex-col w-full mt-4 mb-2">
                             <div className='mx-5'>
                                 { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
                                 { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
