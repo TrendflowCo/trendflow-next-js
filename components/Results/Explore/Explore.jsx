@@ -74,7 +74,8 @@ const Explore = () => {
                 setCurrentProduct(currentIdProduct.result)
                 // traer los similares
                 const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
-                setSimilarProducts(similars.results);
+                const filteredSimilarProducts = similars.results.filter(product => product.brand.toLowerCase() !== 'h&m');
+                setSimilarProducts(filteredSimilarProducts);
                 
                 // No need to fetch previous results here, they should already be in the Redux store
                 
