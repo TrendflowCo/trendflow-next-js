@@ -32,6 +32,7 @@ const Layout = ({ children }) => {
         <link rel="icon" href=""/>
       </Head>
       {!isHomePage && <NavBar logOut={logOut} user={user} loading={loading}/>}
+      {/* <NavBar logOut={logOut} user={user} loading={loading}/> */}
       <main className='flex flex-col flex-auto p-0 m-0 overflow-auto scrollbar'>
         <Toaster richColors/>
         {children}
