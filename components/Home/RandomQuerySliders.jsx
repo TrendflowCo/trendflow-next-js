@@ -30,10 +30,17 @@ const RandomQuerySliders = () => {
       if (randomQueries.length > 0 && language && country) {
         const results = await Promise.all(
           randomQueries.map(query => 
-            axios.get(`${endpoints('results')}language=${language}&country=${country}&query=${encodeURIComponent(query)}&limit=10`)
+            axios.get(`${endpoints('results')}language=${language}&country=${country}&query=${encodeURIComponent(query)}&limit=20`)
           )
         );
-        setQueryResults(results.map(res => res.data.results));
+        
+        const filteredResults = results.map(res => 
+          res.data.results
+            .filter(product => product.brand.toLowerCase() !== 'h&m')
+            .slice(0, 10)
+        );
+        
+        setQueryResults(filteredResults);
       }
     };
 
