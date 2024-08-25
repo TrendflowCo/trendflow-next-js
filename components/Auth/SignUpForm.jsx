@@ -3,14 +3,11 @@ import { TextField, Button, Box, InputAdornment, IconButton } from "@mui/materia
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Icon } from "@iconify/react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useAppDispatch } from "../../redux/hooks";
-import { setLogInFlag } from "../../redux/features/actions/auth";
+import { sendSignInLink } from './authFunctions';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
-const LogInForm = ({ onLoginSuccess, onLoginError }) => {
-    const dispatch = useAppDispatch();
+const SignUpForm = ({ onSignUpSuccess, onSignUpError }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const formik = useFormik({
@@ -20,18 +17,16 @@ const LogInForm = ({ onLoginSuccess, onLoginError }) => {
         },
         validationSchema: Yup.object({
             email: Yup.string().email("Invalid email address").required("Required"),
-            password: Yup.string().required("Required"),
+            password: Yup.string().min(6, "Password must be at least 6 characters").required("Required"),
         }),
         onSubmit: async (values) => {
             try {
-                const auth = getAuth();
-                await signInWithEmailAndPassword(auth, values.email, values.password);
-                toast.success("Logged in successfully");
-                dispatch(setLogInFlag(false));
-                onLoginSuccess();
+                await sendSignInLink(values.email, values.password);
+                toast.success("Verification link sent to your email");
+                onSignUpSuccess();
             } catch (error) {
-                toast.error("Failed to log in");
-                onLoginError(error);
+                toast.error(error.message || "Failed to send verification link");
+                onSignUpError(error);
             }
         },
     });
@@ -86,11 +81,11 @@ const LogInForm = ({ onLoginSuccess, onLoginError }) => {
                     type="submit"
                     style={{ backgroundColor: 'var(--trendflow-pink)' }}
                 >
-                    Log In
+                    Sign Up
                 </Button>
             </Box>
         </motion.form>
     );
 };
 
-export default LogInForm;
+export default SignUpForm;
