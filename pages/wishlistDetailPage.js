@@ -1,4 +1,4 @@
-import WishlistDetail from '../../components/User/Wishlist/WishlistDetail';
+import WishlistDetail from '../components/User/Wishlist/WishlistDetail';
 import Layout from '../layout';
 
 const WishlistDetailPage = () => {
