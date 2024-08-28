@@ -17,8 +17,10 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { handleSearchQuery } from '../../functions/handleSearchQuery';
 import { setCurrentSearch } from '../../../redux/features/actions/search';
+import { logOut } from '../../Auth/authFunctions';
+import Image from 'next/image';
 
-const Navbar = ({ logOut, user, loading, setFilterModal }) => {
+const Navbar = ({ user, loading, setFilterModal }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElMore, setAnchorElMore] = useState(null);
   const router = useRouter();
@@ -58,46 +60,48 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
     <ThemeProvider theme={muiColors}>
       <AppBar position="fixed" elevation={0} className={`${isHomePage ? 'bg-transparent' : 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue'}`}>
         <Container maxWidth="xl">
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center space-x-2">
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', py: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Image src="/logo_tf.png" alt="TrendFlow Logo" width={50} height={50} />
               {isMobile ? <TitleMobile /> : <TitleDesktop />}
-            </div>
+            </Box>
             
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexGrow: 1, justifyContent: 'center', maxWidth: { xs: '60%', sm: '70%', md: '50%' } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'center', maxWidth: { xs: '60%', sm: '70%', md: '50%' } }}>
               <SearchBar />
               <Tooltip title="Explore new ideas">
-                <Button
-                  variant="contained"
+                <IconButton
                   color="primary"
                   onClick={handleExplore}
                   sx={{
-                    minWidth: 'auto',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    p: 0,
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    color: 'white',
+                    ml: 1,
+                    bgcolor: 'rgba(255, 255, 255, 0.2)',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                      boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
+                      bgcolor: 'rgba(255, 255, 255, 0.3)',
                     },
                   }}
                 >
                   <span role="img" aria-label="sparkles">✨</span>
-                </Button>
+                </IconButton>
               </Tooltip>
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {!isMobile && (
+              {!isMobile ? (
                 <>
-                  {/* <LanAndCountrySelection loading={loading} /> */}
-                  <MenuForUser logOut={logOut} user={user} loading={loading} />
-                  <MenuToggleUser setAnchorElUser={setAnchorElUser} anchorElUser={anchorElUser} />
+                  <LanAndCountrySelection loading={loading} />
+                  <MenuForUser 
+                    loading={loading} 
+                    user={user} 
+                    anchorElUser={anchorElUser} 
+                    setAnchorElUser={setAnchorElUser}
+                  />
+                  <MenuToggleUser 
+                    setAnchorElUser={setAnchorElUser} 
+                    anchorElUser={anchorElUser} 
+                    logOut={logOut}
+                  />
                 </>
-              )}
-              {isMobile && (
+              ) : (
                 <>
                   <Tooltip title={user ? "Logout" : "Login"}>
                     <IconButton
@@ -118,7 +122,7 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
                 </>
               )}
             </Box>
-          </div>
+          </Box>
         </Container>
       </AppBar>
 
@@ -132,12 +136,17 @@ const Navbar = ({ logOut, user, loading, setFilterModal }) => {
         </MenuItem>
         {user && (
           <MenuItem onClick={handleCloseMoreMenu}>
-            <MenuForUser logOut={logOut} user={user} loading={loading} />
+            <MenuForUser 
+              loading={loading} 
+              user={user} 
+              anchorElUser={anchorElUser} 
+              setAnchorElUser={setAnchorElUser}
+            />
           </MenuItem>
         )}
       </Menu>
     </ThemeProvider>
   );
-}
+};
 
 export default Navbar;

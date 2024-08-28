@@ -1,10 +1,18 @@
-import React, { useState, useCallback } from 'react';
-import { Card, CardContent, CardActions, IconButton, Typography, Tooltip, Chip, Box, Fade } from '@mui/material';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Card, CardContent, CardActions, IconButton, Typography,
+  Tooltip, Box, Select, MenuItem, Button, Popover,
+  TextField, Divider, Fade, Zoom, Chip
+} from '@mui/material';
+import { styled, keyframes } from '@mui/system';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import SearchIcon from '@mui/icons-material/Search';
 import ShareIcon from '@mui/icons-material/Share';
-import { styled } from '@mui/system';
+import AddIcon from '@mui/icons-material/Add';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSpring, animated } from 'react-spring';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
 import { logos } from '../Utils/logos';
@@ -21,6 +29,12 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import axios from 'axios';
 import { endpoints } from '../../config/endpoints';
 import ShareModal from '../Common/ShareModal';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from 'firebase/auth';
+import { getUserWishlists, addItemToWishlist, createWishlist } from '../../services/firebase';
+import { app } from '../../services/firebase';
+import { toast } from 'sonner';
+import WishlistManager from '../User/Wishlist/WishlistManager';
 
 const theme = createTheme({
   typography: {
@@ -65,11 +79,23 @@ const theme = createTheme({
   },
 });
 
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(250, 57, 190, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(250, 57, 190, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(250, 57, 190, 0);
+  }
+`;
+
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  transition: 'all 0.3s ease-in-out',
   '&:hover': {
     transform: 'translateY(-5px)',
     boxShadow: '0 12px 20px rgba(0,0,0,0.1)',
@@ -146,7 +172,22 @@ const BrandLogoWrapper = styled(Box)({
   height: '20px',
 });
 
-const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurrentProduct }) => {
+const WishlistButton = styled(IconButton)(({ theme, inWishlist }) => ({
+  color: inWishlist ? '#FA39BE' : '#BDBDBD',
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    color: '#FA39BE',
+    animation: inWishlist ? `${pulse} 1s infinite` : 'none',
+  },
+}));
+
+const PopoverContent = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  width: 280,
+  borderRadius: 12,
+}));
+
+const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
@@ -156,15 +197,37 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const imageUrls = Array.isArray(productItem.img_url) ? productItem.img_url : [productItem.img_url];
+  const [wishlists, setWishlists] = useState([]);
+  const [selectedWishlist, setSelectedWishlist] = useState('');
+  const auth = getAuth(app);
+  const [userAuth] = useAuthState(auth);
+  const [newWishlistName, setNewWishlistName] = useState('');
+  const [isCreatingNewWishlist, setIsCreatingNewWishlist] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [wishlistAdded, setWishlistAdded] = useState(false);
+  const [wishlistManagerOpen, setWishlistManagerOpen] = useState(false);
 
-  const handleMouseEnter = () => {
-    if (imageUrls.length > 1) {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+  useEffect(() => {
+    if (userAuth) {
+      fetchWishlists();
+    }
+  }, [userAuth]);
+
+  const fetchWishlists = async () => {
+    if (userAuth) {
+      const userWishlists = await getUserWishlists(userAuth.uid);
+      setWishlists(userWishlists);
     }
   };
 
-  const handleMouseLeave = () => {
-    setCurrentImageIndex(0); // Reset to first image when mouse leaves
+  const handleWishlistClick = (event) => {
+    event.stopPropagation();
+    console.log("Opening WishlistManager with productItem:", productItem);
+    setWishlistManagerOpen(true);
+  };
+
+  const handleCloseWishlistManager = () => {
+    setWishlistManagerOpen(false);
   };
 
   const handleShowSingleCard = () => {
@@ -219,8 +282,23 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
     router.push(`/${router.query.zone}/${router.query.lan}/results/similar/${itemId}`);
   }, [router]);
 
+  const springProps = useSpring({
+    transform: wishlistAdded ? 'scale(1.2)' : 'scale(1)',
+    config: { tension: 300, friction: 10 },
+  });
+
   const shareUrl = `${window.location.origin}/${router.query.zone}/${router.query.lan}/results/explore/${productItem.name.split(' ').join('-')}%20${productItem.id_item}`;
   const shareTitle = `Check out this product: ${productItem.name}`;
+
+  const handleMouseEnter = () => {
+    if (imageUrls.length > 1) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setCurrentImageIndex(0);
+  };
 
   if (layoutType === 'image-only') {
     return (
@@ -316,16 +394,19 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
               }}
             >
               <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
-                <IconButton 
-                  onClick={handleAddWishlist} 
-                  disabled={loadingFav} 
-                  sx={{ 
-                    color: wishlist.includes(productItem.id_item) ? '#FA39BE' : '#BDBDBD',
-                    '&:hover': { color: '#FA39BE' }
-                  }}
+                <WishlistButton
+                  onClick={handleWishlistClick}
+                  disabled={loadingFav}
+                  inWishlist={wishlist.includes(productItem.id_item)}
+                  component={animated.button}
+                  style={springProps}
                 >
-                  <BookmarkIcon />
-                </IconButton>
+                  {wishlist.includes(productItem.id_item) ? (
+                    <FavoriteIcon />
+                  ) : (
+                    <BookmarkIcon />
+                  )}
+                </WishlistButton>
               </Tooltip>
               <Tooltip title={enhanceText(translations?.results?.visit_site)}>
                 <IconButton 
@@ -348,13 +429,18 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
   return (
     <ThemeProvider theme={theme}>
       <StyledCard
-        sx={isCurrentProduct ? {
-          border: '2px solid #FA39BE',
-          boxShadow: '0 4px 8px rgba(250, 57, 190, 0.2)',
-          '&:hover': {
-            boxShadow: '0 6px 12px rgba(250, 57, 190, 0.3)',
-          },
-        } : {}}
+        component={motion.div}
+        whileHover={{ scale: 1.03 }}
+        sx={{
+          position: 'relative',
+          ...(isCurrentProduct && {
+            border: '2px solid #FA39BE',
+            boxShadow: '0 4px 8px rgba(250, 57, 190, 0.2)',
+            '&:hover': {
+              boxShadow: '0 6px 12px rgba(250, 57, 190, 0.3)',
+            },
+          })
+        }}
       >
         <ImageWrapper
           onMouseEnter={handleMouseEnter}
@@ -421,38 +507,73 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
             </Box>
           </InfoOverlay>
         </ImageWrapper>
-        {layoutType === 'default' && (
-          <CardActions disableSpacing sx={{ marginTop: '4px', padding: '8px' }}>
+        <CardActions disableSpacing sx={{ justifyContent: 'space-between', padding: '8px' }}>
+          <Box>
             <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
-              <IconButton onClick={handleAddWishlist} disabled={loadingFav} size="small">
-                <BookmarkIcon color={wishlist.includes(productItem.id_item) ? "primary" : "action"} fontSize="small" />
+              <WishlistButton
+                onClick={handleWishlistClick}
+                disabled={loadingFav}
+                inWishlist={wishlist.includes(productItem.id_item)}
+                component={animated.button}
+                style={springProps}
+              >
+                {wishlist.includes(productItem.id_item) ? (
+                  <FavoriteIcon />
+                ) : (
+                  <BookmarkIcon />
+                )}
+              </WishlistButton>
+            </Tooltip>
+            <Tooltip title={enhanceText(translations?.results?.visit_site)}>
+              <IconButton onClick={handleVisitSite}>
+                <StorefrontIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+          <Box>
+            <Tooltip title={enhanceText(translations?.results?.search_similar)}>
+              <IconButton onClick={() => handleSearchSimilar(productItem.id_item)}>
+                <SearchIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title={enhanceText(translations?.results?.share)}>
-              <IconButton onClick={handleShare} size="small">
-                <ShareIcon fontSize="small" />
+              <IconButton onClick={handleShare}>
+                <ShareIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Search similar products">
-              <IconButton onClick={(e) => { e.preventDefault(); handleSearchSimilar(productItem.id_item); }} size="small">
-                <SearchIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={enhanceText(translations?.results?.visit_site)}>
-              <IconButton onClick={handleVisitSite} size="small">
-                <StorefrontIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </CardActions>
+          </Box>
+        </CardActions>
+        <Zoom in={wishlistAdded}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              zIndex: 1000,
+            }}
+          >
+            <Typography variant="body2">Added to Wishlist!</Typography>
+          </Box>
+        </Zoom>
+        {shareModalOpen && (
+          <ShareModal
+            open={shareModalOpen}
+            handleClose={() => setShareModalOpen(false)}
+            shareUrl={shareUrl}
+            title={shareTitle}
+          />
         )}
+        <WishlistManager
+          productItem={productItem}
+          open={wishlistManagerOpen}
+          onClose={handleCloseWishlistManager}
+        />
       </StyledCard>
-      <ShareModal
-        open={shareModalOpen}
-        onClose={() => setShareModalOpen(false)}
-        shareUrl={shareUrl}
-        shareTitle={shareTitle}
-        translations={translations}
-      />
     </ThemeProvider>
   );
 };
