@@ -1,7 +1,7 @@
 import React , {useState , useEffect, useRef} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
-import { analytics, app } from "../../../services/firebase";
+import { logAnalyticsEvent, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
 import { Box, Grid, CircularProgress, Fab, styled } from "@mui/material";
 import ResultCard from "../ResultCard";
@@ -13,7 +13,6 @@ import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
 import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
-import { logEvent } from "firebase/analytics";
 import Head from "next/head";
 import { handleAddTag } from "../../functions/handleAddTag";
 import { countFilters } from "../../functions/countFilters";
@@ -133,7 +132,7 @@ const Results = () => {
             if (filters.maxPrice === '' && filters.minPrice === '') {
                 setCurrentPriceRange([metadata?.min_price, metadata?.max_price]);
             }
-            logEvent(analytics, 'page_view', {
+            logAnalyticsEvent('page_view', {
                 page_title: 'results',
             });
             setProducts(fetchedProducts);

@@ -11,8 +11,7 @@ import { logos } from '../Utils/logos';
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { setWishlist } from '../../redux/features/actions/search';
 import { wishlistChange } from './functions/wishlistChange';
-import { logEvent } from 'firebase/analytics';
-import { analytics } from "../../services/firebase";
+import { logAnalyticsEvent } from "../../services/firebase";
 import { useRouter } from 'next/router';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import '@fontsource/poppins';
@@ -169,7 +168,7 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
 
   const handleShowSingleCard = () => {
     const withoutSlash = productItem.name.split('/').join('%2F');
-    logEvent(analytics, 'clickSingleCard', {
+    logAnalyticsEvent('clickSingleCard', {
       img_id: productItem.id_item
     });
     router.push(`/${router.query.zone}/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id_item}`);
@@ -188,7 +187,7 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
       }
       setLoadingFav(false);
     } else {
-      logEvent(analytics, 'clickAddToWishlist', {
+      logAnalyticsEvent('clickAddToWishlist', {
         img_id: productItem.id
       });
       // Show login prompt
@@ -200,7 +199,7 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
     if (!finalURI.includes('http://') && !finalURI.includes('https://')) {
       finalURI = `https://${finalURI}`;
     }
-    logEvent(analytics, 'select_content', {
+    logAnalyticsEvent('select_content', {
       content_type: 'product',
       content_id: finalURI
     });
@@ -213,7 +212,7 @@ const ResultCard = ({ productItem, reloadFlag, setReloadFlag, layoutType, isCurr
 
   const handleSearchSimilar = useCallback((itemId) => {
     console.log('handleSearchSimilar called with itemId:', itemId);
-    logEvent(analytics, 'search_similar', {
+    logAnalyticsEvent('search_similar', {
       item_id: itemId
     });
     router.push(`/${router.query.zone}/${router.query.lan}/results/similar/${itemId}`);
