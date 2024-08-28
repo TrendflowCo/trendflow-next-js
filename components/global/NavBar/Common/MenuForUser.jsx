@@ -1,21 +1,25 @@
 import { Box, CircularProgress, IconButton, Tooltip, Button } from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
-import { logEvent } from "firebase/analytics";
 import React from "react";
 import Image from 'next/image';
-import { analytics } from "../../../../services/firebase";
+import { logAnalyticsEvent } from "../../../../services/firebase";
 import { useAppDispatch , useAppSelector } from "../../../../redux/hooks";
 import { setLogInFlag } from "../../../../redux/features/actions/auth";
+import { logOut } from "../../../../components/Auth/authFunctions";
 
-const MenuForUser = ({loading , user , setAnchorElUser}) => {
+const MenuForUser = ({loading , user , anchorElUser, setAnchorElUser}) => {
     const dispatch = useAppDispatch();
     const { translations } = useAppSelector(state => state.region)
 
     const handleOpenUserMenu = (event) => { // open user menu
-        logEvent(analytics, 'clickOnUserMenu', {
+        logAnalyticsEvent('clickOnUserMenu', {
           button: 'Main'
         });
-        setAnchorElUser(event.currentTarget);
+        if (setAnchorElUser && typeof setAnchorElUser === 'function') {
+            setAnchorElUser(event.currentTarget);
+        } else {
+            console.warn('setAnchorElUser is not a function or not provided');
+        }
       };
     
     return (
@@ -36,7 +40,7 @@ const MenuForUser = ({loading , user , setAnchorElUser}) => {
                       <Image
                         referrerPolicy='no-referrer'
                         alt="avatar"
-                        src={user.photoURL || 'https://www.flaticon.com/free-icon/user_456212?term=user+avatar&page=1&position=1&origin=tag&related_id=456212'} 
+                        src={user.photoURL || 'https://example.com/path/to/default-icon.png'}
                         width={44} 
                         height={44} 
                         className='w-11 h-11 rounded-[22px]'

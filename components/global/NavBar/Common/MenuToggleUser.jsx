@@ -4,8 +4,7 @@ import { settings_account } from "../../../Utils/settingsAccount";
 import { enhanceText } from "../../../Utils/enhanceText";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useRouter } from "next/router";
-import { logEvent } from "firebase/analytics";
-import { analytics } from "../../../../services/firebase";
+import { logAnalyticsEvent } from "../../../../services/firebase";
 
 const MenuToggleUser = ({anchorElUser , setAnchorElUser , logOut }) => {
     const router = useRouter();
@@ -15,12 +14,12 @@ const MenuToggleUser = ({anchorElUser , setAnchorElUser , logOut }) => {
     };
     const handleMenuOption = (option) => { // options from user menu
         if (option === 'logout') {
-          logEvent(analytics, 'clickOnUserMenu', {
+          logAnalyticsEvent('clickOnUserMenu', {
             button: 'Logout'
           });  
           logOut()
         } else if (option === 'wishlist') {
-          logEvent(analytics, 'clickOnUserMenu', {
+          logAnalyticsEvent('clickOnUserMenu', {
             button: 'Wishlist'
           });  
           router.push(`/${country}/${language}/user/wishlist`)
