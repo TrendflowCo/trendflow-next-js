@@ -1,5 +1,5 @@
 import WishlistDetail from '../components/User/Wishlist/WishlistDetail';
-import Layout from '../layout';
+import Layout from '../components/Home/Layout';
 
 const WishlistDetailPage = () => {
   return (
