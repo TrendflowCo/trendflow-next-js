@@ -1,5 +1,5 @@
 import UserProfile from '../components/User/UserProfile';
-import Layout from '../components/Home/Layout';
+import Layout from '../components/Layout';
 
 const ProfilePage = () => {
   return (
