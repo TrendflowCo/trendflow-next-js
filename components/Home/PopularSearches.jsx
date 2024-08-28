@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useAppDispatch , useAppSelector } from "../../redux/hooks";
 import { setCurrentSearch } from "../../redux/features/actions/search";
-import { logEvent } from "firebase/analytics";
+import { logAnalyticsEvent } from "../../services/firebase";
 import { analytics } from "../../services/firebase";
 
 const PopularSearches = () => {
@@ -10,7 +10,7 @@ const PopularSearches = () => {
     const { translations , language , country } = useAppSelector(state => state.region);
     const dispatch = useAppDispatch();
     const handleQuickSearch = (val) => {
-        logEvent(analytics, 'clickOnPopularSearches', {
+        logAnalyticsEvent('clickOnPopularSearches', {
             search_term: val
         });      
         dispatch(setCurrentSearch(val))

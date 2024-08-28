@@ -1,8 +1,7 @@
-import { analytics } from "../../services/firebase";
-import { logEvent } from "firebase/analytics";
+import { logAnalyticsEvent } from "../../services/firebase";
 
 export const handleSearchQuery = (country, language, val, action, router) => {
-    logEvent(analytics, action, {
+    logAnalyticsEvent(action, {
         search_term: val
     });
     router.push(`/${country}/${language}/results?query=${encodeURIComponent(val)}`);
