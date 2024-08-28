@@ -1,9 +1,8 @@
-import { analytics } from "../../services/firebase";
-import { logEvent } from "firebase/analytics";
+import { logAnalyticsEvent } from "../../services/firebase";
 import { endpoints } from "../../config/endpoints";
 
 export const fetchSearchResults = async (country, language, query, event) => {
-    logEvent(analytics, event, {
+    logAnalyticsEvent(event, {
         search_term: query
     });
     const url = `${endpoints('results')}&query=${query}&limit=10`;
