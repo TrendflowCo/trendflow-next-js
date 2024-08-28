@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import ResultCard from './ResultCard';
 
-const ResultsGrid = ({ products, gridLayout }) => {
+const ResultsGrid = ({ products, gridLayout, currentProductId }) => {
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
+  const toggleDropdown = (id) => {
+    setOpenDropdownId(openDropdownId === id ? null : id);
+  };
+
   const getGridItemProps = () => {
     switch (gridLayout) {
       case 'compact':
@@ -30,7 +36,10 @@ const ResultsGrid = ({ products, gridLayout }) => {
         >
           <ResultCard 
             productItem={productItem} 
-            layoutType={gridLayout} 
+            layoutType={gridLayout}
+            toggleDropdown={toggleDropdown}
+            isDropdownOpen={openDropdownId === productItem.id_item}
+            isCurrentProduct={currentProductId === productItem.id_item}
           />
         </Grid>
       ))}
