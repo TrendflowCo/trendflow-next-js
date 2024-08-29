@@ -1,0 +1,132 @@
+.userProfile {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 80px auto 0;
+  background-color: #f8f9fa;
+}
+
+.profileTitle {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #FA39BE;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.emptyWishlistMessage {
+  font-size: 1.2rem;
+  color: #666;
+  text-align: center;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.wishlistGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.wishlistCard {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.wishlistCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.wishlistTitle {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.wishlistImages {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.wishlistImageContainer {
+  position: relative;
+  padding-bottom: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.wishlistImage {
+  transition: transform 0.3s ease-in-out;
+}
+
+.wishlistImage:hover {
+  transform: scale(1.05);
+}
+
+.wishlistImageOverlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(250, 57, 190, 0.8);
+  color: white;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-top-left-radius: 8px;
+}
+
+.wishlistItemCount {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.viewWishlistButton {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #FA39BE, #FE9D2B);
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.viewWishlistButton:hover {
+  background: linear-gradient(45deg, #FE9D2B, #FA39BE);
+  transform: scale(1.05);
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .wishlistGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
