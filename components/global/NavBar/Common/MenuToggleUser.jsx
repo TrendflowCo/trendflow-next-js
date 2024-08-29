@@ -5,53 +5,28 @@ import { enhanceText } from "../../../Utils/enhanceText";
 import { useAppSelector } from "../../../../redux/hooks";
 import { useRouter } from "next/router";
 import { logAnalyticsEvent } from "../../../../services/firebase";
+import Link from 'next/link';
 
-const MenuToggleUser = ({anchorElUser , setAnchorElUser , logOut }) => {
-    const router = useRouter();
-    const { translations , language , country } = useAppSelector(state => state.region)
-    const handleCloseUserMenu = () => { // close user menu
-        setAnchorElUser(null);
-    };
-    const handleMenuOption = (option) => { // options from user menu
-        if (option === 'logout') {
-          logAnalyticsEvent('clickOnUserMenu', {
-            button: 'Logout'
-          });  
-          logOut()
-        } else if (option === 'wishlist') {
-          logAnalyticsEvent('clickOnUserMenu', {
-            button: 'Wishlist'
-          });  
-          router.push(`/${country}/${language}/user/wishlist`)
-        }
-        handleCloseUserMenu()
-    };
-    
+const MenuToggleUser = ({ setAnchorElUser, anchorElUser, logOut }) => {
     return (
         <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
             anchorEl={anchorElUser}
-            anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-            }}
             open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
+            onClose={() => setAnchorElUser(null)}
         >
-            {settings_account.map((setting) => (
-            <MenuItem key={setting} onClick={() => handleMenuOption(setting)}>
-                <Typography textAlign="center">{translations?.userMenu?.[setting] && enhanceText(translations?.userMenu?.[setting])}</Typography>
+            <MenuItem>
+                <Link href="/profilePage">
+                    Profile
+                </Link>
             </MenuItem>
-            ))}
+            <MenuItem>
+                <Link href="/profilePage">
+                    Wishlist
+                </Link>
+            </MenuItem>
+            <MenuItem onClick={logOut}>Logout</MenuItem>
         </Menu>
-
-    )
+    );
 };
 
 export default MenuToggleUser;

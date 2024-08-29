@@ -1,30 +1,47 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported, logEvent } from "firebase/analytics";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore, collection, doc, addDoc, updateDoc, getDocs, query, where, arrayUnion, getDoc, serverTimestamp } from "firebase/firestore";
-
-// const firebaseConfig = {
-//   apiKey: process.env.NEXT_PUBLIC_API_KEY,
-//   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
-//   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-//   storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
-//   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
-//   appId: process.env.NEXT_PUBLIC_APP_ID,
-//   measurementId: process.env.NEXT_PUBLIC_MESAUREMENT_ID,
-// };
+import { initializeApp, getApps } from "firebase/app";
+import { 
+  getFirestore, 
+  initializeFirestore, 
+  collection, 
+  query, 
+  where, 
+  getDocs,
+  getDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  arrayUnion
+} from "firebase/firestore";
+import { logEvent, getAnalytics, isSupported } from "firebase/analytics";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import { setLogLevel as setFirestoreLogLevel } from "firebase/firestore";
+setFirestoreLogLevel('debug');
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD9lXuyCBrNt-ypOEvLRirxGFD7QddJzLk",
-  authDomain: "trendflow-429722.firebaseapp.com",
-  projectId: "trendflow-429722",
-  storageBucket: "trendflow-429722.appspot.com",
-  messagingSenderId: "908136706043",
-  appId: "1:908136706043:web:7df3f49807b29ccc5de55e",
-  measurementId: "G-0BQ974LN5F"
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_MESAUREMENT_ID,
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+let app;
+let db;
+
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+  db = initializeFirestore(app, {});
+} else {
+  app = getApps()[0];
+  db = getFirestore(app);
+}
+
+export { app, db };
 
 let analyticsInstance = null;
 
@@ -65,14 +82,18 @@ export const signInWithGoogle = async () => {
   }
 };
 
-export const db = getFirestore(app);
+
+// // Enable offline persistence
+// enableIndexedDbPersistence(db).catch((err) => {
+//     if (err.code == 'failed-precondition') {
+//         console.warn('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
+//     } else if (err.code == 'unimplemented') {
+//         console.warn('The current browser does not support all of the features required to enable persistence');
+//     }
+// });
 
 export const createWishlist = async (userId, name) => {
   try {
-    if (!(await checkOnlineStatus())) {
-      throw new Error("No internet connection");
-    }
-    console.log("Creating wishlist for user:", userId, "with name:", name);
     const wishlistRef = collection(db, "wishlists");
     const newWishlist = await addDoc(wishlistRef, {
       userId,
@@ -83,36 +104,19 @@ export const createWishlist = async (userId, name) => {
     console.log("Wishlist created with ID:", newWishlist.id);
     return newWishlist.id;
   } catch (error) {
-    console.error("Error creating wishlist:", error);
-    if (error.code) {
-      console.error("Error code:", error.code);
-    }
-    if (error.message) {
-      console.error("Error message:", error.message);
-    }
+    console.error("Error in createWishlist function:", error);
     throw error;
   }
 };
 
 export const addItemToWishlist = async (wishlistId, item) => {
   try {
-    console.log("Adding item to wishlist. WishlistID:", wishlistId, "Item:", item);
-    if (!item || !item.id_item) {
-      throw new Error("Invalid item: missing id_item");
-    }
     const wishlistRef = doc(db, "wishlists", wishlistId);
-    
-    // First, let's check if the wishlist document exists
-    const wishlistDoc = await getDoc(wishlistRef);
-    if (!wishlistDoc.exists()) {
-      throw new Error("Wishlist document does not exist");
-    }
-    
-    console.log("Wishlist document found. Updating...");
     await updateDoc(wishlistRef, {
       items: arrayUnion(item)
     });
-    console.log("Item successfully added to wishlist");
+    console.log("Item added to wishlist:", wishlistId);
+    return true;
   } catch (error) {
     console.error("Error adding item to wishlist:", error);
     throw error;
@@ -121,12 +125,27 @@ export const addItemToWishlist = async (wishlistId, item) => {
 
 export const getUserWishlists = async (userId) => {
   try {
-    const wishlistRef = collection(db, "wishlists");
-    const q = query(wishlistRef, where("userId", "==", userId));
+    const wishlistsRef = collection(db, "wishlists");
+    const q = query(wishlistsRef, where("userId", "==", userId));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error("Error getting user wishlists:", error);
+    throw error;
+  }
+};
+
+export const getWishlistDetails = async (wishlistId) => {
+  try {
+    const wishlistRef = doc(db, "wishlists", wishlistId);
+    const wishlistDoc = await getDoc(wishlistRef);
+    if (wishlistDoc.exists()) {
+      return { id: wishlistDoc.id, ...wishlistDoc.data() };
+    } else {
+      throw new Error("Wishlist not found");
+    }
+  } catch (error) {
+    console.error("Error getting wishlist details:", error);
     throw error;
   }
 };
@@ -148,8 +167,18 @@ export const getWishlistItems = async (wishlistId) => {
 };
 
 const checkOnlineStatus = async () => {
+  if (typeof window === 'undefined') {
+    // Server-side: assume online
+    return true;
+  }
+  
+  if (!navigator.onLine) return false;
+  
   try {
-    const online = await fetch("/favicon.ico");
+    const online = await fetch("/favicon.ico", {
+      method: "HEAD",
+      cache: "no-cache"
+    });
     return online.status >= 200 && online.status < 300;
   } catch (err) {
     return false;
