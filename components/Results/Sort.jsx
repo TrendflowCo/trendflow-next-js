@@ -6,8 +6,7 @@ import { enhanceText } from "../Utils/enhanceText";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useRouter } from "next/router";
-import { logEvent } from "firebase/analytics";
-import { analytics } from "../../services/firebase";
+import { logAnalyticsEvent } from "../../services/firebase";
 
 const Sort = ( props ) => {
     const router = useRouter();
@@ -42,7 +41,7 @@ const Sort = ( props ) => {
             undefined, 
             { shallow: true }
         );
-        logEvent(analytics, 'FilterAndSorting', {
+        logAnalyticsEvent('FilterAndSorting', {
             action: 'Delete_sorting'
         });        
         setSelectedSort('');
@@ -56,7 +55,7 @@ const Sort = ( props ) => {
     };
     const handleApplySorting = () => {
         if(selectedSort !== '') {
-            logEvent(analytics, 'FilterAndSorting', {
+            logAnalyticsEvent('FilterAndSorting', {
                 action: 'Apply_sorting'
             });        
             let newQuery = {...router.query};
