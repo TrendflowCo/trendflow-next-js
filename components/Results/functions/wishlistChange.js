@@ -1,10 +1,9 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, where } from "firebase/firestore";
-import { analytics, app } from "../../../services/firebase";
-import { logEvent } from "firebase/analytics";
+import { logAnalyticsEvent } from "../../../services/firebase";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { swalNoInputs } from "../../Utils/swalConfig";
-
+import { app } from "../../../services/firebase";
 
 const db = getFirestore(app);
 
@@ -16,14 +15,14 @@ export const wishlistChange = async (id , user , wishlist) => {
             img_id: id,
           })
           // log add to wishlist
-          logEvent(analytics, 'clickAddToWishlist', {
+          logAnalyticsEvent('clickAddToWishlist', {
             img_id: id
           });
           toast.success('Added item to wishlist');
           return 'added'
         } else { // delete if it exists
           // log remove from wishlist
-          logEvent(analytics, 'clickRemoveFromWishlist', {
+          logAnalyticsEvent('clickRemoveFromWishlist', {
             img_id: id
           });
           const q = query(collection(db, "wishlist"), where("img_id", "==", id)); // bring the query with the one with this img_id
