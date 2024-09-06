@@ -1,0 +1,103 @@
+.collaborationModal {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .collaborationModal :global(.MuiDialog-paper) {
+    border-radius: 16px;
+    padding: 24px;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
+  }
+  
+  .collaborationModal :global(.MuiDialogTitle-root) {
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+  
+  .collaborationModal :global(.MuiDialogContent-root) {
+    padding: 0 24px;
+  }
+  
+  .emailInput {
+    margin-bottom: 16px;
+  }
+  
+  .emailInput :global(.MuiOutlinedInput-root) {
+    border-radius: 8px;
+  }
+  
+  .emailInput :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: #FA39BE;
+  }
+  
+  .emailInput:hover :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: #E6008C;
+  }
+  
+  .emailInput :global(.Mui-focused .MuiOutlinedInput-notchedOutline) {
+    border-color: #E6008C;
+  }
+  
+  .inviteButton {
+    background: linear-gradient(to right, #FA39BE, #FE9D2B);
+    color: white;
+    font-weight: bold;
+    text-transform: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .inviteButton:hover {
+    background: linear-gradient(to right, #E6008C, #E68A00);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .privateMessage {
+    color: #666;
+    text-align: center;
+    font-style: italic;
+    margin: 16px 0;
+  }
+  
+  .collaborationModal :global(.MuiDialogActions-root) {
+    padding: 16px 24px;
+    justify-content: center;
+  }
+  
+  .collaborationModal :global(.MuiButton-root) {
+    text-transform: none;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 8px 16px;
+  }
+  
+  .collaborationModal :global(.MuiButton-textPrimary) {
+    color: #FA39BE;
+  }
+  
+  .collaborationModal :global(.MuiButton-textPrimary:hover) {
+    background-color: rgba(250, 57, 190, 0.1);
+  }
+  
+  @media (max-width: 600px) {
+    .collaborationModal :global(.MuiDialog-paper) {
+      margin: 16px;
+      width: calc(100% - 32px);
+    }
+  
+    .collaborationModal :global(.MuiDialogTitle-root) {
+      font-size: 1.2rem;
+    }
+  
+    .collaborationModal :global(.MuiDialogContent-root) {
+      padding: 0 16px;
+    }
+  
+    .collaborationModal :global(.MuiDialogActions-root) {
+      padding: 16px;
+    }
+  }

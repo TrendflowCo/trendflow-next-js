@@ -10,6 +10,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: '**.com.hk',
+      },
+      {
+        protocol: 'https',
         hostname: '**.org',
       },
       {
@@ -23,6 +27,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '**.co.uk',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.es',
       }
       // Add more patterns as needed
     ],
