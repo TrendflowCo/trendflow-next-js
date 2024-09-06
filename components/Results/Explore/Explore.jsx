@@ -9,8 +9,6 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import { logEvent } from "firebase/analytics";
-import { analytics } from "../../../services/firebase";
 import { wishlistChange } from "./../functions/wishlistChange";
 import { setWishlist, setPreviousResults } from "../../../redux/features/actions/search";
 import Swal from 'sweetalert2';
@@ -44,6 +42,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import Link from 'next/link';
 import ShareModal from '../../Common/ShareModal';
+import { logAnalyticsEvent } from "../../../services/firebase";
 
 const Explore = () => {
     const router = useRouter();
@@ -117,14 +116,14 @@ const Explore = () => {
         }
       };
     const handleVisitSite = () => {
-        logEvent(analytics, 'select_content', {
+        logAnalyticsEvent('select_content', {
           content_type: 'product',
           content_id: currentProduct.shop_link
         });
         window.open(currentProduct.shop_link, '_blank');
     };
     const handleCopyToClipboard = () => {
-        logEvent(analytics, 'select_content', {
+        logAnalyticsEvent('select_content', {
             content_type: 'copy_to_clipboard',
             content_id: currentProduct.shop_link
         });
@@ -184,8 +183,8 @@ const Explore = () => {
                                 </nav>
                                 <div className="flex flex-col lg:flex-row">
                                     <div className="lg:w-1/2 lg:pr-8">
-                                        {console.log('Product images:', currentProduct.img_url)}
-                                        <ProductImageGallery images={currentProduct.img_url} />
+                                        {console.log('Product images:', currentProduct.img_urls)}
+                                        <ProductImageGallery images={currentProduct.img_urls} />
                                     </div>
                                     <div className="lg:w-1/2 lg:pl-8 mt-8 lg:mt-0">
                                         <h1 className="text-3xl font-bold mb-4">{enhanceText(currentProduct?.name)}</h1>

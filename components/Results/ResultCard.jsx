@@ -17,8 +17,6 @@ import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
 import { logos } from '../Utils/logos';
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
-import { setWishlist } from '../../redux/features/actions/search';
-import { wishlistChange } from './functions/wishlistChange';
 import { logAnalyticsEvent } from "../../services/firebase";
 import { useRouter } from 'next/router';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -30,7 +28,7 @@ import { endpoints } from '../../config/endpoints';
 import ShareModal from '../Common/ShareModal';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
-import { getUserWishlists, addItemToWishlist, createWishlist } from '../../services/firebase';
+import { getUserWishlists } from '../../services/firebase';
 import { app } from '../../services/firebase';
 import { toast } from 'sonner';
 import WishlistManager from '../User/Wishlist/WishlistManager';
@@ -195,7 +193,7 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
   const [loadingFav, setLoadingFav] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const imageUrls = Array.isArray(productItem.img_url) ? productItem.img_url : [productItem.img_url];
+  const imageUrls = Array.isArray(productItem.img_urls) ? productItem.img_urls : [productItem.img_urls];
   const [wishlists, setWishlists] = useState([]);
   const [selectedWishlist, setSelectedWishlist] = useState('');
   const auth = getAuth(app);
@@ -221,8 +219,13 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
 
   const handleWishlistClick = (event) => {
     event.stopPropagation();
-    console.log("Opening WishlistManager with productItem:", productItem);
-    setWishlistManagerOpen(true);
+    if (user && Object.keys(user).length > 0) {
+      console.log("Opening WishlistManager with productItem:", productItem);
+      setWishlistManagerOpen(true);
+      console.log('user', user);
+    } else {
+      toast.error("Please log in to add items to your wishlist");
+    }
   };
 
   const handleCloseWishlistManager = () => {
@@ -237,25 +240,7 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
     router.push(`/${router.query.zone}/${router.query.lan}/results/explore/${withoutSlash.split(' ').join('-')}%20${productItem.id_item}`);
   };
 
-  const handleAddWishlist = async (event) => {
-    event.stopPropagation();
-    if (user) {
-      setLoadingFav(true);
-      const response = await wishlistChange(productItem.id_item, user, wishlist);
-      if (response === 'added' || response === 'deleted') {
-        const newWishlist = response === 'added'
-          ? [...wishlist, productItem.id_item]
-          : wishlist.filter(item => item !== productItem.id_item);
-        dispatch(setWishlist(newWishlist));
-      }
-      setLoadingFav(false);
-    } else {
-      logAnalyticsEvent('clickAddToWishlist', {
-        img_id: productItem.id
-      });
-      // Show login prompt
-    }
-  };
+  
 
   const handleVisitSite = () => {
     let finalURI = productItem.shop_link;
@@ -500,7 +485,8 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
               />
               <Typography variant="body2" fontWeight="bold">
                 {productItem.price !== 0 
-                  ? `${productItem.currency} ${productItem.price}`
+                  // ? `${productItem.currency} ${productItem.price}`
+                  ? `€ ${productItem.price}`
                   : enhanceText(translations?.results?.no_price)}
               </Typography>
             </Box>
