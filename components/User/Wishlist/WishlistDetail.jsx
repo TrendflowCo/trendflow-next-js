@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getWishlistDetails } from '../../../services/firebase';
 import ResultCard from '../../Results/ResultCard';
+import WishlistInsights from './WishlistInsights';
+import styles from './WishlistDetail.module.css';
 
 const WishlistDetail = () => {
   const [wishlist, setWishlist] = useState(null);
