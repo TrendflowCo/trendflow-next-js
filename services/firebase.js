@@ -166,6 +166,70 @@ export const getWishlistItems = async (wishlistId) => {
   }
 };
 
+export const shareWishlist = async (wishlistId, email, isPublic) => {
+  try {
+    const wishlistRef = doc(db, "wishlists", wishlistId);
+    const wishlistDoc = await getDoc(wishlistRef);
+
+    if (!wishlistDoc.exists()) {
+      throw new Error("Wishlist not found");
+    }
+
+    const wishlistData = wishlistDoc.data();
+    let sharedWith = wishlistData.sharedWith || [];
+
+    if (!sharedWith.includes(email)) {
+      sharedWith.push(email);
+    }
+
+    await updateDoc(wishlistRef, {
+      sharedWith,
+      isPublic: isPublic
+    });
+
+    // Send email invitation (you'll need to implement this separately)
+    // await sendEmailInvitation(email, wishlistId);
+
+    console.log("Wishlist shared successfully");
+    return true;
+  } catch (error) {
+    console.error("Error sharing wishlist:", error);
+    throw error;
+  }
+};
+
+const checkOnlineStatus = async () => {
+  try {
+    const wishlistRef = doc(db, "wishlists", wishlistId);
+    const wishlistDoc = await getDoc(wishlistRef);
+
+    if (!wishlistDoc.exists()) {
+      throw new Error("Wishlist not found");
+    }
+
+    const wishlistData = wishlistDoc.data();
+    let sharedWith = wishlistData.sharedWith || [];
+
+    if (!sharedWith.includes(email)) {
+      sharedWith.push(email);
+    }
+
+    await updateDoc(wishlistRef, {
+      sharedWith,
+      isPublic: isPublic
+    });
+
+    // Send email invitation (you'll need to implement this separately)
+    // await sendEmailInvitation(email, wishlistId);
+
+    console.log("Wishlist shared successfully");
+    return true;
+  } catch (error) {
+    console.error("Error sharing wishlist:", error);
+    throw error;
+  }
+};
+
 const checkOnlineStatus = async () => {
   if (typeof window === 'undefined') {
     // Server-side: assume online
@@ -214,3 +278,42 @@ testFirestoreConnection().then(isConnected => {
     console.error("Failed to connect to Firestore");
   }
 });
+
+export const updateWishlistPrivacy = async (wishlistId, isPublic) => {
+  try {
+    const wishlistRef = doc(db, "wishlists", wishlistId);
+    await updateDoc(wishlistRef, { isPublic });
+    return { id: wishlistId, isPublic };
+  } catch (error) {
+    console.error("Error updating wishlist privacy:", error);
+    throw error;
+  }
+};
+
+export const inviteCollaborator = async (wishlistId, collaboratorEmail) => {
+  try {
+    const wishlistRef = doc(db, "wishlists", wishlistId);
+    const wishlistDoc = await getDoc(wishlistRef);
+
+    if (!wishlistDoc.exists()) {
+      throw new Error("Wishlist not found");
+    }
+
+    const wishlistData = wishlistDoc.data();
+    let collaborators = wishlistData.collaborators || [];
+
+    if (!collaborators.includes(collaboratorEmail)) {
+      collaborators.push(collaboratorEmail);
+      await updateDoc(wishlistRef, { collaborators });
+    }
+
+    // Send email invitation (you'll need to implement this separately)
+    // await sendEmailInvitation(collaboratorEmail, wishlistId);
+
+    console.log("Collaborator invited successfully");
+    return true;
+  } catch (error) {
+    console.error("Error inviting collaborator:", error);
+    throw error;
+  }
+};

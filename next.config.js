@@ -34,6 +34,11 @@ const nextConfig = {
       }
       // Add more patterns as needed
     ],
+    domains: [
+      // ... other existing domains
+      'www.pacificplace.com.hk',
+      'torrado.es', // Add this new domain
+    ],
   }
 };
 

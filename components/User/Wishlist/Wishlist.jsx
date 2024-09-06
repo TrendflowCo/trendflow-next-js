@@ -1,110 +1,85 @@
-import React , { useEffect , useState } from "react";
-import { app } from "../../../services/firebase";
-import { endpoints } from "../../../config/endpoints";
-import { getAuth } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
-import axios from "axios";
-import { useAppDispatch , useAppSelector } from "../../../redux/hooks";
-import { setWishlist } from "../../../redux/features/actions/search";
-import ResultCard from "../../Results/ResultCard";
-import { useRouter } from "next/router";
-import { Box, Grid, Pagination, ThemeProvider } from "@mui/material";
-import { muiColors } from "../../Utils/muiTheme";
-import { enhanceText } from "../../Utils/enhanceText";
-import GlobalLoader from "../../Common/Loaders/GlobalLoader";
-  
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '../../../services/firebase';
+import axios from 'axios';
+
 const Wishlist = () => {
-    const dispatch = useAppDispatch();
-    const { translations } = useAppSelector(state => state.region);
-    const db = getFirestore(app);
-    const auth = getAuth(app); // instance of auth method
-    const [user, loading] = useAuthState(auth); // user data
-    const [loadingFlag , setLoadingFlag] = useState(false);
-    const [products , setProducts] = useState([]);
-    const [lastPage , setLastPage] = useState(0);
-    const [currentPage , setCurrentPage] = useState(1);
-    const router = useRouter();
+	const [wishlist, setWishlist] = useState(null);
+	const [items, setItems] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const router = useRouter();
+	const { id } = router.query;
 
-    useEffect(() => { // ejemplo basico para traerme los IDs de los items que tengo en mi wishlist - solo lo id
-        const fetchData = async () => {
-            if (user) {
-                try {
-                    setLoadingFlag(true);
-                    const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
-                    const querySnapshot = await getDocs(q);
-                    const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-                    const items = newData.map(item => item["img_id"]);
-                    dispatch(setWishlist(items)); // set to global state
-                    const completeString = items.join(',');
-                    const wishlistProducts = await axios.get(`${endpoints('byIds')}${completeString}`);
-                    setProducts(wishlistProducts.data.results);
-                    setLastPage(wishlistProducts.data.total_pages);
-                    setLoadingFlag(false);
-                } catch (err) {
-                    console.error(err);
-                    setLoadingFlag(false);
-                }
-            }
-        };
-    fetchData();
-    },[router.query.lan , currentPage , user]); // eslint-disable-line
-    useEffect(() => { // funcion solo para remover favoritos de la wishlist - sin loader general
-        const fetchData = async () => {
-            if (user) {
-                try {
-                    const q = queryfb(collection(db, "wishlist"), where("uid", "==", user.uid));
-                    const querySnapshot = await getDocs(q);
-                    const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-                    const items = newData.map(item => item["img_id"]);
-                    dispatch(setWishlist(items)); // set to global state
-                    const completeString = items.join(',');
-                    const wishlistProducts = await axios.get(`${endpoints('byIds')}${completeString}`);
-                    setProducts(wishlistProducts.data.results);
-                } catch (err) {
-                    console.error(err);
-                    setLoadingFlag(false);
-                }
-            }
-        };
-    fetchData();
-    },[]); // eslint-disable-line
+	useEffect(() => {
+		if (id) {
+			fetchWishlist();
+		}
+	}, [id]);
 
-    const handleChangePage = (event, newPage) => {
-        setCurrentPage(newPage);
-    };
+	const fetchWishlist = async () => {
+		try {
+			const wishlistRef = doc(db, 'wishlists', id);
+			const wishlistDoc = await getDoc(wishlistRef);
+			if (wishlistDoc.exists()) {
+				setWishlist({ id: wishlistDoc.id, ...wishlistDoc.data() });
+				fetchItemDetails(wishlistDoc.data().items);
+			} else {
+				setError('Wishlist not found');
+			}
+		} catch (err) {
+			console.error('Error fetching wishlist:', err);
+			setError('Failed to fetch wishlist');
+		} finally {
+			setLoading(false);
+		}
+	};
 
-    return (
-        <> 
-            { loadingFlag ? 
-                <GlobalLoader/>
-            : 
-                <Box sx={{ display: 'flex' , width: '100%' , height: '100%', flexDirection: 'column' , py: '24px' }}>
-                    <div className='flex flex-col lg:flex-row lg:justify-between mt-25'>
-                        <div className='mx-5'>
-                            <h6 className='text-black text-4xl leading-10 font-semibold'>{translations?.wishlist?.title && enhanceText(translations?.wishlist?.title)}</h6>
-                        </div>
-                    </div>
-                    <section>
-                        <Grid container spacing={2} sx={{padding: 2}}>
-                            {products.length > 0 && products.map((productItem,productIndex) => {return (
-                                <Grid key={productIndex} item xs={12} sm={6} md={4} lg={3} xl={2.4}>
-                                    <ResultCard productItem={productItem}/>
-                                </Grid>
-                            )})}
-                        </Grid>
-                    </section>
-                    { products.length > 0 && 
-                        <div className="flex flex-col w-full items-center py-4">
-                            <ThemeProvider theme={muiColors}>
-                                <Pagination page={currentPage} count={lastPage} onChange={handleChangePage} color="trendflowOrange" />
-                            </ThemeProvider>
-                        </div>
-                    }
-                </Box>
-            }
-        </>
-    )
+	const fetchItemDetails = async (wishlistItems) => {
+		if (!wishlistItems || wishlistItems.length === 0) {
+			setItems([]);
+			return;
+		}
+
+		const itemIds = wishlistItems.map(item => item.id_item).filter(Boolean).join(',');
+		if (!itemIds) {
+			setItems([]);
+			return;
+		}
+
+		try {
+			const response = await axios.get(`https://fashion-clip-search-owkpe6u3xa-uc.a.run.app/api/search?ids=${itemIds}`);
+			setItems(response.data);
+		} catch (error) {
+			console.error("Error fetching item details:", error);
+			setError("Failed to fetch item details");
+		}
+	};
+
+	if (loading) return <div>Loading...</div>;
+	if (error) return <div>Error: {error}</div>;
+	if (!wishlist) return <div>Wishlist not found</div>;
+
+	return (
+		<div>
+			<h1>{wishlist.name}</h1>
+			{items.length === 0 ? (
+				<p>This wishlist is empty.</p>
+			) : (
+				<div>
+					{items.map((item) => (
+						<div key={item.id}>
+							<h3>{item.name}</h3>
+							<p>Brand: {item.brand}</p>
+							<p>Price: {item.price} {item.currency}</p>
+							{item.image && <img src={item.image} alt={item.name} style={{maxWidth: '200px'}} />}
+						</div>
+					))}
+				</div>
+			)}
+		</div>
+	);
 };
 
 export default Wishlist;

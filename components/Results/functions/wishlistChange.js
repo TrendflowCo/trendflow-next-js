@@ -48,4 +48,10 @@ export const wishlistChange = async (id , user , wishlist) => {
         console.error(err);
         return false
       }
-}
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error('Failed to update wishlist');
+    return false;
+  }
+};
