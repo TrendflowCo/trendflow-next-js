@@ -198,37 +198,37 @@ export const shareWishlist = async (wishlistId, email, isPublic) => {
   }
 };
 
-const checkOnlineStatus = async () => {
-  try {
-    const wishlistRef = doc(db, "wishlists", wishlistId);
-    const wishlistDoc = await getDoc(wishlistRef);
+// const checkOnlineStatus = async () => {
+//   try {
+//     const wishlistRef = doc(db, "wishlists", wishlistId);
+//     const wishlistDoc = await getDoc(wishlistRef);
 
-    if (!wishlistDoc.exists()) {
-      throw new Error("Wishlist not found");
-    }
+//     if (!wishlistDoc.exists()) {
+//       throw new Error("Wishlist not found");
+//     }
 
-    const wishlistData = wishlistDoc.data();
-    let sharedWith = wishlistData.sharedWith || [];
+//     const wishlistData = wishlistDoc.data();
+//     let sharedWith = wishlistData.sharedWith || [];
 
-    if (!sharedWith.includes(email)) {
-      sharedWith.push(email);
-    }
+//     if (!sharedWith.includes(email)) {
+//       sharedWith.push(email);
+//     }
 
-    await updateDoc(wishlistRef, {
-      sharedWith,
-      isPublic: isPublic
-    });
+//     await updateDoc(wishlistRef, {
+//       sharedWith,
+//       isPublic: isPublic
+//     });
 
-    // Send email invitation (you'll need to implement this separately)
-    // await sendEmailInvitation(email, wishlistId);
+//     // Send email invitation (you'll need to implement this separately)
+//     // await sendEmailInvitation(email, wishlistId);
 
-    console.log("Wishlist shared successfully");
-    return true;
-  } catch (error) {
-    console.error("Error sharing wishlist:", error);
-    throw error;
-  }
-};
+//     console.log("Wishlist shared successfully");
+//     return true;
+//   } catch (error) {
+//     console.error("Error sharing wishlist:", error);
+//     throw error;
+//   }
+// };
 
 const checkOnlineStatus = async () => {
   if (typeof window === 'undefined') {

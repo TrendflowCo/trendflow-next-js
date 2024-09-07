@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../services/firebase';
 import axios from 'axios';
+import Image from 'next/image';
 
 const Wishlist = () => {
 	const [wishlist, setWishlist] = useState(null);
@@ -12,13 +13,7 @@ const Wishlist = () => {
 	const router = useRouter();
 	const { id } = router.query;
 
-	useEffect(() => {
-		if (id) {
-			fetchWishlist();
-		}
-	}, [id]);
-
-	const fetchWishlist = async () => {
+	const fetchWishlist = useCallback(async () => {
 		try {
 			const wishlistRef = doc(db, 'wishlists', id);
 			const wishlistDoc = await getDoc(wishlistRef);
@@ -34,7 +29,13 @@ const Wishlist = () => {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [id]);
+
+	useEffect(() => {
+		if (id) {
+			fetchWishlist();
+		}
+	}, [id, fetchWishlist]);
 
 	const fetchItemDetails = async (wishlistItems) => {
 		if (!wishlistItems || wishlistItems.length === 0) {
@@ -73,7 +74,15 @@ const Wishlist = () => {
 							<h3>{item.name}</h3>
 							<p>Brand: {item.brand}</p>
 							<p>Price: {item.price} {item.currency}</p>
-							{item.image && <img src={item.image} alt={item.name} style={{maxWidth: '200px'}} />}
+							{item.image && (
+								<Image
+									src={item.image}
+									alt={item.name}
+									width={200}
+									height={200}
+									objectFit="contain"
+								/>
+							)}
 						</div>
 					))}
 				</div>
