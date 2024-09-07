@@ -1,4 +1,4 @@
-import React , {useState , useEffect, useRef} from "react";
+import React , {useState , useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { logAnalyticsEvent, app } from "../../../services/firebase";
@@ -89,7 +89,7 @@ const Results = () => {
         setDimensions({width: window.innerWidth});
         window.addEventListener("resize", handleResize, false);
     },[])
-    const fetchDataToAPI = async (filters, sortings, page = 1, limit = 20) => {
+    const fetchDataToAPI = useCallback(async (filters, sortings, page = 1, limit = 20) => {
         try {
             setFailedSearch(false);
             setLoadingFlag(true);
@@ -142,7 +142,7 @@ const Results = () => {
             setLoadingFlag(false);
             setFailedSearch(true);
         }
-    };
+    }, []);
     useEffect(() => {
       if (router.isReady) {
         const { lan, zone } = router.query;
@@ -200,7 +200,7 @@ const Results = () => {
                 setTagSectionVisible(true); // Reset tag section visibility when the query changes
             }
         }
-    }, [router.query.query, router.isReady]);
+    }, [router.query, router.isReady]);
 
     useEffect(() => { // Reset selected tags when the query changes
         if (router.isReady) {
@@ -209,7 +209,7 @@ const Results = () => {
                 setSelectedTags([]); // Reset selected tags when the query changes
             }
         }
-    }, [router.query.query, router.isReady]); // Add other dependencies as needed
+    }, [router.query, router.isReady]); // Add other dependencies as needed
 
     useEffect(() => { // Reset currentPage when the query changes
         if (router.isReady) {
@@ -218,7 +218,7 @@ const Results = () => {
                 setCurrentPage(1); // Reset currentPage when the query changes
             }
         }
-    }, [router.query.query, router.isReady]); // Add other dependencies as needed
+    }, [router.query, router.isReady]); // Add other dependencies as needed
 
     useEffect(() => { // wishlist search
         const fetchData = async () => {

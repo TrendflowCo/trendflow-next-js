@@ -199,7 +199,8 @@ const Filter = (props) => {
     setOnSaleChecked(false);
     setPriceRange(currentPriceRange);
     setSelectedTags([]);
-  }, [currentPriceRange]);
+  }, [currentPriceRange, setSelectedCategory, setSelectedBrands, setOnSaleChecked, setPriceRange, setSelectedTags]);
+  
 
   const deleteFilter = () => {
     resetFilters();

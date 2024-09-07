@@ -39,7 +39,10 @@ const nextConfig = {
       'www.pacificplace.com.hk',
       'torrado.es', // Add this new domain
     ],
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;

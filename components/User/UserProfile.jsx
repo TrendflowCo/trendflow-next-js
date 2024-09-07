@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
 import { getUserWishlists, getWishlistItems } from '../../services/firebase';
@@ -13,14 +13,7 @@ const UserProfile = () => {
   const auth = getAuth(app);
   const [user] = useAuthState(auth);
 
-  useEffect(() => {
-    if (user) {
-      fetchWishlists();
-      console.log('Fetching wishlists...');
-    }
-  }, [user, fetchWishlists]);
-
-  const fetchWishlists = async () => {
+  const fetchWishlists = useCallback(async () => {
     try {
       setLoading(true);
       const userWishlists = await getUserWishlists(user.uid);
@@ -39,7 +32,14 @@ const UserProfile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchWishlists();
+      console.log('Fetching wishlists...');
+    }
+  }, [user, fetchWishlists]);
 
   const handleUpdateWishlist = (updatedWishlist) => {
     setWishlists(prevWishlists =>
