@@ -18,7 +18,7 @@ const UserProfile = () => {
       fetchWishlists();
       console.log('Fetching wishlists...');
     }
-  }, [user]);
+  }, [user, fetchWishlists]);
 
   const fetchWishlists = async () => {
     try {
@@ -57,7 +57,7 @@ const UserProfile = () => {
       <h1 className={styles.profileTitle}>My TrendFlow Collections</h1>
       {wishlists.length === 0 ? (
         <div className={styles.emptyWishlistMessage}>
-          <p>You haven't created any collections yet.</p>
+          <p>You haven&apost created any collections yet.</p>
           <p>Start adding items to create your first TrendFlow collection!</p>
         </div>
       ) : (

@@ -16,8 +16,8 @@ const WishlistDetail = () => {
     if (id) {
       fetchWishlistDetails();
     }
-  }, [id]);
-
+  }, [id, fetchWishlistDetails]);
+  
   const fetchWishlistDetails = async () => {
     try {
       setLoading(true);

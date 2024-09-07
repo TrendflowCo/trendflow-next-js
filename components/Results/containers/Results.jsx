@@ -188,7 +188,7 @@ const Results = () => {
           }
         }
       }
-    }, [user, router.isReady, router.query, gridLayout]);
+    }, [user, router.isReady, router.query, gridLayout, dispatch, fetchDataToAPI]);
 
     useEffect(() => {
         if (router.isReady) {
