@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, List, ListItem, ListItemText } from '@mui/material';
@@ -11,20 +11,21 @@ const WishlistManager = ({ productItem, open, onClose }) => {
   const [newWishlistName, setNewWishlistName] = useState('');
   const [isCreatingNewWishlist, setIsCreatingNewWishlist] = useState(false);
 
-  useEffect(() => {
-    if (user && open) {
-      fetchWishlists();
-    }
-  }, [user, open]);
-
-  const fetchWishlists = async () => {
+  const fetchWishlists = useCallback(async () => {
+    if (!user) return;
     try {
       const userWishlists = await getUserWishlists(user.uid);
       setWishlists(userWishlists);
     } catch (error) {
       toast.error('Failed to fetch wishlists');
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user && open) {
+      fetchWishlists();
+    }
+  }, [user, open, fetchWishlists]);
 
   const handleCreateWishlist = async () => {
     if (!user || !newWishlistName.trim()) return;

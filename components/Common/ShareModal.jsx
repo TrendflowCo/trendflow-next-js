@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import { 
   EmailShareButton, 
   TwitterShareButton, 
@@ -13,8 +14,21 @@ import {
   WhatsappIcon 
 } from 'react-share';
 import { enhanceText } from '../Utils/enhanceText';
+import { inviteCollaborator } from '../../services/firebase';
 
-const ShareModal = ({ open, onClose, shareUrl, shareTitle, translations }) => {
+const ShareModal = ({ open, onClose, shareUrl, shareTitle, translations, wishlistId, isPublic, onUpdateWishlist }) => {
+  const [collaboratorEmail, setCollaboratorEmail] = useState('');
+
+  const handleInviteCollaborator = async () => {
+    try {
+      await inviteCollaborator(wishlistId, collaboratorEmail);
+      setCollaboratorEmail('');
+      onClose();
+    } catch (error) {
+      console.error("Error inviting collaborator:", error);
+    }
+  };
+
   return (
     <Dialog 
       open={open} 
@@ -43,6 +57,27 @@ const ShareModal = ({ open, onClose, shareUrl, shareTitle, translations }) => {
             <WhatsappIcon size={48} round />
           </WhatsappShareButton>
         </div>
+        {isPublic && (
+          <div className="mt-6">
+            <TextField
+              fullWidth
+              label="Invite Collaborator"
+              variant="outlined"
+              value={collaboratorEmail}
+              onChange={(e) => setCollaboratorEmail(e.target.value)}
+              placeholder="Enter email address"
+            />
+            <Button
+              onClick={handleInviteCollaborator}
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              Invite Collaborator
+            </Button>
+          </div>
+        )}
       </DialogContent>
       <DialogActions>
         <Button 

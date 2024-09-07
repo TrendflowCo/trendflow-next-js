@@ -204,19 +204,21 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
   const [wishlistAdded, setWishlistAdded] = useState(false);
   const [wishlistManagerOpen, setWishlistManagerOpen] = useState(false);
 
-  useEffect(() => {
-    if (userAuth) {
-      fetchWishlists();
-    }
-  }, [userAuth]);
 
-  const fetchWishlists = async () => {
+  const fetchWishlists = useCallback(async () => {
     if (userAuth) {
       const userWishlists = await getUserWishlists(userAuth.uid);
       setWishlists(userWishlists);
     }
-  };
-
+  }, [userAuth]);
+  
+  useEffect(() => {
+    if (userAuth) {
+      fetchWishlists();
+    }
+  }, [userAuth, fetchWishlists]);
+  
+  
   const handleWishlistClick = (event) => {
     event.stopPropagation();
     if (user && Object.keys(user).length > 0) {
@@ -316,7 +318,7 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
             <StyledLazyLoadImage
               src={imageUrls[currentImageIndex]}
               alt={productItem.name}
-              placeholderSrc="/path/to/placeholder.jpg"
+              // placeholderSrc="/path/to/placeholder.jpg"
               onClick={handleShowSingleCard}
             />
             {imageUrls.length > 1 && (
