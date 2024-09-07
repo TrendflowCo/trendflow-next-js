@@ -104,20 +104,38 @@ const Navbar = () => {
               {!isMobile ? (
                 <>
                   <LanAndCountrySelection loading={loading} />
-                  {user && (
-                    <MenuForUser 
-                      loading={loading} 
-                      user={user} 
-                      anchorElUser={anchorElUser} 
-                      setAnchorElUser={setAnchorElUser}
-                    />
-                  )}
-                  {user && (
-                    <MenuToggleUser 
-                      setAnchorElUser={setAnchorElUser} 
-                      anchorElUser={anchorElUser} 
-                      logOut={logOut}
-                    />
+                  {user ? (
+                    <>
+                      <MenuForUser 
+                        loading={loading} 
+                        user={user} 
+                        anchorElUser={anchorElUser} 
+                        setAnchorElUser={setAnchorElUser}
+                      />
+                      <MenuToggleUser 
+                        setAnchorElUser={setAnchorElUser} 
+                        anchorElUser={anchorElUser} 
+                        logOut={logOut}
+                      />
+                    </>
+                  ) : (
+                    <Button 
+                      onClick={() => {/* Implement login logic here */}}
+                      variant="contained" 
+                      startIcon={<LoginIcon />}
+                      sx={{
+                        fontWeight: 'bold',
+                        textTransform: 'none',
+                        borderRadius: 20,
+                        padding: '8px 16px',
+                        background: 'linear-gradient(to right, #FF6B6B, #4ECDC4)',
+                        '&:hover': {
+                          background: 'linear-gradient(to right, #FF8E53, #FE4B8D)',
+                        },
+                      }}
+                    >
+                      {translations?.login?.log_in || 'Log In'}
+                    </Button>
                   )}
                 </>
               ) : (
