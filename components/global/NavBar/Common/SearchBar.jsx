@@ -27,8 +27,8 @@ const SearchBar = () => {
             e.preventDefault();
             if (searchQuery.trim() !== '') {
                 router.push({
-                    pathname: '/results',
-                    query: { ...router.query, query: searchQuery, page: 1 },
+                    pathname: `/${country}/${language}/results`,
+                    query: { query: searchQuery, page: 1 },
                 });
             }
         }
@@ -71,7 +71,14 @@ const SearchBar = () => {
                     type="button"
                     sx={{ p: '10px' }}
                     aria-label="search"
-                    onClick={() => {handleSearchQuery(language, searchQuery, 'search', router)}}
+                    onClick={() => {
+                        if (searchQuery.trim() !== '') {
+                            router.push({
+                                pathname: `/${country}/${language}/results`,
+                                query: { query: searchQuery, page: 1 },
+                            });
+                        }
+                    }}
                 >
                     <SearchIcon />
                 </IconButton>
