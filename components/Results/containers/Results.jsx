@@ -145,7 +145,7 @@ const Results = () => {
     }, []);
     useEffect(() => {
       if (router.isReady) {
-        const { lan, zone } = router.query;
+        const { lan, zone, query } = router.query;
         if (lan) {
           dispatch(setLanguage(lan));
           localStorage.setItem('language', lan.toLowerCase());
@@ -154,7 +154,7 @@ const Results = () => {
             country: `&country=${zone}`,
             page: router.query.page ? `&page=${router.query.page}` : '',
             limit: '', // We'll set this dynamically based on the grid layout
-            query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
+            query: query ? `&query=${encodeURIComponent(query)}` : '',
             imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
             brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
             category: router.query.category ? `&category=${router.query.category}` : '',
@@ -180,6 +180,10 @@ const Results = () => {
           fetchDataToAPI(filters, sortings, 1, limit);
           dispatch(setTotalFilters(countFilters(filters)));
           
+          // Update lastSearch state with the new query
+          setLastSearch(query || '');
+          dispatch(setCurrentSearch(query || ''));
+
           // Set selected tags based on the URL
           if (router.query.tags) {
             setSelectedTags(router.query.tags.split(','));
@@ -409,7 +413,7 @@ const Results = () => {
                         )}
                         <section className="flex flex-col w-full mt-4 mb-2">
                             <div className='mx-5'>
-                                { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
+                                { router.query.query && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(router.query.query) }</h6> }
                                 { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
                             </div>
                         </section>
