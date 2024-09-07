@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
@@ -19,15 +19,30 @@ import { handleSearchQuery } from '../../functions/handleSearchQuery';
 import { setCurrentSearch } from '../../../redux/features/actions/search';
 import { logOut } from '../../Auth/authFunctions';
 import Image from 'next/image';
+import Link from 'next/link';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../../../services/firebase';
 
-const Navbar = ({ user, loading, setFilterModal }) => {
+const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElMore, setAnchorElMore] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { country, language, translations } = useAppSelector(state => state.region);
   const isHomePage = router.pathname === '/[zone]/[lan]';
   const isMobile = useMediaQuery('(max-width:768px)');
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
 
   const handleExplore = () => {
     if (translations?.prompts) {
@@ -89,17 +104,21 @@ const Navbar = ({ user, loading, setFilterModal }) => {
               {!isMobile ? (
                 <>
                   <LanAndCountrySelection loading={loading} />
-                  <MenuForUser 
-                    loading={loading} 
-                    user={user} 
-                    anchorElUser={anchorElUser} 
-                    setAnchorElUser={setAnchorElUser}
-                  />
-                  <MenuToggleUser 
-                    setAnchorElUser={setAnchorElUser} 
-                    anchorElUser={anchorElUser} 
-                    logOut={logOut}
-                  />
+                  {user && (
+                    <MenuForUser 
+                      loading={loading} 
+                      user={user} 
+                      anchorElUser={anchorElUser} 
+                      setAnchorElUser={setAnchorElUser}
+                    />
+                  )}
+                  {user && (
+                    <MenuToggleUser 
+                      setAnchorElUser={setAnchorElUser} 
+                      anchorElUser={anchorElUser} 
+                      logOut={logOut}
+                    />
+                  )}
                 </>
               ) : (
                 <>
@@ -136,12 +155,9 @@ const Navbar = ({ user, loading, setFilterModal }) => {
         </MenuItem>
         {user && (
           <MenuItem onClick={handleCloseMoreMenu}>
-            <MenuForUser 
-              loading={loading} 
-              user={user} 
-              anchorElUser={anchorElUser} 
-              setAnchorElUser={setAnchorElUser}
-            />
+            <Link href="/profilePage">
+              Wishlists
+            </Link>
           </MenuItem>
         )}
       </Menu>

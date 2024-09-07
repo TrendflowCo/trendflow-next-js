@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useAppSelector, useAppDispatch } from "../../../../redux/hooks";
+import { useAppSelector } from "../../../../redux/hooks";
 import { setCurrentSearch } from "../../../../redux/features/actions/search";
 import { handleSearchQuery } from "../../../functions/handleSearchQuery";
 import { IconButton, Tooltip, InputBase, Paper } from "@mui/material";
@@ -8,18 +8,29 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = () => {
     const router = useRouter();
-    const dispatch = useAppDispatch();
+    const [searchQuery, setSearchQuery] = useState("");
     const { translations, country, language } = useAppSelector(state => state.region);
-    const { currentSearch } = useAppSelector(state => state.search);
+
+    useEffect(() => {
+        if (router.isReady) {
+            const { query } = router.query;
+            setSearchQuery(query ? decodeURIComponent(query) : "");
+        }
+    }, [router.isReady, router.query]);
 
     const handleSearchPhrase = (e) => {
-        dispatch(setCurrentSearch(e.target.value));
+        setSearchQuery(e.target.value);
     };
 
     const handleEnterSearch = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            handleSearchQuery(country, language, currentSearch, 'search', router);
+            if (searchQuery.trim() !== '') {
+                router.push({
+                    pathname: '/results',
+                    query: { ...router.query, query: searchQuery, page: 1 },
+                });
+            }
         }
     };
 
@@ -51,7 +62,7 @@ const SearchBar = () => {
                     },
                 }}
                 placeholder={translations?.search?.placeholder}
-                value={currentSearch.split('-').join(' ')}
+                value={searchQuery}
                 onChange={(e) => {handleSearchPhrase(e)}}
                 onKeyDown={handleEnterSearch}
             />
@@ -60,7 +71,7 @@ const SearchBar = () => {
                     type="button"
                     sx={{ p: '10px' }}
                     aria-label="search"
-                    onClick={() => {handleSearchQuery(language, currentSearch, 'search', router)}}
+                    onClick={() => {handleSearchQuery(language, searchQuery, 'search', router)}}
                 >
                     <SearchIcon />
                 </IconButton>

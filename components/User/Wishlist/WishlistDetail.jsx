@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { getWishlistDetails } from '../../../services/firebase';
 import ResultCard from '../../Results/ResultCard';
+import WishlistInsights from './WishlistInsights';
+import styles from './WishlistDetail.module.css';
 
 const WishlistDetail = () => {
   const [wishlist, setWishlist] = useState(null);
@@ -10,13 +12,7 @@ const WishlistDetail = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  useEffect(() => {
-    if (id) {
-      fetchWishlistDetails();
-    }
-  }, [id]);
-
-  const fetchWishlistDetails = async () => {
+  const fetchWishlistDetails = useCallback(async () => {
     try {
       setLoading(true);
       const wishlistData = await getWishlistDetails(id);
@@ -27,7 +23,13 @@ const WishlistDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchWishlistDetails();
+    }
+  }, [id, fetchWishlistDetails]);
 
   if (loading) return <div style={{ padding: '20px', textAlign: 'center' }}>Loading...</div>;
   if (error) return <div style={{ padding: '20px', color: 'red' }}>Error: {error}</div>;

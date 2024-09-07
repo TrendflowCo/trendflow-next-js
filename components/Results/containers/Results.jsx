@@ -1,4 +1,4 @@
-import React , {useState , useEffect, useRef} from "react";
+import React , {useState , useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { logAnalyticsEvent, app } from "../../../services/firebase";
@@ -89,7 +89,7 @@ const Results = () => {
         setDimensions({width: window.innerWidth});
         window.addEventListener("resize", handleResize, false);
     },[])
-    const fetchDataToAPI = async (filters, sortings, page = 1, limit = 20) => {
+    const fetchDataToAPI = useCallback(async (filters, sortings, page = 1, limit = 20) => {
         try {
             setFailedSearch(false);
             setLoadingFlag(true);
@@ -142,10 +142,10 @@ const Results = () => {
             setLoadingFlag(false);
             setFailedSearch(true);
         }
-    };
+    }, []);
     useEffect(() => {
       if (router.isReady) {
-        const { lan, zone } = router.query;
+        const { lan, zone, query } = router.query;
         if (lan) {
           dispatch(setLanguage(lan));
           localStorage.setItem('language', lan.toLowerCase());
@@ -154,7 +154,7 @@ const Results = () => {
             country: `&country=${zone}`,
             page: router.query.page ? `&page=${router.query.page}` : '',
             limit: '', // We'll set this dynamically based on the grid layout
-            query: router.query.query ? `&query=${encodeURIComponent(router.query.query)}` : '',
+            query: query ? `&query=${encodeURIComponent(query)}` : '',
             imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
             brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
             category: router.query.category ? `&category=${router.query.category}` : '',
@@ -180,6 +180,10 @@ const Results = () => {
           fetchDataToAPI(filters, sortings, 1, limit);
           dispatch(setTotalFilters(countFilters(filters)));
           
+          // Update lastSearch state with the new query
+          setLastSearch(query || '');
+          dispatch(setCurrentSearch(query || ''));
+
           // Set selected tags based on the URL
           if (router.query.tags) {
             setSelectedTags(router.query.tags.split(','));
@@ -188,7 +192,7 @@ const Results = () => {
           }
         }
       }
-    }, [user, router.isReady, router.query, gridLayout]);
+    }, [user, router.isReady, router.query, gridLayout, dispatch, fetchDataToAPI]);
 
     useEffect(() => {
         if (router.isReady) {
@@ -200,7 +204,7 @@ const Results = () => {
                 setTagSectionVisible(true); // Reset tag section visibility when the query changes
             }
         }
-    }, [router.query.query, router.isReady]);
+    }, [router.query, router.isReady]);
 
     useEffect(() => { // Reset selected tags when the query changes
         if (router.isReady) {
@@ -209,7 +213,7 @@ const Results = () => {
                 setSelectedTags([]); // Reset selected tags when the query changes
             }
         }
-    }, [router.query.query, router.isReady]); // Add other dependencies as needed
+    }, [router.query, router.isReady]); // Add other dependencies as needed
 
     useEffect(() => { // Reset currentPage when the query changes
         if (router.isReady) {
@@ -218,7 +222,7 @@ const Results = () => {
                 setCurrentPage(1); // Reset currentPage when the query changes
             }
         }
-    }, [router.query.query, router.isReady]); // Add other dependencies as needed
+    }, [router.query, router.isReady]); // Add other dependencies as needed
 
     useEffect(() => { // wishlist search
         const fetchData = async () => {
@@ -409,7 +413,7 @@ const Results = () => {
                         )}
                         <section className="flex flex-col w-full mt-4 mb-2">
                             <div className='mx-5'>
-                                { lastSearch && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(lastSearch) }</h6> }
+                                { router.query.query && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(router.query.query) }</h6> }
                                 { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
                             </div>
                         </section>

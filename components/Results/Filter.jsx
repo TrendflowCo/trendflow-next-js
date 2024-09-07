@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Drawer, IconButton, Typography, Slider, Box, Divider, Grid, ThemeProvider, Tooltip, Chip
 } from '@mui/material';
@@ -193,13 +193,14 @@ const Filter = (props) => {
     toast.success(translations?.results?.filters_applied || 'Filters applied successfully!');
   };
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setSelectedCategory('');
     setSelectedBrands([]);
     setOnSaleChecked(false);
     setPriceRange(currentPriceRange);
     setSelectedTags([]);
-  };
+  }, [currentPriceRange, setSelectedCategory, setSelectedBrands, setOnSaleChecked, setPriceRange, setSelectedTags]);
+  
 
   const deleteFilter = () => {
     resetFilters();
