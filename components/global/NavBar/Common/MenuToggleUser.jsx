@@ -19,11 +19,6 @@ const MenuToggleUser = ({ setAnchorElUser, anchorElUser, logOut }) => {
                     Profile
                 </Link>
             </MenuItem>
-            <MenuItem>
-                <Link href="/profilePage">
-                    Wishlist
-                </Link>
-            </MenuItem>
             <MenuItem onClick={logOut}>Logout</MenuItem>
         </Menu>
     );
