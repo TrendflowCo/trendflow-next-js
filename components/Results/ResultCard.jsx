@@ -208,8 +208,8 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
     if (userAuth) {
       fetchWishlists();
     }
-  }, [userAuth]);
-
+  }, [user, open, fetchWishlists]);
+  
   const fetchWishlists = async () => {
     if (userAuth) {
       const userWishlists = await getUserWishlists(userAuth.uid);
@@ -316,7 +316,7 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
             <StyledLazyLoadImage
               src={imageUrls[currentImageIndex]}
               alt={productItem.name}
-              placeholderSrc="/path/to/placeholder.jpg"
+              // placeholderSrc="/path/to/placeholder.jpg"
               onClick={handleShowSingleCard}
             />
             {imageUrls.length > 1 && (

@@ -15,7 +15,7 @@ const WishlistManager = ({ productItem, open, onClose }) => {
     if (user && open) {
       fetchWishlists();
     }
-  }, [user, open]);
+  }, [user, open, fetchWishlists]);
 
   const fetchWishlists = async () => {
     try {
