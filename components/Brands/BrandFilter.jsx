@@ -1,16 +1,23 @@
 import React from "react";
+import { motion } from "framer-motion";
+import SearchIcon from '@mui/icons-material/Search';
 
-const BrandFilter = ({setFilter,placeholder}) => {
+const BrandFilter = ({ setFilter, placeholder }) => {
     return (
-        <div className="mt-4 flex flex-col">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mt-4 flex flex-col relative"
+        >
             <input 
-                className="bg-trendflow-black bg-opacity-5 border-none rounded-[5px] text-base tracking-[2px] outline-none py-4 pr-10 pl-5 relative flex-auto w-full items-center text-trendflow-black"
+                className="bg-white border-2 border-trendflow-pink rounded-full text-lg tracking-wide outline-none py-3 pr-12 pl-6 w-full text-trendflow-black shadow-md focus:ring-2 focus:ring-trendflow-blue transition duration-300"
                 type="text"
                 placeholder={placeholder}
-                style={{'fontFamily':"Arial, FontAwesome"}}
                 onChange={(e) => {setFilter(e.target.value)}}
             />
-        </div>
+            <SearchIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-trendflow-pink" />
+        </motion.div>
     )
 };
 
