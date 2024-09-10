@@ -22,6 +22,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from '../../../services/firebase';
+import { setLogInFlag } from '../../../redux/features/actions/auth';
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -65,15 +66,22 @@ const Navbar = () => {
     if (user) {
       logOut();
     } else {
-      // Implement login logic here
-      console.log('Login clicked');
+      dispatch(setLogInFlag(true));
     }
     handleCloseMoreMenu();
   };
 
   return (
     <ThemeProvider theme={muiColors}>
-      <AppBar position="fixed" elevation={0} className={`${isHomePage ? 'bg-transparent' : 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue'}`}>
+      <AppBar 
+        position="fixed" 
+        elevation={0} 
+        sx={{
+          background: isHomePage ? 'transparent' : 'linear-gradient(to right, #FF6B6B, #4ECDC4)',
+          transition: 'background 0.3s ease-in-out',
+          boxShadow: isHomePage ? 'none' : '0 2px 4px rgba(0,0,0,0.1)',
+        }}
+      >
         <Container maxWidth="xl">
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', py: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -85,11 +93,11 @@ const Navbar = () => {
               <SearchBar />
               <Tooltip title="Explore new ideas">
                 <IconButton
-                  color="primary"
                   onClick={handleExplore}
                   sx={{
                     ml: 1,
                     bgcolor: 'rgba(255, 255, 255, 0.2)',
+                    color: 'white',
                     '&:hover': {
                       bgcolor: 'rgba(255, 255, 255, 0.3)',
                     },
@@ -120,7 +128,7 @@ const Navbar = () => {
                     </>
                   ) : (
                     <Button 
-                      onClick={() => {/* Implement login logic here */}}
+                      onClick={() => dispatch(setLogInFlag(true))}
                       variant="contained" 
                       startIcon={<LoginIcon />}
                       sx={{
@@ -128,9 +136,9 @@ const Navbar = () => {
                         textTransform: 'none',
                         borderRadius: 20,
                         padding: '8px 16px',
-                        background: 'linear-gradient(to right, #FF6B6B, #4ECDC4)',
+                        background: 'linear-gradient(to right, #FF8E53, #FE4B8D)',
                         '&:hover': {
-                          background: 'linear-gradient(to right, #FF8E53, #FE4B8D)',
+                          background: 'linear-gradient(to right, #FF6B6B, #4ECDC4)',
                         },
                       }}
                     >
@@ -142,17 +150,20 @@ const Navbar = () => {
                 <>
                   <Tooltip title={user ? "Logout" : "Login"}>
                     <IconButton
-                      color="inherit"
                       onClick={handleLoginLogout}
-                      sx={{ mr: 1 }}
+                      sx={{ 
+                        mr: 1,
+                        color: 'white',
+                      }}
                     >
                       {user ? <LogoutIcon /> : <LoginIcon />}
                     </IconButton>
                   </Tooltip>
                   <IconButton
-                    color="inherit"
-                    aria-label="more options"
                     onClick={handleOpenMoreMenu}
+                    sx={{
+                      color: 'white',
+                    }}
                   >
                     <MoreVertIcon />
                   </IconButton>

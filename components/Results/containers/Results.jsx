@@ -3,7 +3,7 @@ import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { logAnalyticsEvent, app } from "../../../services/firebase";
 import { endpoints } from "../../../config/endpoints";
-import { Box, Grid, CircularProgress, Fab, styled } from "@mui/material";
+import { Box, Grid, CircularProgress, Fab, styled, Select, MenuItem } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
 import { useAppSelector , useAppDispatch } from "../../../redux/hooks";
@@ -11,7 +11,6 @@ import { setCurrentSearch , setTotalFilters, setWishlist, setPreviousResults } f
 import { setLanguage } from "../../../redux/features/actions/region";
 import { enhanceText } from "../../Utils/enhanceText";
 import Filter from "../Filter";
-import Sort from "../Sort";
 import { muiColors } from "../../Utils/muiTheme";
 import Head from "next/head";
 import { handleAddTag } from "../../functions/handleAddTag";
@@ -27,6 +26,10 @@ import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ResultsGrid from '../ResultsGrid';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import SortIcon from '@mui/icons-material/Sort';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
@@ -68,11 +71,13 @@ const Results = () => {
     const [currentSortings, setCurrentSortings] = useState({});
     const [filterModal , setFilterModal] = useState(false);
     const [currentFilters, setCurrentFilters] = useState({});
-    const [sortingModal , setSortingModal] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 0 });
     const [gridLayout, setGridLayout] = useState('default');
     const [priceHistogramData, setPriceHistogramData] = useState([]);
     const [tagSectionVisible, setTagSectionVisible] = useState(true);
+    const [sortBy, setSortBy] = useState('');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
 
     const resetFiltersRef = useRef(null);
 
@@ -96,7 +101,7 @@ const Results = () => {
             setTotalResults(0);
 
             const tags = selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : '';
-            const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}&ascending=${sortings.ascending}` : '';
+            const sortingParams = sortings.sortBy ? `&sortBy=${sortings.sortBy}${sortings.ascending}` : '';
             
             let fetchedProducts = [];
             let currentPage = page;
@@ -322,7 +327,6 @@ const Results = () => {
 
     const MemoizedResultCard = React.memo(ResultCard);
 
-    // Add this state to control rendering
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -392,184 +396,200 @@ const Results = () => {
       }
     }, [router.query.query]);
 
+    const sortOptions = [
+      { value: 'relevance', label: 'Relevance' },
+      { value: 'price', label: 'Price' },
+      // { value: 'date', label: 'Date' },
+      { value: 'brand', label: 'Brand' },
+    ];
+
+    const handleSortChange = (option) => {
+      setSortBy(option.value);
+      setIsSortMenuOpen(false);
+      applySort(option.value, sortDirection);
+    };
+
+    const toggleSortDirection = () => {
+      const newDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+      setSortDirection(newDirection);
+      applySort(sortBy, newDirection);
+    };
+
+    const applySort = (sort, direction) => {
+      const newQuery = {
+        ...router.query,
+        sortBy: sort,
+        ascending: direction === 'asc' ? 'true' : 'false',
+        page: '1'
+      };
+      router.push({ pathname: router.pathname, query: newQuery }, undefined, { shallow: true });
+    };
+
     return (
-        <Box sx={{ display: 'flex', width: '100%', height: '100%', flexDirection: 'column', py: '24px', pb: '48px', mt: '64px' }}>
-            { loadingFlag ? 
-                <GlobalLoader/>
-            :
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-emerald-50">
+        <div className="container mx-auto px-4 py-8 pt-24">
+          {loadingFlag ? (
+            <GlobalLoader />
+          ) : (
+            <>
+              {failedSearch ? (
+                <section className="flex flex-col items-center justify-center h-64">
+                  <h6 className="text-2xl text-gray-600 mb-4">No results found</h6>
+                  <p className="text-gray-500">Try adjusting your search or filters</p>
+                </section>
+              ) : (
                 <>
-                    {failedSearch ? 
-                        <section className="flex flex-col w-full mt-25 mb-2">
-                            <h6 className="text-sm mt-1">No results for this search</h6>
-                        </section>
-                    : 
-                    <>
-                        {isClient && (
-                            <Head>
-                                {lastSearch && <title>{`TrendFlow - ${enhanceText(lastSearch)}`}</title>}
-                                {lastSearch && <meta name="description" content={enhanceText(lastSearch)}/>}
-                                {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')}/>}
-                            </Head>
-                        )}
-                        <section className="flex flex-col w-full mt-4 mb-2">
-                            <div className='mx-5'>
-                                { router.query.query && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold'>{ enhanceText(router.query.query) }</h6> }
-                                { filteredBrand && <h6 className='text-black text-3xl md:text-4xl leading-10 font-semibold mt-2'>{ enhanceText(filteredBrand) }</h6> }
-                            </div>
-                        </section>
-                        {searchTags?.length > 0 && (
-                          <section className='mx-5 mt-6 mb-4'>
-                            <div className="flex justify-between items-center mb-3">
-                              <h6 className='text-black text-xl font-semibold'>
-                                {tagSectionVisible ? 'Refine Your Search' : 'Search Results'}
-                              </h6>
-                              <button 
-                                onClick={() => setTagSectionVisible(!tagSectionVisible)}
-                                className="text-trendflow-blue hover:text-trendflow-pink transition-colors duration-300 p-2 rounded-full hover:bg-gray-100"
-                              >
-                                {tagSectionVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                              </button>
-                            </div>
-                            {tagSectionVisible && (
-                              <>
-                                <div className="flex flex-row flex-wrap w-full mb-4">
-                                  {searchTags.sort().map((tag, index) => (
-                                    <button 
-                                      key={index}
-                                      className={`
-                                        px-4 py-2 mb-2 mr-2 rounded-full text-sm font-medium
-                                        transition-all duration-300 ease-in-out
-                                        ${selectedTags.includes(tag) 
-                                          ? 'bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white shadow-md transform scale-105' 
-                                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-                                      `}
-                                      onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
+                  <Head>
+                    {lastSearch && <title>{`TrendFlow - ${enhanceText(lastSearch)}`}</title>}
+                    {lastSearch && <meta name="description" content={enhanceText(lastSearch)} />}
+                    {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')} />}
+                  </Head>
+                  <section className="mb-8">
+                    <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4 bg-gradient-to-r from-purple-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">
+                      {enhanceText(router.query.query)}
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-4">
+                      <button
+                        onClick={() => setFilterModal(true)}
+                        className="px-4 py-2 bg-white text-purple-600 rounded-full font-medium text-sm shadow hover:shadow-md transition-all duration-300 flex items-center"
+                      >
+                        <FilterListIcon className="mr-2" />
+                        Filter
+                      </button>
+                      <div className="relative">
+                        <button
+                          onClick={() => setIsSortMenuOpen(!isSortMenuOpen)}
+                          className="px-4 py-2 bg-white text-emerald-600 rounded-full font-medium text-sm shadow hover:shadow-md transition-all duration-300 flex items-center"
+                        >
+                          <SortIcon className="mr-2" />
+                          {sortBy ? enhanceText(sortOptions.find(o => o.value === sortBy).label) : 'Sort'}
+                          <KeyboardArrowDownIcon className={`ml-1 transition-transform duration-300 ${isSortMenuOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        {isSortMenuOpen && (
+                          <div className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                              {sortOptions.map((option) => (
+                                <button
+                                  key={option.value}
+                                  onClick={() => handleSortChange(option)}
+                                  className={`${
+                                    sortBy === option.value ? 'bg-emerald-100 text-emerald-900' : 'text-gray-700'
+                                  } group flex w-full items-center px-4 py-2 text-sm hover:bg-emerald-50 transition-colors duration-300`}
+                                  role="menuitem"
+                                >
+                                  {option.label}
+                                  {sortBy === option.value && (
+                                    <span 
+                                      onClick={(e) => { e.stopPropagation(); toggleSortDirection(); }}
+                                      className="ml-auto"
                                     >
-                                      {enhanceText(tag)}
-                                    </button>
-                                  ))}
-                                </div>
-                                <div className="flex justify-center">
-                                  <button 
-                                    onClick={handleRefineSearch}
-                                    className="
-                                      bg-gradient-to-r from-trendflow-pink to-trendflow-blue
-                                      text-white font-bold py-3 px-6 rounded-lg
-                                      shadow-lg hover:shadow-xl transition-all duration-300
-                                      transform hover:scale-105
-                                      flex items-center justify-center
-                                    "
-                                  >
-                                    <span className="mr-2">
-                                      Refine Search {selectedTags.length > 0 && `(${selectedTags.length})`}
+                                      {sortDirection === 'asc' ? '↑' : '↓'}
                                     </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                      <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </>
-                            )}
-                          </section>
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
                         )}
-                        <div className="flex justify-end mb-4 mr-4">
-                            <button
-                                onClick={() => setGridLayout('default')}
-                                className={`p-2 rounded-l-lg ${gridLayout === 'default' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                      </div>
+                      <div className="flex rounded-full bg-gray-100 p-1">
+                        <button
+                          onClick={() => setGridLayout('default')}
+                          className={`p-2 rounded-full ${gridLayout === 'default' ? 'bg-white shadow' : ''}`}
+                        >
+                          <GridViewIcon />
+                        </button>
+                        <button
+                          onClick={() => setGridLayout('compact')}
+                          className={`p-2 rounded-full ${gridLayout === 'compact' ? 'bg-white shadow' : ''}`}
+                        >
+                          <ViewModuleIcon />
+                        </button>
+                        <button
+                          onClick={() => setGridLayout('image-only')}
+                          className={`p-2 rounded-full ${gridLayout === 'image-only' ? 'bg-white shadow' : ''}`}
+                        >
+                          <ViewCompactIcon />
+                        </button>
+                      </div>
+                    </div>
+                  </section>
+                  {searchTags?.length > 0 && (
+                    <section className="mb-8 bg-white rounded-xl shadow-lg p-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-2xl font-bold text-gray-800">
+                          {tagSectionVisible ? 'Refine Your Search' : 'Search Results'}
+                        </h2>
+                        <button 
+                          onClick={() => setTagSectionVisible(!tagSectionVisible)}
+                          className="text-purple-600 hover:text-emerald-500 transition-colors duration-300 p-2 rounded-full hover:bg-gray-100"
+                        >
+                          {tagSectionVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </button>
+                      </div>
+                      {tagSectionVisible && (
+                        <div className="flex flex-wrap gap-2">
+                          {searchTags.sort().map((tag, index) => (
+                            <button 
+                              key={index}
+                              className={`
+                                px-4 py-2 rounded-full text-sm font-medium
+                                transition-all duration-300 ease-in-out
+                                ${selectedTags.includes(tag) 
+                                  ? 'bg-gradient-to-r from-purple-500 to-emerald-500 text-white shadow-md transform scale-105' 
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                              `}
+                              onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
                             >
-                                <GridViewIcon />
+                              {enhanceText(tag)}
                             </button>
-                            <button
-                                onClick={() => setGridLayout('compact')}
-                                className={`p-2 ${gridLayout === 'compact' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                            >
-                                <ViewModuleIcon/>
-                            </button>
-                            <button
-                                onClick={() => setGridLayout('image-only')}
-                                className={`p-2 rounded-r-lg ${gridLayout === 'image-only' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                            >
-                                <ViewCompactIcon />
-                            </button>
+                          ))}
                         </div>
-                        <div style={{ minHeight: '100vh', marginBottom: '2rem' }}>
-                            {products?.length > 0 && (
-                              <ResultsGrid products={products} gridLayout={gridLayout} />
-                            )}
-                            {console.log('Render check - products.length:', products.length, 'totalResults:', totalResults)}
-                            {hasMore && (
-                                <div className="flex justify-center mt-8 mb-12">
-                                    <button
-                                        onClick={fetchMoreData}
-                                        className="bg-gradient-to-r from-trendflow-pink to-trendflow-blue text-white font-bold py-4 px-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-trendflow-pink"
-                                        style={{
-                                            clipPath: 'polygon(92% 0, 100% 25%, 100% 100%, 8% 100%, 0% 75%, 0 0)',
-                                            backgroundColor: '#3f51b5', // A more subtle blue color
-                                            color: '#ffffff',
-                                            padding: '1rem',
-                                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                                            transition: 'all 0.3s ease-in-out',
-                                        }}
-                                    >
-                                        {loadingMore ? (
-                                            <div className="flex items-center justify-center">
-                                                <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                </svg>
-                                                Loading...
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center justify-center">
-                                                See More
-                                                <svg className="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
-                                                </svg>
-                                            </div>
-                                        )}
-                                    </button>
-                                </div>
-                            )}
-                            {!hasMore && (
-                                <div className="text-center mt-8 mb-12 text-gray-500">
-                                    No more products to load
-                                </div>
-                            )}
-                        </div>
-                    </>
-                    }
+                      )}
+                    </section>
+                  )}
+                  <div className="min-h-screen mb-12">
+                    {products?.length > 0 && (
+                      <ResultsGrid products={products} gridLayout={gridLayout} />
+                    )}
+                    {hasMore && (
+                      <div className="flex justify-center mt-8">
+                        <button
+                          onClick={fetchMoreData}
+                          className="px-8 py-3 bg-gradient-to-r from-purple-500 to-emerald-500 text-white rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center"
+                        >
+                          Load More
+                          <ExpandMoreIcon className="ml-2" />
+                        </button>
+                      </div>
+                    )}
+                    {!hasMore && (
+                      <div className="text-center mt-8 text-gray-500">
+                        No more products to load
+                      </div>
+                    )}
+                  </div>
                 </>
-            }
-            <div className="sticky top-0 z-50 bg-white shadow">
-                <Filter 
-                    setFilterModal={setFilterModal} 
-                    filterModal={filterModal}
-                    availableBrands={availableBrands}
-                    currentPriceRange={currentPriceRange}
-                    deviceWidth={dimensions.width}
-                    priceHistogramData={priceHistogramData}
-                    searchTags={searchTags}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
-                    setResetFiltersRef={(resetFunc) => {
-                      resetFiltersRef.current = resetFunc;
-                    }}
-                />
-                <Sort 
-                    sortingModal={sortingModal}
-                    setSortingModal={setSortingModal}
-                    deviceWidth={dimensions.width}
-                />
-               
-            </div>
-            <StyledFab
-                aria-label="filter"
-                onClick={() => setFilterModal(true)}
-            >
-                <FilterListIcon sx={{ fontSize: '2rem' }} />
-            </StyledFab>
-        </Box>
-    )
-};
+              )}
+            </>
+          )}
+          <Filter 
+            setFilterModal={setFilterModal} 
+            filterModal={filterModal}
+            availableBrands={availableBrands}
+            currentPriceRange={currentPriceRange}
+            deviceWidth={dimensions.width}
+            priceHistogramData={priceHistogramData}
+            searchTags={searchTags}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            setResetFiltersRef={(resetFunc) => {
+              resetFiltersRef.current = resetFunc;
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
 
 export default Results;
