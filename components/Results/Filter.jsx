@@ -80,7 +80,7 @@ const SaleChip = styled(Box)(({ theme, selected }) => ({
 
 const ActionButton = styled(Box)(({ theme, variant }) => ({
   padding: '10px 16px',
-  borderRadius: 4,
+  borderRadius: 20,
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
@@ -88,16 +88,16 @@ const ActionButton = styled(Box)(({ theme, variant }) => ({
   fontWeight: 'bold',
   transition: 'all 0.3s ease',
   ...(variant === 'contained' ? {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
+    background: 'linear-gradient(to right, #9333ea, #10b981)',
+    color: theme.palette.common.white,
     '&:hover': {
-      backgroundColor: theme.palette.primary.dark,
+      background: 'linear-gradient(to right, #7e22ce, #059669)',
     },
   } : {
-    border: `1px solid ${theme.palette.primary.main}`,
-    color: theme.palette.primary.main,
+    border: '2px solid #9333ea',
+    color: '#9333ea',
     '&:hover': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: 'rgba(147, 51, 234, 0.1)',
     },
   }),
 }));
@@ -200,7 +200,6 @@ const Filter = (props) => {
     setPriceRange(currentPriceRange);
     setSelectedTags([]);
   }, [currentPriceRange, setSelectedCategory, setSelectedBrands, setOnSaleChecked, setPriceRange, setSelectedTags]);
-  
 
   const deleteFilter = () => {
     resetFilters();
