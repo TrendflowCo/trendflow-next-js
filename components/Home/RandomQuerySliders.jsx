@@ -1,10 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { setCurrentSearch } from '../../redux/features/actions/search';
+import { handleSearchQuery } from '../functions/handleSearchQuery';
 import axios from 'axios';
 import { endpoints } from "../../config/endpoints";
-import ResultCard from '../Results/ResultCard';
-import { useRouter } from 'next/router';
-import { setCurrentSearch } from "../../redux/features/actions/search";
+import Image from 'next/image';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const RandomQuerySliders = () => {
   const [randomQueries, setRandomQueries] = useState([]);
@@ -47,68 +55,54 @@ const RandomQuerySliders = () => {
     fetchQueryResults();
   }, [randomQueries, language, country]);
 
-  const sliderRefs = useRef([]);
-
-  const scroll = (index, direction) => {
-    const slider = sliderRefs.current[index];
-    const isSmallScreen = window.innerWidth < 768; // Adjust this breakpoint as needed
-    const scrollAmount = isSmallScreen ? slider.clientWidth * 0.9 : slider.clientWidth * 0.5;
-    slider.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  const handleProductClick = (product) => {
+    dispatch(setCurrentSearch(product.name));
+    handleSearchQuery(country, language, product.name, 'clickOnRandomQuerySlider', router);
   };
-
-  const handleSeeMore = (query) => {
-    dispatch(setCurrentSearch(query));
-    router.push(`/${country}/${language}/results?query=${encodeURIComponent(query)}`);
-  };
-
-  if (randomQueries.length === 0 || queryResults.length === 0) {
-    return null; // or return a loading indicator
-  }
 
   return (
-    <div className="w-full mt-5">
-      <h2 className="text-3xl font-semibold mb-4 text-center">Trending Searches</h2>
-
+    <div className="space-y-8">
       {randomQueries.map((query, index) => (
-        <div key={query} className="mb-12">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">{query}</h2>
-            <button 
-              onClick={() => handleSeeMore(query)}
-              className="text-trendflow-blue hover:text-trendflow-pink transition-colors duration-300 flex items-center"
-            >
-              See More
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-          <div className="relative">
-            <button 
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10 sm:block hidden"
-              onClick={() => scroll(index, index % 2 === 0 ? -1 : 1)}
-            >
-              &#8592;
-            </button>
-            <div 
-              ref={el => sliderRefs.current[index] = el}
-              className={`overflow-x-auto sm:overflow-hidden ${index % 2 === 0 ? 'slider-rtl' : 'slider-ltr'}`}
-            >
-              <div className="flex animate-scroll">
-                {[...queryResults[index], ...queryResults[index]].map((product, productIndex) => (
-                  <div key={`${product.id_item}-${productIndex}`} className="flex-shrink-0 w-4/5 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 px-2">
-                    <ResultCard productItem={product} layoutType="default" />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <button 
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10 sm:block hidden"
-              onClick={() => scroll(index, index % 2 === 0 ? 1 : -1)}
-            >
-              &#8594;
-            </button>
-          </div>
+        <div key={index} className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-2xl font-semibold mb-4">{query}</h3>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={20}
+            slidesPerView={2}
+            navigation
+            pagination={{ clickable: true }}
+            breakpoints={{
+              640: {
+                slidesPerView: 3,
+              },
+              768: {
+                slidesPerView: 4,
+              },
+              1024: {
+                slidesPerView: 5,
+              },
+            }}
+          >
+            {queryResults[index]?.map((product) => (
+              <SwiperSlide key={product.id}>
+                <div 
+                  className="cursor-pointer hover:opacity-75 transition-opacity duration-300"
+                  onClick={() => handleProductClick(product)}
+                >
+                  <Image
+                    src={product.img_urls[0]}
+                    alt={product.name}
+                    width={200}
+                    height={200}
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                  <p className="mt-2 text-sm font-medium truncate">{product.name}</p>
+                  <p className="text-sm text-gray-500">{product.brand}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       ))}
     </div>
