@@ -32,17 +32,18 @@ const CategoryButton = styled(Box)(({ theme, selected }) => ({
   textTransform: 'capitalize',
   fontWeight: 'bold',
   padding: '8px 16px',
-  color: theme.palette.text.primary,
-  backgroundColor: 'transparent',
-  border: `2px solid ${selected ? theme.palette.primary.main : theme.palette.grey[300]}`,
+  color: selected ? theme.palette.common.white : theme.palette.text.primary,
+  backgroundColor: selected ? 'transparent' : 'transparent',
+  background: selected ? 'linear-gradient(to right, #9333ea, #10b981)' : 'transparent',
+  border: `2px solid ${selected ? 'transparent' : theme.palette.grey[300]}`,
   cursor: 'pointer',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
   transition: 'all 0.3s ease',
   '&:hover': {
-    backgroundColor: theme.palette.grey[100],
-    border: `2px solid ${selected ? theme.palette.primary.main : theme.palette.grey[400]}`,
+    backgroundColor: selected ? 'transparent' : theme.palette.grey[100],
+    border: `2px solid ${selected ? 'transparent' : theme.palette.grey[400]}`,
   },
 }));
 
@@ -55,9 +56,9 @@ const BrandLogoWrapper = styled(Box)(({ theme, selected }) => ({
   alignItems: 'center',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
-  border: selected ? `3px solid ${theme.palette.primary.main}` : '3px solid transparent',
-  boxShadow: selected ? `0 0 15px ${theme.palette.primary.main}` : 'none',
-  backgroundColor: '#ffffff',
+  border: selected ? '3px solid transparent' : '3px solid transparent',
+  background: selected ? 'linear-gradient(to right, #9333ea, #10b981)' : 'transparent',
+  boxShadow: selected ? '0 0 15px rgba(147, 51, 234, 0.5)' : 'none',
   '&:hover': {
     transform: 'scale(1.1)',
     boxShadow: `0 5px 15px rgba(0,0,0,0.1)`,
@@ -71,10 +72,11 @@ const SaleChip = styled(Box)(({ theme, selected }) => ({
   borderRadius: 20,
   cursor: 'pointer',
   transition: 'all 0.3s ease',
-  backgroundColor: selected ? theme.palette.secondary.main : 'transparent',
-  border: `2px solid ${selected ? theme.palette.secondary.main : theme.palette.grey[300]}`,
+  background: selected ? 'linear-gradient(to right, #9333ea, #10b981)' : 'transparent',
+  border: `2px solid ${selected ? 'transparent' : theme.palette.grey[300]}`,
+  color: selected ? theme.palette.common.white : theme.palette.text.primary,
   '&:hover': {
-    backgroundColor: selected ? theme.palette.secondary.light : theme.palette.grey[100],
+    backgroundColor: selected ? 'transparent' : theme.palette.grey[100],
   },
 }));
 
@@ -219,11 +221,11 @@ const Filter = (props) => {
     <ThemeProvider theme={createTheme({
       palette: {
         primary: {
-          main: '#FA39BE',
+          main: '#9333ea',
           contrastText: '#ffffff',
         },
         secondary: {
-          main: '#FE9D2B',
+          main: '#10b981',
         },
       },
     })}>
@@ -241,7 +243,7 @@ const Filter = (props) => {
               transition={{ duration: 0.3 }}
             >
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h5" fontWeight="bold">
+                <Typography variant="h5" fontWeight="bold" className="bg-gradient-to-r from-purple-600 to-emerald-500 bg-clip-text text-transparent">
                   {translations?.results?.filters || 'Filters'}
                 </Typography>
                 <IconButton onClick={() => setFilterModal(false)}>
@@ -386,12 +388,6 @@ const Filter = (props) => {
                 <ActionButton
                   variant="contained"
                   onClick={handleApplyFilter}
-                  sx={{
-                    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
-                    '&:hover': {
-                      background: 'linear-gradient(to right, #FE9D2B, #FA39BE)',
-                    },
-                  }}
                 >
                   <FilterAltIcon sx={{ mr: 1 }} />
                   {translations?.results?.apply_filters || 'Apply Filters'}
@@ -399,14 +395,6 @@ const Filter = (props) => {
                 <ActionButton
                   variant="outlined"
                   onClick={deleteFilter}
-                  sx={{
-                    borderColor: '#FA39BE',
-                    color: '#FA39BE',
-                    '&:hover': {
-                      borderColor: '#FE9D2B',
-                      color: '#FE9D2B',
-                    },
-                  }}
                 >
                   {translations?.results?.delete_filters || 'Delete Filters'}
                 </ActionButton>
