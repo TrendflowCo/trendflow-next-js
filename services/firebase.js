@@ -317,3 +317,17 @@ export const inviteCollaborator = async (wishlistId, collaboratorEmail) => {
     throw error;
   }
 };
+
+export const deleteWishlist = async (wishlistId) => {
+  try {
+    await deleteDoc(doc(db, "wishlists", wishlistId));
+  } catch (error) {
+    console.error("Error deleting wishlist:", error);
+    throw error;
+  }
+};
+
+export const updateWishlistName = async (wishlistId, newName) => {
+  const wishlistRef = doc(db, 'wishlists', wishlistId);
+  await updateDoc(wishlistRef, { name: newName });
+};
