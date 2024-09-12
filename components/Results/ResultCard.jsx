@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Card, CardContent, CardActions, IconButton, Typography,
-  Tooltip, Box, Select, MenuItem, Button, Popover,
-  TextField, Divider, Fade, Zoom, Chip
+  Card, CardActions, IconButton, Typography,
+  Tooltip, Box, Zoom
 } from '@mui/material';
 import { styled, keyframes } from '@mui/system';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import SearchIcon from '@mui/icons-material/Search';
 import ShareIcon from '@mui/icons-material/Share';
-import AddIcon from '@mui/icons-material/Add';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useSpring, animated } from 'react-spring';
 import Image from 'next/image';
 import { enhanceText } from '../Utils/enhanceText';
@@ -20,11 +18,7 @@ import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { logAnalyticsEvent } from "../../services/firebase";
 import { useRouter } from 'next/router';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import '@fontsource/poppins';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-import axios from 'axios';
-import { endpoints } from '../../config/endpoints';
 import ShareModal from '../Common/ShareModal';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from 'firebase/auth';
@@ -32,46 +26,15 @@ import { getUserWishlists } from '../../services/firebase';
 import { app } from '../../services/firebase';
 import { toast } from 'sonner';
 import WishlistManager from '../User/Wishlist/WishlistManager';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const theme = createTheme({
-  typography: {
-    fontFamily: [
-      'Poppins',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-    h6: {
-      fontWeight: 600,
-      fontSize: '1rem',
-      lineHeight: 1.2,
+  palette: {
+    primary: {
+      main: '#9333ea',
     },
-    body1: {
-      fontWeight: 400,
-      fontSize: '0.875rem',
-    },
-    body2: {
-      fontWeight: 400,
-      fontSize: '0.75rem',
-    },
-  },
-  components: {
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: '12px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          fontWeight: 600,
-          borderRadius: '16px',
-        },
-      },
+    secondary: {
+      main: '#10b981',
     },
   },
 });
@@ -93,6 +56,9 @@ const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   transition: 'all 0.3s ease-in-out',
+  borderRadius: '16px',
+  overflow: 'hidden',
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   '&:hover': {
     transform: 'translateY(-5px)',
     boxShadow: '0 12px 20px rgba(0,0,0,0.1)',
@@ -101,7 +67,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 const ImageWrapper = styled(Box)({
   position: 'relative',
-  paddingTop: '95%',
+  paddingTop: '100%',
   overflow: 'hidden',
 });
 
@@ -112,6 +78,10 @@ const StyledLazyLoadImage = styled(LazyLoadImage)({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  transition: 'transform 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'scale(1.05)',
+  },
 });
 
 const BrandLogo = styled(Image)({
@@ -120,16 +90,16 @@ const BrandLogo = styled(Image)({
   objectFit: 'contain',
 });
 
-const SaleChip = styled(Chip)(({ theme }) => ({
+const SaleChip = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: theme.spacing ? theme.spacing(1) : '8px',
-  right: theme.spacing ? theme.spacing(1) : '8px',
-  background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
+  top: theme.spacing(1),
+  right: theme.spacing(1),
+  background: 'linear-gradient(to right, #9333ea, #10b981)',
   color: '#ffffff',
   fontWeight: 'bold',
-  '&:hover': {
-    background: 'linear-gradient(to right, #FA39BE, #FE9D2B)',
-  },
+  padding: '4px 8px',
+  borderRadius: '12px',
+  fontSize: '0.75rem',
 }));
 
 const InfoOverlay = styled(Box)(({ theme }) => ({
@@ -137,17 +107,22 @@ const InfoOverlay = styled(Box)(({ theme }) => ({
   bottom: 0,
   left: 0,
   right: 0,
-  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  padding: '8px',
-  borderBottomLeftRadius: '4px',
-  borderBottomRightRadius: '4px',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  padding: '12px',
+  borderTopLeftRadius: '16px',
+  borderTopRightRadius: '16px',
+  transition: 'transform 0.3s ease-in-out',
+  transform: 'translateY(100%)',
+  '.MuiCard-root:hover &': {
+    transform: 'translateY(0)',
+  },
 }));
 
 const ProductTitle = styled(Typography)({
   fontWeight: 'bold',
-  fontSize: '0.9rem',
+  fontSize: '1rem',
   lineHeight: 1.2,
-  marginBottom: '4px',
+  marginBottom: '8px',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   display: '-webkit-box',
@@ -157,37 +132,40 @@ const ProductTitle = styled(Typography)({
 
 const BrandLogoWrapper = styled(Box)({
   position: 'absolute',
-  bottom: 8,
+  top: 8,
   left: 8,
-  backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  borderRadius: '4px',
-  padding: '2px',
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  borderRadius: '8px',
+  padding: '4px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '40px',
-  height: '20px',
+  width: '48px',
+  height: '24px',
 });
 
 const WishlistButton = styled(IconButton)(({ theme, inWishlist }) => ({
-  color: inWishlist ? '#FA39BE' : '#BDBDBD',
+  color: inWishlist ? theme.palette.primary.main : theme.palette.grey[400],
   transition: 'all 0.3s ease-in-out',
   '&:hover': {
-    color: '#FA39BE',
+    color: theme.palette.primary.main,
+    transform: 'scale(1.1)',
     animation: inWishlist ? `${pulse} 1s infinite` : 'none',
   },
 }));
 
-const PopoverContent = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
-  width: 280,
-  borderRadius: 12,
+const ActionButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.grey[600],
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    color: theme.palette.secondary.main,
+    transform: 'scale(1.1)',
+  },
 }));
 
 const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user } = useAppSelector(state => state.auth);
   const { wishlist } = useAppSelector(state => state.search);
   const { translations } = useAppSelector(state => state.region);
   const [loadingFav, setLoadingFav] = useState(false);
@@ -195,36 +173,31 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const imageUrls = Array.isArray(productItem.img_urls) ? productItem.img_urls : [productItem.img_urls];
   const [wishlists, setWishlists] = useState([]);
-  const [selectedWishlist, setSelectedWishlist] = useState('');
   const auth = getAuth(app);
-  const [userAuth] = useAuthState(auth);
-  const [newWishlistName, setNewWishlistName] = useState('');
-  const [isCreatingNewWishlist, setIsCreatingNewWishlist] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [user, loading] = useAuthState(auth);
   const [wishlistAdded, setWishlistAdded] = useState(false);
   const [wishlistManagerOpen, setWishlistManagerOpen] = useState(false);
 
-
   const fetchWishlists = useCallback(async () => {
-    if (userAuth) {
-      const userWishlists = await getUserWishlists(userAuth.uid);
+    if (user) {
+      const userWishlists = await getUserWishlists(user.uid);
       setWishlists(userWishlists);
     }
-  }, [userAuth]);
+  }, [user]);
   
   useEffect(() => {
-    if (userAuth) {
+    if (user) {
       fetchWishlists();
     }
-  }, [userAuth, fetchWishlists]);
-  
-  
+  }, [user, fetchWishlists]);
+
   const handleWishlistClick = (event) => {
     event.stopPropagation();
-    if (user && Object.keys(user).length > 0) {
+    if (user) {
       console.log("Opening WishlistManager with productItem:", productItem);
       setWishlistManagerOpen(true);
-      console.log('user', user);
+    } else if (loading) {
+      toast.info("Please wait while we check your login status");
     } else {
       toast.error("Please log in to add items to your wishlist");
     }
@@ -455,7 +428,7 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
             </Box>
           )}
           {productItem.sale && (
-            <SaleChip label={translations?.results?.on_sale.toUpperCase()} />
+            <SaleChip>{translations?.results?.on_sale.toUpperCase()}</SaleChip>
           )}
           {isCurrentProduct && (
             <Typography
@@ -464,37 +437,41 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
                 position: 'absolute',
                 top: 8,
                 left: 8,
-                backgroundColor: '#FA39BE',
+                backgroundColor: 'primary.main',
                 color: 'white',
                 padding: '2px 8px',
-                borderRadius: '4px',
+                borderRadius: '8px',
                 fontWeight: 'bold',
               }}
             >
               Current Product
             </Typography>
           )}
+          <BrandLogoWrapper>
+            <BrandLogo
+              src={logos[productItem?.brand?.toLowerCase()] || '/path/to/default/logo.png'}
+              alt={productItem?.brand}
+              width={40}
+              height={20}
+            />
+          </BrandLogoWrapper>
           <InfoOverlay>
             <ProductTitle>
               {enhanceText(productItem.name)}
             </ProductTitle>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <BrandLogo
-                src={logos[productItem?.brand?.toLowerCase()] || '/path/to/default/logo.png'}
-                alt={productItem?.brand}
-                width={50}
-                height={20}
-              />
-              <Typography variant="body2" fontWeight="bold">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="body2" fontWeight="bold" sx={{ color: 'primary.main' }}>
                 {productItem.price !== 0 
-                  // ? `${productItem.currency} ${productItem.price}`
                   ? `€ ${productItem.price}`
                   : enhanceText(translations?.results?.no_price)}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {productItem?.brand}
               </Typography>
             </Box>
           </InfoOverlay>
         </ImageWrapper>
-        <CardActions disableSpacing sx={{ justifyContent: 'space-between', padding: '8px' }}>
+        <CardActions disableSpacing sx={{ justifyContent: 'space-between', padding: '12px' }}>
           <Box>
             <Tooltip title={enhanceText(translations?.results?.add_to_wishlist)}>
               <WishlistButton
@@ -512,21 +489,21 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
               </WishlistButton>
             </Tooltip>
             <Tooltip title={enhanceText(translations?.results?.visit_site)}>
-              <IconButton onClick={handleVisitSite}>
+              <ActionButton onClick={handleVisitSite}>
                 <StorefrontIcon />
-              </IconButton>
+              </ActionButton>
             </Tooltip>
           </Box>
           <Box>
             <Tooltip title={enhanceText(translations?.results?.search_similar)}>
-              <IconButton onClick={() => handleSearchSimilar(productItem.id_item)}>
+              <ActionButton onClick={() => handleSearchSimilar(productItem.id_item)}>
                 <SearchIcon />
-              </IconButton>
+              </ActionButton>
             </Tooltip>
             <Tooltip title={enhanceText(translations?.results?.share)}>
-              <IconButton onClick={handleShare}>
+              <ActionButton onClick={handleShare}>
                 <ShareIcon />
-              </IconButton>
+              </ActionButton>
             </Tooltip>
           </Box>
         </CardActions>

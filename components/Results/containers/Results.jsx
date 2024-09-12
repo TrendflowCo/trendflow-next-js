@@ -19,6 +19,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { getAuth } from "firebase/auth";
 import GlobalLoader from "../../Common/Loaders/GlobalLoader";
 import { toast } from "sonner"; // Import toast from sonner
+import { Button } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -30,6 +31,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SortIcon from '@mui/icons-material/Sort';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { motion } from 'framer-motion';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
@@ -445,7 +447,7 @@ const Results = () => {
                     {availableBrands?.length > 0 && <meta name="brands" content={availableBrands.join(' ')} />}
                   </Head>
                   <section className="mb-8">
-                    <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4 bg-gradient-to-r from-purple-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">
+                    <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-emerald-500 bg-clip-text text-transparent">
                       {enhanceText(router.query.query)}
                     </h1>
                     <div className="flex flex-wrap items-center gap-4">
@@ -515,38 +517,80 @@ const Results = () => {
                     </div>
                   </section>
                   {searchTags?.length > 0 && (
-                    <section className="mb-8 bg-white rounded-xl shadow-lg p-6">
-                      <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-bold text-gray-800">
-                          {tagSectionVisible ? 'Refine Your Search' : 'Search Results'}
-                        </h2>
-                        <button 
-                          onClick={() => setTagSectionVisible(!tagSectionVisible)}
-                          className="text-purple-600 hover:text-emerald-500 transition-colors duration-300 p-2 rounded-full hover:bg-gray-100"
-                        >
-                          {tagSectionVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        </button>
-                      </div>
-                      {tagSectionVisible && (
-                        <div className="flex flex-wrap gap-2">
-                          {searchTags.sort().map((tag, index) => (
-                            <button 
-                              key={index}
-                              className={`
-                                px-4 py-2 rounded-full text-sm font-medium
-                                transition-all duration-300 ease-in-out
-                                ${selectedTags.includes(tag) 
-                                  ? 'bg-gradient-to-r from-purple-500 to-emerald-500 text-white shadow-md transform scale-105' 
-                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
-                              `}
-                              onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
-                            >
-                              {enhanceText(tag)}
-                            </button>
-                          ))}
+                    <motion.section 
+                      className="mb-8 bg-white rounded-xl shadow-lg overflow-hidden"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <div className="p-6">
+                        <div className="flex justify-between items-center mb-4">
+                          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-emerald-500 bg-clip-text text-transparent">
+                            {tagSectionVisible ? 'Refine Your Search' : 'Search Results'}
+                          </h2>
+                          <Button 
+                            onClick={() => setTagSectionVisible(!tagSectionVisible)}
+                            className="text-purple-600 hover:text-emerald-500 transition-colors duration-300"
+                            startIcon={tagSectionVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                          >
+                            {tagSectionVisible ? 'Hide' : 'Show'}
+                          </Button>
                         </div>
-                      )}
-                    </section>
+                        {tagSectionVisible && (
+                          <motion.div 
+                            className="space-y-4"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <div className="flex flex-wrap gap-2">
+                              {searchTags.sort().map((tag, index) => {
+                                const isTagApplied = selectedTags.includes(tag) || (router.query.tags && router.query.tags.split(',').includes(tag));
+                                return (
+                                  <motion.button 
+                                    key={index}
+                                    className={`
+                                      px-4 py-2 rounded-full text-sm font-medium
+                                      transition-all duration-300 ease-in-out
+                                      ${isTagApplied
+                                        ? 'bg-gradient-to-r from-purple-500 to-emerald-500 text-white shadow-md' 
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                                    `}
+                                    onClick={() => handleAddTag(selectedTags, setSelectedTags, tag)}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                  >
+                                    {enhanceText(tag)}
+                                  </motion.button>
+                                );
+                              })}
+                            </div>
+                            <motion.div 
+                              className="flex justify-center mt-4"
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.2 }}
+                            >
+                              <Button
+                                onClick={handleRefineSearch}
+                                variant="contained"
+                                color="primary"
+                                startIcon={<FilterListIcon />}
+                                className="
+                                  bg-gradient-to-r from-purple-600 to-emerald-500
+                                  text-white font-bold py-3 px-6 rounded-lg
+                                  shadow-lg hover:shadow-xl transition-all duration-300
+                                  transform hover:scale-105
+                                "
+                              >
+                                Refine Search {selectedTags.length > 0 && `(${selectedTags.length})`}
+                              </Button>
+                            </motion.div>
+                          </motion.div>
+                        )}
+                      </div>
+                    </motion.section>
                   )}
                   <div className="min-h-screen mb-12">
                     {products?.length > 0 && (
