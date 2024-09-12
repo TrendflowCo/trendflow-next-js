@@ -73,7 +73,7 @@ const Wishlist = () => {
 						<div key={item.id}>
 							<h3>{item.name}</h3>
 							<p>Brand: {item.brand}</p>
-							<p>Price: {item.price} {item.currency}</p>
+							<p>Price: {item.price} €</p>
 							{item.image && (
 								<Image
 									src={item.image}
