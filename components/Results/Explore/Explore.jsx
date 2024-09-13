@@ -27,21 +27,27 @@ import { wishlistChange } from "./../functions/wishlistChange";
 import { setWishlist } from '../../../redux/features/actions/search';
 import { logAnalyticsEvent } from '../../../services/firebase';
 import { toast } from 'sonner';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from "firebase/auth";
+import { app } from "../../../services/firebase";
+import WishlistManager from '../../User/Wishlist/WishlistManager';
 
 const Explore = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const { user } = useAppSelector(state => state.auth);
-    const { translations , country, language } = useAppSelector(state => state.region);
-    const { wishlist , currentSearch, previousResults } = useAppSelector(state => state.search);
+    const auth = getAuth(app);
+    const [user, authLoading] = useAuthState(auth);
+    const { translations, country, language } = useAppSelector(state => state.region);
+    const { wishlist, currentSearch, previousResults } = useAppSelector(state => state.search);
     console.log('Explore component - previousResults:', previousResults);
     console.log('Explore component - entire search state:', useAppSelector(state => state.search));
 
-    const [loadingFav , setLoadingFav] = useState(false);
-    const [currentProduct , setCurrentProduct] = useState({});
-    const [similarProducts , setSimilarProducts] = useState([]);
-    const [loading , setLoading] = useState(true);
+    const [loadingFav, setLoadingFav] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState({});
+    const [similarProducts, setSimilarProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [shareModalOpen, setShareModalOpen] = useState(false);
+    const [wishlistManagerOpen, setWishlistManagerOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -74,31 +80,15 @@ const Explore = () => {
         }
     }, [router.query.id, router.query.lan])
 
-    const handleAddWishlist = async (event) => {
+    const handleAddWishlist = (event) => {
         event.stopPropagation();
-        if (user) {
-          setLoadingFav(true);
-          const response = await wishlistChange(currentProduct.id_item , user , wishlist);
-          if(response === 'added'){
-            let newWishlist = [...wishlist];
-            newWishlist.push(currentProduct.id);
-            dispatch(setWishlist(newWishlist))
-            setLoadingFav(false);
-          } else if (response === 'deleted') {
-            let newWishlist = [...wishlist];
-            const index = newWishlist.findIndex(item => item === currentProduct.id_item);
-            newWishlist.splice(index, 1); // 2nd parameter means remove one item only
-            dispatch(setWishlist(newWishlist))
-            setLoadingFav(false);
-          }
-        } else {
-          Swal.fire({
-            ...swalNoInputs,
-            text: "You're not logged in",
-            confirmButtonText: "Oh right"
-          })
+        if (!user) {
+            toast.error("You're not logged in");
+            return;
         }
-      };
+        setWishlistManagerOpen(true);
+    };
+
     const handleVisitSite = () => {
         logAnalyticsEvent('select_content', {
           content_type: 'product',
@@ -323,12 +313,9 @@ const Explore = () => {
                                                 <Tooltip title="Save to Wishlist">
                                                     <IconButton
                                                         onClick={(event) => handleAddWishlist(event)}
-                                                        disabled={loadingFav}
                                                         className="text-white hover:bg-white hover:text-purple-600 transition-all duration-300"
                                                     >
-                                                        {loadingFav ? (
-                                                            <CircularProgress size={24} color="inherit" />
-                                                        ) : wishlist.includes(currentProduct.id_item) ? (
+                                                        {wishlist.includes(currentProduct.id_item) ? (
                                                             <Badge badgeContent={<CheckIcon fontSize="small" />} color="success">
                                                                 <FavoriteIcon />
                                                             </Badge>
@@ -384,6 +371,14 @@ const Explore = () => {
                     />
                 );
             })()}
+
+            {currentProduct && (
+                <WishlistManager
+                    productItem={currentProduct}
+                    open={wishlistManagerOpen}
+                    onClose={() => setWishlistManagerOpen(false)}
+                />
+            )}
         </Box>
     )
 };
