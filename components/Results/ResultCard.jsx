@@ -163,7 +163,7 @@ const ActionButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
+const ResultCard = ({ productItem, layoutType, isCurrentProduct, onWishlistClick }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { wishlist } = useAppSelector(state => state.search);
@@ -193,13 +193,17 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct }) => {
 
   const handleWishlistClick = (event) => {
     event.stopPropagation();
-    if (user) {
-      console.log("Opening WishlistManager with productItem:", productItem);
-      setWishlistManagerOpen(true);
-    } else if (loading) {
-      toast.info("Please wait while we check your login status");
+    if (onWishlistClick) {
+      onWishlistClick(productItem);
     } else {
-      toast.error("Please log in to add items to your wishlist");
+      if (user) {
+        console.log("Opening WishlistManager with productItem:", productItem);
+        setWishlistManagerOpen(true);
+      } else if (loading) {
+        toast.info("Please wait while we check your login status");
+      } else {
+        toast.error("Please log in to add items to your wishlist");
+      }
     }
   };
 

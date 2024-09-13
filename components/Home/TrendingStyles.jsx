@@ -12,6 +12,11 @@ import ResultCard from '../Results/ResultCard';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from "firebase/auth";
+import { app } from "../../services/firebase";
+import { toast } from 'sonner';
+import WishlistManager from '../User/Wishlist/WishlistManager';
 
 const TrendingStyles = () => {
   const [randomQueries, setRandomQueries] = useState([]);
@@ -19,6 +24,10 @@ const TrendingStyles = () => {
   const { translations, language, country } = useAppSelector(state => state.region);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const auth = getAuth(app);
+  const [user] = useAuthState(auth);
+  const [wishlistManagerOpen, setWishlistManagerOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     if (translations?.prompts && Object.keys(translations.prompts).length > 0) {
@@ -57,6 +66,15 @@ const TrendingStyles = () => {
     handleSearchQuery(country, language, query, 'clickOnTrendingStyle', router);
   };
 
+  const handleAddWishlist = (product) => {
+    if (!user) {
+      toast.error("You're not logged in");
+      return;
+    }
+    setSelectedProduct(product);
+    setWishlistManagerOpen(true);
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -93,6 +111,7 @@ const TrendingStyles = () => {
                     productItem={product}
                     layoutType="compact"
                     isCurrentProduct={false}
+                    onWishlistClick={() => handleAddWishlist(product)}
                   />
                 </SwiperSlide>
               ))}
@@ -110,6 +129,16 @@ const TrendingStyles = () => {
           </div>
         </motion.div>
       ))}
+      {selectedProduct && (
+        <WishlistManager
+          productItem={selectedProduct}
+          open={wishlistManagerOpen}
+          onClose={() => {
+            setWishlistManagerOpen(false);
+            setSelectedProduct(null);
+          }}
+        />
+      )}
     </motion.div>
   );
 };

@@ -32,15 +32,12 @@ module.exports = {
     },
     extend: {
       colors: {
-        'primary': '#3B82F6', // Blue
-        'secondary': '#10B981', // Emerald
-        'accent': '#F59E0B', // Amber
-        'neutral': '#6B7280', // Gray
-        'base-100': '#FFFFFF',
-        'info': '#3ABFF8',
-        'success': '#36D399',
-        'warning': '#FBBD23',
-        'error': '#F87272',
+        'trendflow-black': '#262626',
+        'trendflow-white': '#FAFAFA',
+        'trendflow-green': '#57FA3E',
+        'trendflow-orange': '#FAB332',
+        'trendflow-blue': '#318AFA',
+        'trendflow-pink': '#FA39BE',
       },
     },
   },
