@@ -399,7 +399,10 @@
         "select_brands": "seleziona marche",
         "brand": "marca",
         "price": "prezzo",
-        "select_filter": "seleziona filtro"
+        "select_filter": "seleziona filtro",
+        "share": "Condividi",
+        "share_product": "Condividi questo prodotto",
+        "search_similar": "Cerca simile"
     },
     "firstVisit": {
         "selectYourRegion": "Seleziona la tua regione",

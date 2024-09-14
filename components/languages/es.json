@@ -402,7 +402,8 @@
     "price": "precio",
     "select_filter": "seleccionar filtro",
     "share": "Compartir",
-    "share_product": "Compartir este producto"
+    "share_product": "Compartir este producto",
+    "search_similar": "Buscar similar"
   },
   "firstVisit": {
     "selectYourRegion": "Selecciona tu región",

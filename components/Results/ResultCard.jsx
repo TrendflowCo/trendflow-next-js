@@ -404,6 +404,7 @@ const ResultCard = ({ productItem, layoutType, isCurrentProduct, onWishlistClick
             },
           })
         }}
+        className={`${isCurrentProduct ? 'ring-4 ring-purple-500 ring-opacity-50' : ''}`}
       >
         <ImageWrapper
           onMouseEnter={handleMouseEnter}
