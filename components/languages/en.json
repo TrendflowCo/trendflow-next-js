@@ -421,7 +421,8 @@
         "price": "price",
         "select_filter": "select filter",
         "share": "Share",
-        "share_product": "Share this product"
+        "share_product": "Share this product",
+        "search_similar": "Search Similar"
     },
     "firstVisit": {
         "selectYourRegion": "Select your region",
