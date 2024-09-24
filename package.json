@@ -16,6 +16,7 @@
     "@fontsource/poppins": "^5.0.14",
     "@heroicons/react": "^2.1.5",
     "@iconify/react": "^4.1.0",
+    "@langchain/openai": "^0.3.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.129",
     "@mui/material": "^5.16.6",
