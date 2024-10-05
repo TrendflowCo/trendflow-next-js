@@ -4,58 +4,55 @@ import { useRouter } from 'next/router';
 import { endpoints } from '../config/endpoints';
 import axios from 'axios';
 import ResultCard from '../components/Results/ResultCard';
-import { Typography, Box, Chip, IconButton, Container, Button, TextField } from '@mui/material';
-import { KeyboardArrowUp, KeyboardArrowDown, Celebration, ExpandMore, Chat } from '@mui/icons-material';
+import { Typography, Box, Chip, IconButton, Container, Button, TextField, Drawer } from '@mui/material';
+import { KeyboardArrowUp, KeyboardArrowDown, Celebration, ExpandMore, Chat, Send } from '@mui/icons-material';
 import styles from '../styles/MultiResults.module.css';
+import AIRefinementAssistant from '../components/Home/AIRefinementAssistant';
 
 const MultiResults = () => {
   const router = useRouter();
   const { queries } = router.query;
   const [results, setResults] = useState([]);
+  const [conversation, setConversation] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeSection, setActiveSection] = useState(0);
   const [expandedCriteria, setExpandedCriteria] = useState(false);
-  const [aiChatOpen, setAiChatOpen] = useState(false);
+  const [aiDrawerOpen, setAiDrawerOpen] = useState(false);
   const [aiInput, setAiInput] = useState('');
+  const [aiConversation, setAiConversation] = useState([]);
   const sectionRefs = useRef([]);
 
   useEffect(() => {
     if (queries) {
       const searchParams = JSON.parse(queries);
-      const fetchResults = async () => {
-        try {
-          const allResults = await Promise.all(
-            searchParams.map(async (param) => {
-              const response = await axios.get(endpoints('results'), {
-                params: {
-                  query: param.query,
-                  maxPrice: param.maxPrice,
-                  onSale: param.onSale,
-                  brands: param.brands ? param.brands.join(',') : undefined,
-                },
-              });
-              return { 
-                query: param.query, 
-                items: response.data.results.map(item => ({
-                  ...item,
-                  id_item: item.id, // Ensure id_item is set
-                  img_urls: item.img_urls[0] ? [item.img_urls[0]] : [], // Convert image to img_urls array
-                })) || [] 
-              };
-            })
-          );
-          setResults(allResults);
-          setLoading(false);
-        } catch (error) {
-          console.error('Error fetching results:', error);
-          setError('Failed to fetch results. Please try again.');
-          setLoading(false);
-        }
-      };
-      fetchResults();
+      fetchResults(searchParams);
     }
   }, [queries]);
+
+  const fetchResults = async (searchParams) => {
+    try {
+      const allResults = await Promise.all(
+        searchParams.map(async (param) => {
+          const response = await axios.get(endpoints('results'), {
+            params: {
+              query: param.query,
+              maxPrice: param.maxPrice,
+              onSale: param.onSale,
+              brands: param.brands ? param.brands.join(',') : undefined,
+            },
+          });
+          return { query: param.query, items: response.data.results || [], ...param };
+        })
+      );
+      setResults(allResults);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching results:', error);
+      setError('Failed to fetch results. Please try again.');
+      setLoading(false);
+    }
+  };
 
   const handleSectionChange = (index) => {
     setActiveSection(index);
@@ -63,10 +60,36 @@ const MultiResults = () => {
   };
 
   const handleAiRefinement = async () => {
-    // Implement AI refinement logic here
-    console.log("Refining search with AI:", aiInput);
-    // You would typically send this to your backend for processing
+    if (aiInput.trim() === '') return;
+
+    setAiConversation(prev => [...prev, { role: 'user', content: aiInput }]);
     setAiInput('');
+
+    // Simulate AI processing (replace with actual AI processing in production)
+    setAiConversation(prev => [...prev, { role: 'ai', content: "I'm refining your search based on your input. Please wait a moment..." }]);
+
+    // Simulate API call for refined results
+    setTimeout(async () => {
+      try {
+        const refinedParams = results.map(result => ({
+          ...result,
+          query: `${result.query} ${aiInput}`,
+        }));
+
+        await fetchResults(refinedParams);
+
+        setAiConversation(prev => [...prev, { role: 'ai', content: `I've refined your search to include "${aiInput}". The results have been updated with new items that match your criteria.` }]);
+      } catch (error) {
+        console.error('Error refining results:', error);
+        setAiConversation(prev => [...prev, { role: 'ai', content: "I'm sorry, I encountered an error while refining the search. Please try again." }]);
+      }
+    }, 1500);
+  };
+
+  const handleRefinement = (newResults, updatedConversation) => {
+    setResults(newResults);
+    setConversation(updatedConversation);
+    // Optionally, update URL or perform other actions
   };
 
   if (loading) {
@@ -223,24 +246,50 @@ const MultiResults = () => {
 
       <Button
         className={styles.aiChatButton}
-        onClick={() => setAiChatOpen(!aiChatOpen)}
+        onClick={() => setAiDrawerOpen(true)}
         startIcon={<Chat />}
       >
         Refine with AI
       </Button>
 
-      {aiChatOpen && (
+      <Drawer
+        anchor="right"
+        open={aiDrawerOpen}
+        onClose={() => setAiDrawerOpen(false)}
+        classes={{ paper: styles.aiDrawer }}
+      >
         <Box className={styles.aiChatBox}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Ask me to refine your search..."
-            value={aiInput}
-            onChange={(e) => setAiInput(e.target.value)}
-          />
-          <Button onClick={handleAiRefinement}>Send</Button>
+          <Typography variant="h6" className={styles.aiChatTitle}>
+            AI Style Assistant
+          </Typography>
+          <Box className={styles.aiConversation}>
+            {aiConversation.map((message, index) => (
+              <Box key={index} className={`${styles.aiMessage} ${styles[message.role]}`}>
+                {message.content}
+              </Box>
+            ))}
+          </Box>
+          <Box className={styles.aiInputBox}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Ask me to refine your search..."
+              value={aiInput}
+              onChange={(e) => setAiInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAiRefinement()}
+            />
+            <IconButton onClick={handleAiRefinement} color="primary">
+              <Send />
+            </IconButton>
+          </Box>
         </Box>
-      )}
+      </Drawer>
+
+      <AIRefinementAssistant 
+        onRefine={handleRefinement} 
+        initialResults={results} 
+        initialConversation={conversation}
+      />
     </Container>
   );
 };
