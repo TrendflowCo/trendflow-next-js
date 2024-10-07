@@ -65,6 +65,9 @@ const AIStylingAssistant = ({ onClose }) => {
           case 'Shop for specific item':
             handleSend("I'm looking for a specific item");
             break;
+          case 'View Results':
+            handleViewResults();
+            break;
           default:
             handleSend(label);
         }
@@ -94,34 +97,24 @@ const AIStylingAssistant = ({ onClose }) => {
     }
   }, [messages]);
 
-  const parseInteractiveElements = (content) => {
-    const regex = /\[([^\]]+)\]\((button|dropdown|slider)(?::([^)]+))?\)/g;
-    let lastIndex = 0;
-    const elements = [];
-    const plainText = [];
-
+  const parseInteractiveElements = (text) => {
+    const regex = /\[([^\]]+)\]\((button|dropdown|slider)(?::([^\)]+))?\)/g;
     let match;
-    while ((match = regex.exec(content)) !== null) {
-      plainText.push(content.slice(lastIndex, match.index));
-      
-      const [_, label, type, options] = match;
-      const element = { type, label };
-      
-      if (type === 'dropdown' && options) {
-        element.options = options.split(',').map(opt => opt.trim());
-      } else if (type === 'slider' && options) {
-        const [min, max, step] = options.split(',').map(Number);
-        element.min = min;
-        element.max = max;
-        element.step = step;
-      }
-      
-      elements.push(element);
+    const elements = [];
+    let lastIndex = 0;
+    let parsedText = '';
+
+    while ((match = regex.exec(text)) !== null) {
+      parsedText += text.slice(lastIndex, match.index);
       lastIndex = regex.lastIndex;
+
+      const [_, label, type, options] = match;
+      elements.push({ type, label, options: options ? options.split(',') : [] });
     }
 
-    plainText.push(content.slice(lastIndex));
-    return { text: plainText.join(''), elements };
+    parsedText += text.slice(lastIndex);
+
+    return { text: parsedText, elements };
   };
 
   const handleSend = async (message = input) => {
@@ -134,11 +127,11 @@ const AIStylingAssistant = ({ onClose }) => {
 
     try {
       const response = await chat.call([
-        new SystemMessage(`You are an AI fashion stylist assistant. Engage in a natural conversation to understand the user's style preferences, needs, and context. Be adaptive to short or long conversations. Use emojis to add personality. When appropriate, suggest interactive elements using the following syntax:
+        new SystemMessage(`You are an AI fashion stylist assistant. Engage in a natural conversation to understand the user's style preferences, needs, and context. Be adaptive to short or long conversations. Use emojis to add personality. Highlight important parts using **bold text**. When appropriate, suggest interactive elements using the following syntax:
         - For buttons: [Button Label](button)
         - For dropdowns: [Dropdown Label](dropdown:option1,option2,option3)
         - For sliders: [Slider Label](slider:min,max,step)
-        From time to time provide at least one interactive element in your responses to keep the conversation engaging. When you have enough information or the user expresses readiness, suggest viewing results. Use the 'generateSearchQueries' function to create tailored search queries when appropriate.`),
+        Provide at least one interactive element in your responses to keep the conversation engaging. When you have enough information or the user expresses readiness, use the 'generateSearchQueries' function to create tailored search queries.`),
         ...newMessages.map(msg => 
           msg.type === 'human' ? new HumanMessage(msg.content) : new SystemMessage(msg.content)
         ),
@@ -146,7 +139,7 @@ const AIStylingAssistant = ({ onClose }) => {
         functions: [
           {
             name: "generateSearchQueries",
-            description: "Generate rich search queries based on user preferences",
+            description: "Generate search queries based on the conversation",
             parameters: {
               type: "object",
               properties: {
@@ -156,37 +149,16 @@ const AIStylingAssistant = ({ onClose }) => {
                     type: "object",
                     properties: {
                       query: { type: "string" },
-                      maxPrice: { type: "number", optional: true },
-                      onSale: { type: "boolean", optional: true },
-                      category: { type: "string", enum: ['men', 'women', 'kids', 'home', 'gift'], optional: true },
+                      section: { type: "string", optional: true },
                       brands: { 
-                        type: "array", 
-                        items: { type: "string" },
-                        enum: ['zara', 'mango', 'uo', 'h&m', 'cos', 'massimo dutti', 'pull & bear', 'bershka', 'stradivarius', '&other', 'desigual', 'uniqlo', 'ben sherman', 'loewe', 'adidas', 'moschino', 'farm rio', 'miu miu', 'calvin klein', 'balenciaga', 'champion', 'dior', 'all saints', 'alexander mcqueen', 'fila', 'sandro', 'ysl', 'parfois', 'hugo boss', 'hyein seo', 'jaded london', 'the reformation', 'adanola', 'bobo choses', 'danielle guizio', 'fait par foutch', 'feners', 'geel', 'gimaguas', 'henne', 'kitteny', 'ksubi', 'miaou', 'mode mischief', 'my mum made it', 'nodress', 'the bekk', 'rouje', 'rationalle', 'souce unknown'],
-                        optional: true 
-                      }
-                    }
-                  }
-                },
-                interactiveElements: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      type: { type: "string", enum: ["button", "slider", "dropdown"] },
-                      label: { type: "string" },
-                      action: { type: "string" },
-                      options: { 
                         type: "array", 
                         items: { type: "string" },
                         optional: true 
                       },
-                      min: { type: "number", optional: true },
-                      max: { type: "number", optional: true },
-                      step: { type: "number", optional: true }
+                      maxPrice: { type: "number", optional: true },
+                      onSale: { type: "boolean", optional: true }
                     }
-                  },
-                  optional: true
+                  }
                 }
               }
             }
@@ -208,31 +180,44 @@ const AIStylingAssistant = ({ onClose }) => {
         setSearchParams(functionResponse.queries || []);
         setReadyForResults(functionResponse.queries && functionResponse.queries.length > 0);
         updateAvatar('excited');
+        
+        // Add a message to inform the user that results are ready
+        assistantMessage.content += "\n\n**Great news!** 🎉 I've prepared some exciting outfit options based on our conversation. Would you like to see the results now?";
+        assistantMessage.interactiveElements.push({ type: 'button', label: 'View Results', action: 'view_results' });
       } else {
         updateAvatar('thoughtful');
       }
 
       setMessages([...newMessages, assistantMessage]);
+      setIsTyping(false);
+
     } catch (error) {
-      console.error('Error in AI conversation:', error);
-      setMessages([...newMessages, { type: 'assistant', content: "I'm sorry, I encountered an error. Please try again." }]);
+      console.error('Error in chat:', error);
+      setMessages([...newMessages, { type: 'assistant', content: "I'm sorry, I encountered an error. Could you please try again?" }]);
+      setIsTyping(false);
       updateAvatar('confused');
     }
-
-    setIsTyping(false);
   };
 
   const handleViewResults = () => {
+    console.log("handleViewResults called");
+    console.log("searchParams:", searchParams);
+    
     if (searchParams.length > 0) {
       const query = {
         queries: JSON.stringify(searchParams),
         lan: router.query.lan || 'en',
         zone: router.query.zone || 'us'
       };
+      console.log("Navigating with query:", query);
+      
       router.push({
         pathname: '/multi-results',
         query: query
       });
+    } else {
+      console.error("No search params available");
+      setMessages([...messages, { type: 'assistant', content: "I'm sorry, but I don't have enough information to generate results yet. Can you provide more details about what you're looking for?" }]);
     }
   };
 
