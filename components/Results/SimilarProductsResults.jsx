@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { endpoints } from "../../config/endpoints";
+import { endpoints, fetchWithAuth } from "../../config/endpoints";
 import { Box, Typography, CircularProgress, Paper, Button } from '@mui/material';
 import Image from 'next/image';
 import { languageAdapter } from '../Results/functions/languageAdapter';
@@ -56,19 +55,19 @@ const SimilarProductsResults = () => {
         try {
           setLoading(true);
           const languageQuery = `&language=${languageAdapter(lan)}`;
-          const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${id}${languageQuery}`)).data;
-          setCurrentProduct(currentIdProduct.result);
+          const currentIdProductResponse = await fetchWithAuth(`${endpoints('dedicatedProduct')}${id}${languageQuery}`);
+          setCurrentProduct(currentIdProductResponse.result);
 
-          const similars = (await axios.get(`${endpoints('similarProducts')}${id}`)).data;
-          setSimilarProducts(similars.results || []);
-          setSearchTags(similars.tags || []);
+          const similarsResponse = await fetchWithAuth(`${endpoints('similarProducts')}${id}`);
+          setSimilarProducts(similarsResponse.results || []);
+          setSearchTags(similarsResponse.tags || []);
 
           // Extract available brands
-          const brands = [...new Set(similars.results.map(product => product.brand))];
+          const brands = [...new Set((similarsResponse.results || []).map(product => product.brand))];
           setAvailableBrands(brands);
 
           // Calculate price range
-          const prices = similars.results.map(product => product.price);
+          const prices = (similarsResponse.results || []).map(product => product.price);
           const minPrice = Math.min(...prices);
           const maxPrice = Math.max(...prices);
           setCurrentPriceRange([minPrice, maxPrice]);
@@ -94,9 +93,9 @@ const SimilarProductsResults = () => {
       setLoadingMore(true);
       const nextPage = currentPage + 1;
       try {
-        const newSimilars = (await axios.get(`${endpoints('similarProducts')}${id}&page=${nextPage}`)).data;
-        if (newSimilars.results && newSimilars.results.length > 0) {
-          setSimilarProducts(prev => [...prev, ...newSimilars.results]);
+        const newSimilarsResponse = await fetchWithAuth(`${endpoints('similarProducts')}${id}&page=${nextPage}`);
+        if (newSimilarsResponse.results && newSimilarsResponse.results.length > 0) {
+          setSimilarProducts(prev => [...prev, ...newSimilarsResponse.results]);
           setCurrentPage(nextPage);
         } else {
           setHasMore(false);
