@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAppSelector } from '../../redux/hooks';
 import { toast } from 'sonner';
+import { endpoints, fetchWithAuth } from '../../config/endpoints';
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
@@ -160,7 +161,7 @@ const Filter = (props) => {
     );
   };
 
-  const handleApplyFilter = () => {
+  const handleApplyFilter = async () => {
     let newQuery = {...router.query};
     if (selectedCategory !== '') {
       newQuery = {...newQuery, category: selectedCategory}

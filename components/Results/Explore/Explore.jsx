@@ -18,7 +18,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CheckIcon from '@mui/icons-material/Check';
-import { endpoints } from "../../../config/endpoints";
+import { endpoints, fetchWithAuth } from "../../../config/endpoints";
 import axios from "axios";
 
 import { languageAdapter } from "../functions/languageAdapter";
@@ -39,10 +39,8 @@ const Explore = () => {
     const [user, authLoading] = useAuthState(auth);
     const { translations, country, language } = useAppSelector(state => state.region);
     const { wishlist, currentSearch, previousResults } = useAppSelector(state => state.search);
-    console.log('Explore component - previousResults:', previousResults);
-    console.log('Explore component - entire search state:', useAppSelector(state => state.search));
-
-    const [loadingFav, setLoadingFav] = useState(false);
+    const entireSearchState = useAppSelector(state => state.search);
+    
     const [currentProduct, setCurrentProduct] = useState({});
     const [similarProducts, setSimilarProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -50,35 +48,46 @@ const Explore = () => {
     const [wishlistManagerOpen, setWishlistManagerOpen] = useState(false);
 
     useEffect(() => {
+        console.log('Router query:', router.query);
+        console.log('Explore component - previousResults:', previousResults);
+        console.log('Explore component - entire search state:', entireSearchState);
+
         const fetchData = async () => {
-            setLoading(true);
-            const completeQuery = router.query.id;
-            const currentArray = completeQuery.split(' ');
-            const currentId = currentArray[1];
-            const currentLanguage = router.query.lan;
-            const languageQuery = `&language=${languageAdapter(currentLanguage)}`;
-            try {
-                const currentIdProduct = (await axios.get(`${endpoints('dedicatedProduct')}${currentId}${languageQuery}`)).data;
-                console.log('API response:', currentIdProduct);
-                setCurrentProduct(currentIdProduct.result)
-                // traer los similares
-                const similars = (await axios.get(`${endpoints('similarProducts')}${currentId}`)).data;
-                const filteredSimilarProducts = similars.results.filter(product => product.brand.toLowerCase());
-                setSimilarProducts(filteredSimilarProducts);
-                
-                // No need to fetch previous results here, they should already be in the Redux store
-                
-                setLoading(false);    
-            } catch (err) {
-                console.error('Error fetching data:', err);
-                setLoading(false);
+            if (router.query.id && router.query.lan) {
+                try {
+                    setLoading(true);
+                    // Extract only the UUID part from the query.id
+                    const idParts = router.query.id.split(' ');
+                    const productId = idParts[idParts.length - 1]; // Get the last part which should be the UUID
+                    
+                    console.log('Extracted Product ID:', productId);
+
+                    const apiUrl = `${endpoints('dedicatedProduct')}${productId}&language=${router.query.lan}`;
+                    console.log('API URL:', apiUrl);
+
+                    const response = await fetchWithAuth(apiUrl);
+                    console.log('API Response:', response);
+
+                    if (response && response.success) {
+                        setCurrentProduct(response.product);
+                        setSimilarProducts(response.similar_products);
+                    } else {
+                        console.error('Failed to fetch product data:', response);
+                        toast.error('Failed to load product data. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error fetching product data:', error);
+                    toast.error('An error occurred while fetching product data. Please try again later.');
+                } finally {
+                    setLoading(false);
+                }
             }
-        }
+        };
         
         if (router.query.id && router.query.lan) {
             fetchData();
         }
-    }, [router.query.id, router.query.lan])
+    }, [router.query.id, router.query.lan, entireSearchState, previousResults]);
 
     const handleAddWishlist = (event) => {
         event.stopPropagation();

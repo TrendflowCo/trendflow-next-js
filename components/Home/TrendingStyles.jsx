@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { setCurrentSearch } from '../../redux/features/actions/search';
 import { handleSearchQuery } from '../functions/handleSearchQuery';
-import axios from 'axios';
-import { endpoints } from "../../config/endpoints";
+import { endpoints, fetchWithAuth } from '../../config/endpoints';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import ResultCard from '../Results/ResultCard';
@@ -44,17 +43,24 @@ const TrendingStyles = () => {
   useEffect(() => {
     const fetchQueryResults = async () => {
       if (randomQueries.length > 0 && language && country) {
-        const results = await Promise.all(
-          randomQueries.map(query => 
-            axios.get(`${endpoints('results')}language=${language}&country=${country}&query=${encodeURIComponent(query)}&limit=10`)
-          )
-        );
-        
-        const filteredResults = results.map(res => 
-          res.data.results.filter(product => product.brand.toLowerCase() !== 'h&m')
-        );
-        
-        setQueryResults(filteredResults);
+        try {
+          const results = await Promise.all(
+            randomQueries.map(query => 
+              fetchWithAuth(`${endpoints('results')}language=${language}&country=${country}&query=${encodeURIComponent(query)}&limit=10`)
+            )
+          );
+          
+          const filteredResults = results.map(res => {
+            // Check if res.results exists, if not, use an empty array
+            const products = res.results || [];
+            return products.filter(product => product.brand.toLowerCase() !== 'h&m');
+          });
+          
+          setQueryResults(filteredResults);
+        } catch (error) {
+          console.error('Error fetching query results:', error);
+          // Handle the error appropriately (e.g., set an error state, show a message to the user)
+        }
       }
     };
 

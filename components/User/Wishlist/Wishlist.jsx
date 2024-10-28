@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../services/firebase';
-import axios from 'axios';
+import { endpoints, fetchWithAuth } from '../../../config/endpoints';
 import Image from 'next/image';
 
 const Wishlist = () => {
@@ -41,7 +41,7 @@ const Wishlist = () => {
 		if (!wishlistItems || wishlistItems.length === 0) {
 			setItems([]);
 			return;
-		}
+			}
 
 		const itemIds = wishlistItems.map(item => item.id_item).filter(Boolean).join(',');
 		if (!itemIds) {
@@ -50,8 +50,8 @@ const Wishlist = () => {
 		}
 
 		try {
-			const response = await axios.get(`https://fashion-clip-search-owkpe6u3xa-uc.a.run.app/api/search?ids=${itemIds}`);
-			setItems(response.data);
+			const response = await fetchWithAuth(`${endpoints('byIds')}${itemIds}`);
+			setItems(response.results || []);
 		} catch (error) {
 			console.error("Error fetching item details:", error);
 			setError("Failed to fetch item details");
