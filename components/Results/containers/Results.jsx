@@ -2,7 +2,7 @@ import React , {useState , useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import { collection , getDocs, query as queryfb , where , getFirestore } from "firebase/firestore";
 import { logAnalyticsEvent, app } from "../../../services/firebase";
-import { endpoints } from "../../../config/endpoints";
+import { endpoints, fetchWithAuth } from "../../../config/endpoints";
 import { Box, Grid, CircularProgress, Fab, styled, Select, MenuItem } from "@mui/material";
 import ResultCard from "../ResultCard";
 import { useRouter } from "next/router";
@@ -53,11 +53,11 @@ const Results = () => {
     const db = getFirestore(app);
     const dispatch = useAppDispatch();
     const { language } = useAppSelector(state => state.region);
+    const { currentSearch } = useAppSelector(state => state.search);
+    const router = useRouter();
     const auth = getAuth(app);
     const [user, loading] = useAuthState(auth);
 
-    const { currentSearch } = useAppSelector(state => state.search);
-    const router = useRouter();
     const [loadingFlag , setLoadingFlag] = useState(false);
     const [products , setProducts] = useState([]);
     const [reloadFlag , setReloadFlag] = useState(false);
@@ -80,22 +80,35 @@ const Results = () => {
     const [sortBy, setSortBy] = useState('');
     const [sortDirection, setSortDirection] = useState('asc');
     const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
 
     const resetFiltersRef = useRef(null);
 
-    const resetFilters = () => {
+    const resetFilters = useCallback(() => {
       if (resetFiltersRef.current) {
         resetFiltersRef.current();
       }
-    };
+      setSelectedTags([]);
+      setCurrentFilters(prevFilters => ({
+        ...prevFilters,
+        brands: '',
+        minPrice: '',
+        maxPrice: '',
+        onSale: '',
+        tags: ''
+      }));
+      setCurrentSortings({});
+      setSortBy('');
+      setSortDirection('asc');
+    }, []);
 
-    const handleResize = () => {
-        setDimensions({width: window.innerWidth});
-    }
     useEffect(() => {
-        setDimensions({width: window.innerWidth});
-        window.addEventListener("resize", handleResize, false);
-    },[])
+      if (router.isReady && router.query.query) {
+        resetFilters();
+        // ... perform search ...
+      }
+    }, [router.isReady, router.query.query, resetFilters]);
+
     const fetchDataToAPI = useCallback(async (filters, sortings, page = 1, limit = 20) => {
         try {
             setFailedSearch(false);
@@ -111,19 +124,18 @@ const Results = () => {
 
             while (fetchedProducts.length < limit) {
                 const requestURI = `${endpoints('results')}${Object.values(filters).join('')}${sortingParams}${tags}&limit=${limit * 2}&page=${currentPage}`;
-                const response = await axios.get(requestURI);
-                const rsp = response.data;
+                const response = await fetchWithAuth(requestURI);
                 
                 // Store metadata from the first response
-                if (!metadata) {
-                    metadata = rsp.metadata;
+                if (!metadata && response.metadata) {
+                    metadata = response.metadata;
                 }
                 
                 // Filter out H&M products
-                const filteredBatch = rsp?.results?.filter(product => product.brand.toLowerCase() !== 'h&m') || [];
+                const filteredBatch = response?.results?.filter(product => product.brand.toLowerCase() !== 'h&m') || [];
                 fetchedProducts = [...fetchedProducts, ...filteredBatch];
                 
-                if (rsp?.results?.length < limit * 2 || currentPage > 5) break; // Prevent infinite loop
+                if (!response?.results || response.results.length < limit * 2 || currentPage > 5) break; // Prevent infinite loop
                 currentPage++;
             }
 
@@ -132,12 +144,12 @@ const Results = () => {
             setLastSearch(router.query.query ? router.query.query : '');
             dispatch(setCurrentSearch(router.query.query ? router.query.query : ''));
             setFilteredBrand(router.query.brands ? router.query.brands : '');
-            setSearchTags(metadata?.tags);
+            setSearchTags(metadata?.tags || []);
             
             setTotalResults(fetchedProducts.length);
             setAvailableBrands(metadata?.brands?.filter(brand => brand.toLowerCase() !== 'h&m') || []);
             if (filters.maxPrice === '' && filters.minPrice === '') {
-                setCurrentPriceRange([metadata?.min_price, metadata?.max_price]);
+                setCurrentPriceRange([metadata?.min_price || 0, metadata?.max_price || 1000]);
             }
             logAnalyticsEvent('page_view', {
                 page_title: 'results',
@@ -149,57 +161,47 @@ const Results = () => {
             setLoadingFlag(false);
             setFailedSearch(true);
         }
-    }, []);
+    }, [dispatch, router.query, selectedTags, logAnalyticsEvent]);
+
     useEffect(() => {
-      if (router.isReady) {
-        const { lan, zone, query } = router.query;
-        if (lan) {
-          dispatch(setLanguage(lan));
-          localStorage.setItem('language', lan.toLowerCase());
-          const filters = {
-            language: `language=${lan}`,
-            country: `&country=${zone}`,
-            page: router.query.page ? `&page=${router.query.page}` : '',
-            limit: '', // We'll set this dynamically based on the grid layout
-            query: query ? `&query=${encodeURIComponent(query)}` : '',
-            imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
-            brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
-            category: router.query.category ? `&category=${router.query.category}` : '',
-            minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
-            maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
-            onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '',
-            tags: router.query.tags ? `&tags=${encodeURIComponent(router.query.tags)}` : '',
-          }
-          setCurrentFilters(filters);
-          const sortings = {
-            sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '',
-            ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '',
-          };
-          setCurrentSortings(sortings);
-
-          let limit = 20;
-          if (gridLayout === 'compact') {
-            limit = 48;
-          } else if (gridLayout === 'image-only') {
-            limit = 144;
-          }
-
-          fetchDataToAPI(filters, sortings, 1, limit);
-          dispatch(setTotalFilters(countFilters(filters)));
-          
-          // Update lastSearch state with the new query
-          setLastSearch(query || '');
-          dispatch(setCurrentSearch(query || ''));
-
-          // Set selected tags based on the URL
-          if (router.query.tags) {
-            setSelectedTags(router.query.tags.split(','));
-          } else {
-            setSelectedTags([]);
-          }
+        if (router.isReady) {
+            const { lan, zone, query } = router.query;
+            if (lan) {
+                dispatch(setLanguage(lan));
+                localStorage.setItem('language', lan.toLowerCase());
+                const filters = {
+                    language: `language=${lan}`,
+                    country: `&country=${zone}`,
+                    page: router.query.page ? `&page=${router.query.page}` : '',
+                    limit: '', // We'll set this dynamically based on the grid layout
+                    query: query ? `&query=${encodeURIComponent(query)}` : '',
+                    imageUrl: router.query.imageUrl ? `&imageUrl=${router.query.imageUrl}` : '',
+                    brands: router.query.brands ? `&brands=${encodeURIComponent(router.query.brands)}` : '',
+                    category: router.query.category ? `&category=${router.query.category}` : '',
+                    minPrice: router.query.minPrice ? `&minPrice=${router.query.minPrice}` : '',
+                    maxPrice: router.query.maxPrice ? `&maxPrice=${router.query.maxPrice}` : '',
+                    onSale: router.query.onSale ? `&onSale=${router.query.onSale}` : '',
+                    tags: router.query.tags ? `&tags=${encodeURIComponent(router.query.tags)}` : '',
+                }
+                setCurrentFilters(filters);
+                const sortings = {
+                    sortBy: router.query.sortBy ? `&sortBy=${router.query.sortBy}` : '',
+                    ascending: router.query.ascending ? `&ascending=${router.query.ascending}` : '',
+                };
+                setCurrentSortings(sortings);
+                fetchDataToAPI(filters, sortings);
+            }
         }
-      }
-    }, [user, router.isReady, router.query, gridLayout, dispatch, fetchDataToAPI]);
+    }, [router.isReady, router.query, dispatch, fetchDataToAPI]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setDimensions({ width: window.innerWidth });
+        };
+        setDimensions({ width: window.innerWidth });
+        window.addEventListener("resize", handleResize, false);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     useEffect(() => {
         if (router.isReady) {
@@ -213,7 +215,7 @@ const Results = () => {
         }
     }, [router.query, router.isReady]);
 
-    useEffect(() => { // Reset selected tags when the query changes
+    useEffect(() => {
         if (router.isReady) {
             const { query } = router.query;
             if (query) {
@@ -222,7 +224,7 @@ const Results = () => {
         }
     }, [router.query, router.isReady]); // Add other dependencies as needed
 
-    useEffect(() => { // Reset currentPage when the query changes
+    useEffect(() => {
         if (router.isReady) {
             const { query } = router.query;
             if (query) {
@@ -254,20 +256,12 @@ const Results = () => {
         router.push({ href: "./", query: newQuery })
     };
 
-    const handleRefineSearch = () => {
-        const tagsQuery = selectedTags.join(',');
-        const newQuery = { ...router.query, tags: tagsQuery };
-        router.push({
-            pathname: `./results`,
-            query: newQuery
-        }).then(() => {
-            fetchDataToAPI(currentFilters, currentSortings); // Assuming currentFilters and currentSortings are up to date
-            toast.success('Search refined with selected tags.'); // Show toast notification
-        });
-    };
+    const handleRefineSearch = useCallback(() => {
+        const newFilters = { ...currentFilters, tags: `&tags=${encodeURIComponent(selectedTags.join(','))}` };
+        fetchDataToAPI(newFilters, currentSortings);
+    }, [currentFilters, selectedTags, currentSortings, fetchDataToAPI]);
 
     const [loadingMore, setLoadingMore] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
 
     const fetchMoreData = async () => {
         if (!loadingMore && hasMore) {
@@ -290,13 +284,13 @@ const Results = () => {
                 let currentFetchPage = nextPage;
 
                 while (fetchedProducts.length < limit) {
-                    const rsp = await axios.get(`${endpoints('results')}${Object.values(updatedFilters).join('')}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`);
+                    const response = await fetchWithAuth(`${endpoints('results')}${Object.values(updatedFilters).join('')}${currentSortings.sortBy ? `&sortBy=${currentSortings.sortBy}&ascending=${currentSortings.ascending}` : ''}${selectedTags.length > 0 ? `&tags=${encodeURIComponent(selectedTags.join(','))}` : ''}`);
                     
                     // Filter out H&M products
-                    const filteredBatch = rsp.data?.results?.filter(product => product.brand.toLowerCase() !== 'h&m') || [];
+                    const filteredBatch = response?.results?.filter(product => product.brand.toLowerCase() !== 'h&m') || [];
                     fetchedProducts = [...fetchedProducts, ...filteredBatch];
                     
-                    if (rsp.data?.results?.length < limit * 2 || currentFetchPage > nextPage + 5) break; // Prevent infinite loop
+                    if (!response?.results || response.results.length < limit * 2 || currentFetchPage > nextPage + 5) break; // Prevent infinite loop
                     currentFetchPage++;
                     updatedFilters.page = `&page=${currentFetchPage}`;
                 }
@@ -391,13 +385,6 @@ const Results = () => {
       return histogram.filter(bin => bin.count > 0);
     };
 
-    useEffect(() => {
-      if (router.isReady && router.query.query) {
-        resetFilters();
-        // ... perform search ...
-      }
-    }, [router.query.query]);
-
     const sortOptions = [
       { value: 'relevance', label: 'Relevance' },
       { value: 'price', label: 'Price' },
@@ -471,7 +458,7 @@ const Results = () => {
                           <div className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                               {sortOptions.map((option) => (
-                                <button
+                                <button 
                                   key={option.value}
                                   onClick={() => handleSortChange(option)}
                                   className={`${

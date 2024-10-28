@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { endpoints } from '../config/endpoints';
+import { endpoints, fetchWithAuth } from '../config/endpoints';
 import axios from 'axios';
 import ResultCard from '../components/Results/ResultCard';
 import { Typography, Box, Chip, IconButton, Container, Button, TextField, Drawer } from '@mui/material';
@@ -34,15 +34,14 @@ const MultiResults = () => {
     try {
       const allResults = await Promise.all(
         searchParams.map(async (param) => {
-          const response = await axios.get(endpoints('results'), {
-            params: {
-              query: param.query,
-              maxPrice: param.maxPrice,
-              onSale: param.onSale,
-              brands: param.brands ? param.brands.join(',') : undefined,
-            },
-          });
-          return { query: param.query, items: response.data.results || [], ...param };
+          const queryString = new URLSearchParams({
+            query: param.query,
+            maxPrice: param.maxPrice,
+            onSale: param.onSale,
+            brands: param.brands ? param.brands.join(',') : undefined,
+          }).toString();
+          const response = await fetchWithAuth(`${endpoints('results')}${queryString}`);
+          return { query: param.query, items: response.results || [], ...param };
         })
       );
       setResults(allResults);
